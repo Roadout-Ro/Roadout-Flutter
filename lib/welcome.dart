@@ -24,7 +24,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     height: 60,
                     child: CupertinoButton.filled(
                       child: Text(
-                        'Test1',
+                        'Sign In',
                         style: GoogleFonts.karla(
                             fontSize: 17.0, fontWeight: FontWeight.w600),
                       ),
@@ -39,7 +39,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     height: 70,
                     child: CupertinoButton.filled(
                       child: Text(
-                        'Test2',
+                        'Sign Up',
                         style: GoogleFonts.karla(
                             fontSize: 17.0, fontWeight: FontWeight.w600),
                       ),
