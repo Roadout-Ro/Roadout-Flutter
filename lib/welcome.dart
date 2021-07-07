@@ -40,6 +40,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     child: CupertinoButton.filled(
                       child: Text(
                         'Sign Up',
+                        
                         style: GoogleFonts.karla(
                             fontSize: 17.0, fontWeight: FontWeight.w600),
                       ),
