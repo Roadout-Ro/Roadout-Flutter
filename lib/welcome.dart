@@ -17,7 +17,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           child: Column(
           children: <Widget>[
             Container(
-                //constraints: BoxConstraints.expand(),
                 child: Align(
               child: Column(
                   children: <Widget>[
