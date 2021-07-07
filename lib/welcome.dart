@@ -14,13 +14,22 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-          child: Column(
+        child: Column(
           children: <Widget>[
+            Container(
+              width: 264,
+              child: Align(
+                child: Text(
+                  'Welcome to Roadout',
+                  style: GoogleFonts.karla(
+                      fontSize: 30.0, fontWeight: FontWeight.bold), textAlign: TextAlign.center,
+                ),
+             ), padding: EdgeInsets.only(top: 60.0, bottom: 20.0),
+            ),
             Container(
                 child: Align(
               child: Column(
                   children: <Widget>[
-
                     Container(
                       width: 270,
                       height: 60,
