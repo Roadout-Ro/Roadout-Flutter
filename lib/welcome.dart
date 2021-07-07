@@ -15,6 +15,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(
           children: <Widget>[
@@ -37,7 +38,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 _tile(
                     'Title one',
                     'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.',
-                    CupertinoIcons.car_fill,255,193,25),
+                    CupertinoIcons.map,255,193,25),
                 _tile(
                     'Title one',
                     'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.',
