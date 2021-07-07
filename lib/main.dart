@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:roadout/welcome.dart';
+import 'package:roadout/utilites.dart';
 
 void main() => runApp(MainApp());
 
