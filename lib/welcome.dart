@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_sfsymbols/flutter_sfsymbols.dart';
 
 class WelcomeScreen extends StatefulWidget {
   WelcomeScreen();
@@ -10,6 +11,7 @@ class WelcomeScreen extends StatefulWidget {
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,8 +26,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   style: GoogleFonts.karla(
                       fontSize: 30.0, fontWeight: FontWeight.bold), textAlign: TextAlign.center,
                 ),
-             ), padding: EdgeInsets.only(top: 60.0, bottom: 20.0),
+             ), padding: EdgeInsets.only(top: 50.0, bottom: 20.0),
             ),
+            Spacer(),
             Container(
                 child: Align(
               child: Column(
