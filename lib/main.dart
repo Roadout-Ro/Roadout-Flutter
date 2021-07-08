@@ -8,7 +8,7 @@ void main() => runApp(MainApp());
 class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return CupertinoApp(
+    return MaterialApp(
       title: 'Roadout',
       debugShowCheckedModeBanner: false,
       home: WelcomeScreen(),
