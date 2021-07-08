@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_sfsymbols/flutter_sfsymbols.dart';
+import 'package:roadout/signUp.dart';
 import 'package:roadout/utilites.dart';
 
 class WelcomeScreen extends StatefulWidget {
@@ -90,7 +90,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                             style: GoogleFonts.karla(
                                 fontSize: 17.0, fontWeight: FontWeight.w600),
                           ),
-                          onPressed: null,
+                          onPressed: () => _showScreen(),
                           disabledColor: Color.fromRGBO(143, 102, 13, 1.0),
                           borderRadius: BorderRadius.all(Radius.circular(17.0)),
                         ),
@@ -145,6 +145,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           size: 30,
         ),
       );
+
+  _showScreen() {
+      Navigator.of(context).push(
+        CupertinoPageRoute(
+          builder: (context) => SignUpScreen()
+        ),
+      );
+  }
 
 }
 
