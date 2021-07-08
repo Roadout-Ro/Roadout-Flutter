@@ -32,6 +32,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               padding: EdgeInsets.only(top: 50.0, bottom: 40.0),
             ),
             ListView(
+              primary: false,
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
               children: [
