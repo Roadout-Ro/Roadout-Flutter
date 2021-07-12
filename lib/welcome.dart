@@ -11,6 +11,12 @@ class WelcomeScreen extends StatefulWidget {
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
+
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final verifyPasswordController = TextEditingController();
+  final nameController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -189,6 +195,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 height: 50,
                 padding: EdgeInsets.only(left: 24, right: 24, bottom: 10),
                 child: TextFormField(
+                  controller: nameController,
                   cursorColor: Color.fromRGBO(103, 72, 5, 1.0),
                   autocorrect: false,
                   keyboardAppearance: Brightness.light,
@@ -216,6 +223,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 height: 50,
                 padding: EdgeInsets.only(left: 24, right: 24, bottom: 10),
                 child: TextFormField(
+                  controller: emailController,
                   cursorColor: Color.fromRGBO(255, 158, 25, 1.0),
                   autocorrect: false,
                   keyboardAppearance: Brightness.light,
@@ -243,6 +251,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 height: 50,
                 padding: EdgeInsets.only(left: 24, right: 24, bottom: 10),
                 child: TextFormField(
+                  controller: passwordController,
                   cursorColor: Color.fromRGBO(255, 193, 25, 1.0),
                   obscureText: true,
                   autocorrect: false,
@@ -271,6 +280,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 height: 50,
                 padding: EdgeInsets.only(left: 24, right: 24, bottom: 10),
                 child: TextFormField(
+                  controller: verifyPasswordController,
                   cursorColor: Color.fromRGBO(143, 102, 13, 1.0),
                   obscureText: true,
                   autocorrect: false,
@@ -310,7 +320,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               ),
               alignment: Alignment.center,
             ),
-            onPressed: null,
+            onPressed: (){
+              print(nameController.text);
+            },
             disabledColor: Color.fromRGBO(143, 102, 13, 1.0),
             borderRadius: BorderRadius.all(Radius.circular(17.0)),
             color: Color.fromRGBO(143, 102, 13, 1.0),
