@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "775089070575",
+    "project_id": "roadout-e38fe",
+    "storage_bucket": "roadout-e38fe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:775089070575:android:65527105474e4d4533561a",
+        "android_client_info": {
+          "package_name": "com.codebranch.roadout"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "775089070575-gbg8gmd592t8oaiiklgqsd2g0ecmau1g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCiMNgK0kjKuAktpKOjF5rAP10yxdIGRQo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "775089070575-gbg8gmd592t8oaiiklgqsd2g0ecmau1g.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "775089070575-saqccrr03bshdnjq9ndreji5h011bf20.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.codebranch.roadout"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
