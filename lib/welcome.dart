@@ -19,6 +19,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   final passwordController = TextEditingController();
   final verifyPasswordController = TextEditingController();
   final nameController = TextEditingController();
+  final signInEmailController = TextEditingController();
+  final signInPasswordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -357,6 +359,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 height: 50,
                 padding: EdgeInsets.only(left: 24, right: 24, bottom: 10),
                 child: TextFormField(
+                  controller: signInEmailController,
                   cursorColor: Color.fromRGBO(255, 193, 25, 1.0),
                   autocorrect: false,
                   keyboardAppearance: Brightness.light,
@@ -384,6 +387,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 height: 50,
                 padding: EdgeInsets.only(left: 24, right: 24, bottom: 10),
                 child: TextFormField(
+                  controller: signInPasswordController,
                   cursorColor: Color.fromRGBO(143, 102, 13, 1.0),
                   obscureText: true,
                   autocorrect: false,
@@ -424,7 +428,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               alignment: Alignment.center,
             ),
             onPressed: () {
-               AuthenticationService(FirebaseAuth.instance).signUp(email: 'sdds', password: 'sds');
+               AuthenticationService(FirebaseAuth.instance).signIn(email: signInEmailController.text, password: signInPasswordController.text);
             },
             disabledColor: Color.fromRGBO(255, 193, 25, 1.0),
             borderRadius: BorderRadius.all(Radius.circular(17.0)),
