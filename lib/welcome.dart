@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:roadout/auth_service.dart';
 import 'package:roadout/utilites.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class WelcomeScreen extends StatefulWidget {
   WelcomeScreen();
@@ -321,7 +324,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               alignment: Alignment.center,
             ),
             onPressed: (){
-              print(nameController.text);
+              AuthenticationService(FirebaseAuth.instance).signUp(email: emailController.text, password: passwordController.text);
             },
             disabledColor: Color.fromRGBO(143, 102, 13, 1.0),
             borderRadius: BorderRadius.all(Radius.circular(17.0)),
@@ -420,7 +423,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               ),
               alignment: Alignment.center,
             ),
-            onPressed: null,
+            onPressed: () {
+               AuthenticationService(FirebaseAuth.instance).signUp(email: 'sdds', password: 'sds');
+            },
             disabledColor: Color.fromRGBO(255, 193, 25, 1.0),
             borderRadius: BorderRadius.all(Radius.circular(17.0)),
             color: Color.fromRGBO(255, 193, 25, 1.0),
@@ -430,4 +435,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       ],
     ),
   );
+
+
 }
