@@ -330,36 +330,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               alignment: Alignment.center,
             ),
             onPressed: (){
-              const pattern = r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
-              final regExp = RegExp(pattern);
               const  patternPassword = r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$';
               final regExpPassword =  RegExp(patternPassword);
-              if (nameController.text == null  || nameController.text.isEmpty) {
-               showDialog(
-                 context: context,
-                 builder: (context) {
-                   return CupertinoAlertDialog(
-                       title: Text("Please enter your name!"),
-                       actions: <Widget>[
-                         CupertinoDialogAction(
-                             textStyle: TextStyle(
-                                 color: Color.fromRGBO(146, 82, 24, 1.0)),
-                             isDefaultAction: true,
-                             onPressed: () {
-                               Navigator.pop(context);
-                             },
-                             child: Text("OK")
-                         ),
-                       ]
-                   );
-                 },
-               );
-             } else if (!regExp.hasMatch(emailController.text)) {
+              if (passwordController.text != verifyPasswordController.text ) {
                 showDialog(
                   context: context,
                   builder: (context) {
                     return CupertinoAlertDialog(
-                        title: Text("Invalid email!"),
+                        title: Text("Sign Up Error"),
+                        content: Text("Passwords do not match!"),
                         actions: <Widget>[
                           CupertinoDialogAction(
                               textStyle: TextStyle(
@@ -374,32 +353,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     );
                   },
                 );
-              }else if(!regExpPassword.hasMatch(passwordController.text)){
+             }
+              else if (!regExpPassword.hasMatch(passwordController.text)) {
                 showDialog(
                   context: context,
                   builder: (context) {
                     return CupertinoAlertDialog(
-                        title: Text("Invalid password!"),
-                        actions: <Widget>[
-                          CupertinoDialogAction(
-                              textStyle: TextStyle(
-                                  color: Color.fromRGBO(146, 82, 24, 1.0)),
-                              isDefaultAction: true,
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: Text("OK")
-                          ),
-                        ]
-                    );
-                  },
-                );
-              } else if(passwordController.text != verifyPasswordController.text){
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return CupertinoAlertDialog(
-                        title: Text("Passwords do not match!"),
+                        title: Text("Sign Up Error"),
+                        content: Text("Password should be at least 8 characters long, have a capital letter and a number!"),
                         actions: <Widget>[
                           CupertinoDialogAction(
                               textStyle: TextStyle(
@@ -415,12 +376,34 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   },
                 );
               }
+              else if (nameController.text == null  || nameController.text.isEmpty){
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return CupertinoAlertDialog(
+                        title: Text("Sign Up Error"),
+                        content: Text("Please enter your name!"),
+                        actions: <Widget>[
+                          CupertinoDialogAction(
+                              textStyle: TextStyle(
+                                  color: Color.fromRGBO(146, 82, 24, 1.0)),
+                              isDefaultAction: true,
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text("Ok")
+                          ),
+                        ]
+                    );
+                  },
+                );
+              } else {
                 AuthenticationService(FirebaseAuth.instance).signUp(
                     email: emailController.text,
                     password: passwordController.text,
                     context: context);
-              userSetup(name: nameController.text);
-            },
+                userSetup(name: nameController.text);
+            }},
             disabledColor: Color.fromRGBO(143, 102, 13, 1.0),
             borderRadius: BorderRadius.all(Radius.circular(17.0)),
             color: Color.fromRGBO(143, 102, 13, 1.0),
