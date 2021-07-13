@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-String err = "An error";
+String userName = "";
 
 class GradientText extends StatelessWidget {
   GradientText(

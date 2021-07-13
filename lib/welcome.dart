@@ -403,7 +403,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     email: emailController.text,
                     password: passwordController.text,
                     context: context);
-                userSetup(name: nameController.text);
+                userName = nameController.text;
+                //userSetup(name: userName); -> Do later on homescreen
             }
               },
             disabledColor: Color.fromRGBO(143, 102, 13, 1.0),
