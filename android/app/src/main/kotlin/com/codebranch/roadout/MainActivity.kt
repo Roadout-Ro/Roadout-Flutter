@@ -1,4 +1,4 @@
-package com.example.roadout
+package com.codebranch.roadout
 
 import io.flutter.embedding.android.FlutterActivity
 

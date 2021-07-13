@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.codebranch.roadout">
+    package="kotlin.com.codebranch.roadout">
    <application
         android:label="Roadout"
         android:icon="@mipmap/ic_launcher">
