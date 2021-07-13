@@ -116,6 +116,7 @@ Future<void> userSetup({required String name}) async {
   CollectionReference users = FirebaseFirestore.instance.collection('Users');
   FirebaseAuth auth = FirebaseAuth.instance;
   if (auth.currentUser == null) {
+    print("here");
     return;
   }
   String uid = auth.currentUser!.uid.toString();

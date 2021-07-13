@@ -330,7 +330,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               alignment: Alignment.center,
             ),
             onPressed: (){
-              const  patternPassword = r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$';
+              const patternPassword = r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$';
               final regExpPassword =  RegExp(patternPassword);
               if (passwordController.text != verifyPasswordController.text ) {
                 showDialog(
@@ -397,13 +397,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     );
                   },
                 );
-              } else {
+              }
+              if (regExpPassword.hasMatch(passwordController.text) && passwordController.text == verifyPasswordController.text && !nameController.text.isEmpty) {
                 AuthenticationService(FirebaseAuth.instance).signUp(
                     email: emailController.text,
                     password: passwordController.text,
                     context: context);
                 userSetup(name: nameController.text);
-            }},
+            }
+              },
             disabledColor: Color.fromRGBO(143, 102, 13, 1.0),
             borderRadius: BorderRadius.all(Radius.circular(17.0)),
             color: Color.fromRGBO(143, 102, 13, 1.0),
