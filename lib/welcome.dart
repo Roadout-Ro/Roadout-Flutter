@@ -6,6 +6,7 @@ import 'package:roadout/utilites.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 
+
 class WelcomeScreen extends StatefulWidget {
   WelcomeScreen();
   WelcomeScreen.forDesignTime();
@@ -13,14 +14,16 @@ class WelcomeScreen extends StatefulWidget {
   _WelcomeScreenState createState() => _WelcomeScreenState();
 }
 
+TextEditingController emailController = TextEditingController();
+TextEditingController passwordController = TextEditingController();
+TextEditingController verifyPasswordController = TextEditingController();
+TextEditingController nameController = TextEditingController();
+TextEditingController signInEmailController = TextEditingController();
+TextEditingController signInPasswordController = TextEditingController();
+
+
 class _WelcomeScreenState extends State<WelcomeScreen> {
 
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-  final verifyPasswordController = TextEditingController();
-  final nameController = TextEditingController();
-  final signInEmailController = TextEditingController();
-  final signInPasswordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -194,7 +197,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               )),
           alignment: Alignment.centerLeft,
         ),
-        Column(
+        Form(
+          child:Column(
           children: <Widget>[
             Container(
                 height: 50,
@@ -312,6 +316,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 ))
           ],
         ),
+        ),
         Container(
           width: 210,
           height: 90,
@@ -326,7 +331,94 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               alignment: Alignment.center,
             ),
             onPressed: (){
-              AuthenticationService(FirebaseAuth.instance).signUp(email: emailController.text, password: passwordController.text);
+              const pattern = r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
+              final regExp = RegExp(pattern);
+              const  patternPassword = r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$';
+              final regExpPassword =  RegExp(patternPassword);
+              if (nameController.text == null  || nameController.text.isEmpty) {
+               showDialog(
+                 context: context,
+                 builder: (context) {
+                   return CupertinoAlertDialog(
+                       title: Text("Please enter your name!"),
+                       actions: <Widget>[
+                         CupertinoDialogAction(
+                             textStyle: TextStyle(
+                                 color: Color.fromRGBO(146, 82, 24, 1.0)),
+                             isDefaultAction: true,
+                             onPressed: () {
+                               Navigator.pop(context);
+                             },
+                             child: Text("OK")
+                         ),
+                       ]
+                   );
+                 },
+               );
+             } else if (!regExp.hasMatch(emailController.text)) {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return CupertinoAlertDialog(
+                        title: Text("Invalid email!"),
+                        actions: <Widget>[
+                          CupertinoDialogAction(
+                              textStyle: TextStyle(
+                                  color: Color.fromRGBO(146, 82, 24, 1.0)),
+                              isDefaultAction: true,
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text("OK")
+                          ),
+                        ]
+                    );
+                  },
+                );
+              }else if(!regExpPassword.hasMatch(passwordController.text)){
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return CupertinoAlertDialog(
+                        title: Text("Invalid password!"),
+                        actions: <Widget>[
+                          CupertinoDialogAction(
+                              textStyle: TextStyle(
+                                  color: Color.fromRGBO(146, 82, 24, 1.0)),
+                              isDefaultAction: true,
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text("OK")
+                          ),
+                        ]
+                    );
+                  },
+                );
+              } else if(passwordController.text != verifyPasswordController.text){
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return CupertinoAlertDialog(
+                        title: Text("Passwords do not match!"),
+                        actions: <Widget>[
+                          CupertinoDialogAction(
+                              textStyle: TextStyle(
+                                  color: Color.fromRGBO(146, 82, 24, 1.0)),
+                              isDefaultAction: true,
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text("OK")
+                          ),
+                        ]
+                    );
+                  },
+                );
+              }
+                AuthenticationService(FirebaseAuth.instance).signUp(
+                    email: emailController.text,
+                    password: passwordController.text);
             },
             disabledColor: Color.fromRGBO(143, 102, 13, 1.0),
             borderRadius: BorderRadius.all(Radius.circular(17.0)),
@@ -442,3 +534,4 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
 
 }
+
