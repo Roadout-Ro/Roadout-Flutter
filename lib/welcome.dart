@@ -402,10 +402,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 AuthenticationService(FirebaseAuth.instance).signUp(
                     email: emailController.text,
                     password: passwordController.text,
-                    context: context);
-                userName = nameController.text;
-                //userSetup(name: userName); -> Do later on homescreen
-            }
+                    context: context,
+                    name: nameController.text);
+                }
               },
             disabledColor: Color.fromRGBO(143, 102, 13, 1.0),
             borderRadius: BorderRadius.all(Radius.circular(17.0)),
