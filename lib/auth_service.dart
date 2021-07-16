@@ -27,9 +27,10 @@ class AuthenticationService {
       await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
       print("Signed in");
       if(FirebaseAuth.instance.currentUser?.uid != null) {
-        Navigator.push(
+        Navigator.pushAndRemoveUntil(
            context,
-             MaterialPageRoute(builder: (context) => MainScreen())
+             MaterialPageRoute(builder: (context) => MainScreen()),
+            (Route<dynamic> route ) => false
                );
       }
       return "Signed in";
@@ -94,6 +95,13 @@ class AuthenticationService {
     try {
       await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
       userSetup(name: name);
+      if(FirebaseAuth.instance.currentUser?.uid != null) {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => MainScreen()),
+                (Route<dynamic> route ) => false
+        );
+      }
       return "Signed up";
     } on FirebaseAuthException catch (e) {
       print(e.message);
