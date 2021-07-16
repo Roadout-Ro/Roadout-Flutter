@@ -83,9 +83,10 @@ class AuthenticationService {
     }
   }
 
-  Future<String> signUp({required String email, required String password, required BuildContext context}) async {
+  Future<String> signUp({required String email, required String password, required BuildContext context, required String name}) async {
     try {
       await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
+      userSetup(name: name);
       return "Signed up";
     } on FirebaseAuthException catch (e) {
       print(e.message);
