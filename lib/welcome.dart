@@ -49,22 +49,22 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               shrinkWrap: true,
               children: [
                 _tile(
-                    'Title one',
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.',
+                    'Parking Spaces',
+                    'Check the vacancy of parking spaces in real time.',
                     CupertinoIcons.map,
                     255,
                     193,
                     25),
                 _tile(
-                    'Title one',
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.',
+                    'Credit Card Payment',
+                    'You can reserve a parking space by paying safely online in our app.',
                     CupertinoIcons.creditcard,
                     143,
                     102,
                     13),
                 _tile(
-                    'Title one',
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.',
+                    'Live directions',
+                    'Receive step by step directions to the desired parking spot.',
                     CupertinoIcons.arrow_branch,
                     255,
                     158,
