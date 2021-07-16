@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:roadout/welcome.dart';
+import 'package:roadout/mainScreen.dart';
 
 class AuthenticationService {
   final FirebaseAuth _firebaseAuth;
@@ -25,6 +26,12 @@ class AuthenticationService {
     try {
       await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
       print("Signed in");
+      if(FirebaseAuth.instance.currentUser?.uid != null) {
+        Navigator.push(
+           context,
+             MaterialPageRoute(builder: (context) => MainScreen())
+               );
+      }
       return "Signed in";
     } on FirebaseAuthException catch (e) {
       print(e.message);
