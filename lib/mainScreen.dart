@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
+import 'package:google_fonts/google_fonts.dart';
 
 class MainScreen extends StatefulWidget {
   @override
   _MainScreen createState() => _MainScreen();
 }
 
-
 class _MainScreen extends State<MainScreen> {
-
   void _onMapCreated(GoogleMapController controller) {
     controller.setMapStyle(MapStyling.mapStyle);
   }
@@ -18,14 +17,20 @@ class _MainScreen extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        child: GoogleMap(
-          onMapCreated: _onMapCreated,
-          initialCameraPosition: CameraPosition(
-            target: LatLng(46.7712, 23.6236),
-            zoom: 11.5
-          ),
-            myLocationButtonEnabled: false,
-
+        child: Stack(
+          children: <Widget>[
+            GoogleMap(
+              onMapCreated: _onMapCreated,
+              initialCameraPosition:
+                  CameraPosition(target: LatLng(46.7712, 23.6236), zoom: 11.5),
+              myLocationButtonEnabled: false,
+            ),
+            Container(
+              child: Text('Roadout', style: GoogleFonts.karla(
+                  fontSize: 30.0, fontWeight: FontWeight.bold),),
+              padding: EdgeInsets.only(left: 25.0, top: 70.0),
+            ),
+          ],
         ),
       ),
     );
