@@ -27,11 +27,7 @@ class AuthenticationService {
       await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
       print("Signed in");
       if(FirebaseAuth.instance.currentUser?.uid != null) {
-        Navigator.pushAndRemoveUntil(
-           context,
-             MaterialPageRoute(builder: (context) => MainScreen()),
-            (Route<dynamic> route ) => false
-               );
+          Navigator.of(context).push(_createRoute());
       }
       return "Signed in";
     } on FirebaseAuthException catch (e) {
@@ -96,11 +92,7 @@ class AuthenticationService {
       await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
       userSetup(name: name);
       if(FirebaseAuth.instance.currentUser?.uid != null) {
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => MainScreen()),
-                (Route<dynamic> route ) => false
-        );
+        Navigator.of(context).push(_createRoute());
       }
       return "Signed up";
     } on FirebaseAuthException catch (e) {
@@ -140,3 +132,21 @@ Future<void> userSetup({required String name}) async {
   return;
 }
 
+Route _createRoute() {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => MainScreen(),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      var begin = Offset(0.0, 1.0);
+      var end = Offset.zero;
+      var curve = Curves.ease;
+
+      var tween = Tween(begin: begin, end: end).chain(
+          CurveTween(curve: curve));
+
+      return SlideTransition(
+        position: animation.drive(tween),
+        child: child,
+      );
+    },
+  );
+}
