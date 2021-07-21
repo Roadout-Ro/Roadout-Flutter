@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:roadout/welcome.dart';
-import 'package:roadout/mainScreen.dart';
+import 'package:roadout/homescreen.dart';
 
 class AuthenticationService {
   final FirebaseAuth _firebaseAuth;

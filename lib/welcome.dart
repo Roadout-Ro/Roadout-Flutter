@@ -4,7 +4,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:roadout/auth_service.dart';
 import 'package:roadout/utilites.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:roadout/mainScreen.dart';
 
 
 class WelcomeScreen extends StatefulWidget {
@@ -65,7 +64,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     13),
                 _tile(
                     'Live directions',
-                    'Receive step by step directions to the desired parking spot.',
+                    'Receive directions to the desired parking spot in your favourite maps app.',
                     CupertinoIcons.arrow_branch,
                     255,
                     158,

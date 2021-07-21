@@ -3,36 +3,31 @@ import 'package:flutter/cupertino.dart';
 import 'package:roadout/welcome.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'mainScreen.dart';
+import 'homescreen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  if (FirebaseAuth.instance.currentUser?.uid != null) {
-    runApp(MainApp());
-  } else {
-    runApp(WelcomeApp());
-  }
-}
-
-class WelcomeApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Roadout',
-      debugShowCheckedModeBanner: false,
-      home: WelcomeScreen(),
-    );
-  }
+  runApp(MainApp());
 }
 
 class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    User? firebaseUser = FirebaseAuth.instance.currentUser;
+    Widget firstWidget;
+
+    if (firebaseUser != null) {
+      firstWidget = MainScreen();
+    } else {
+      firstWidget = WelcomeScreen();
+    }
+
     return MaterialApp(
       title: 'Roadout',
       debugShowCheckedModeBanner: false,
-      home: MainScreen(),
+      home: firstWidget,
     );
   }
 }
+

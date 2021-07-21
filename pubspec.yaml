@@ -56,6 +56,7 @@ flutter:
   uses-material-design: true
   assets:
      - assets/Logo.jpeg
+     - assets/mapIcon.png
 
   fonts:
     - family: sficonsets
