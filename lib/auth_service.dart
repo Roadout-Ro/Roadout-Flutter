@@ -18,8 +18,9 @@ class AuthenticationService {
     await _firebaseAuth.sendPasswordResetEmail(email: email);
   }
 
-  Future<void> signOut() async {
+  Future<void> signOut({required BuildContext context}) async {
     await _firebaseAuth.signOut();
+    Navigator.of(context).push(_createRouteAfterSignOut());
   }
 
   Future<String> signIn({required String email, required String password, required BuildContext context}) async {
@@ -135,6 +136,25 @@ Future<void> userSetup({required String name}) async {
 Route _createRoute() {
   return PageRouteBuilder(
     pageBuilder: (context, animation, secondaryAnimation) => MainScreen(),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      var begin = Offset(0.0, 1.0);
+      var end = Offset.zero;
+      var curve = Curves.ease;
+
+      var tween = Tween(begin: begin, end: end).chain(
+          CurveTween(curve: curve));
+
+      return SlideTransition(
+        position: animation.drive(tween),
+        child: child,
+      );
+    },
+  );
+}
+
+Route _createRouteAfterSignOut() {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => WelcomeScreen(),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       var begin = Offset(0.0, 1.0);
       var end = Offset.zero;
