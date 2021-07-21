@@ -5,6 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:roadout/welcome.dart';
 import 'package:roadout/homescreen.dart';
 
+import 'database_service.dart';
+
+String username = "User Name";
+
 class AuthenticationService {
   final FirebaseAuth _firebaseAuth;
 
@@ -30,6 +34,7 @@ class AuthenticationService {
       if(FirebaseAuth.instance.currentUser?.uid != null) {
           Navigator.of(context).push(_createRoute());
       }
+      username = await DatabaseService().getUserData();
       return "Signed in";
     } on FirebaseAuthException catch (e) {
       print(e.message);
@@ -95,6 +100,7 @@ class AuthenticationService {
       if(FirebaseAuth.instance.currentUser?.uid != null) {
         Navigator.of(context).push(_createRoute());
       }
+      username = await DatabaseService().getUserData();
       return "Signed up";
     } on FirebaseAuthException catch (e) {
       print(e.message);
@@ -129,7 +135,7 @@ Future<void> userSetup({required String name}) async {
     return;
   }
   String uid = auth.currentUser!.uid.toString();
-  users.add({'name': name, 'uid': uid});
+  users.doc(uid).set({'name': name, 'uid': uid,});
   return;
 }
 
