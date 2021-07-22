@@ -2,19 +2,81 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:notification_permissions/notification_permissions.dart';
 import 'package:roadout/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:roadout/database_service.dart';
+import 'package:roadout/settings.dart';
+import 'package:geolocator/geolocator.dart';
 
 class MainScreen extends StatefulWidget {
   @override
   _MainScreen createState() => _MainScreen();
 }
 
-class _MainScreen extends State<MainScreen> {
+class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
+
+  late Position currentPosition;
+  var geolocator = Geolocator();
+  LatLng latlngPos = LatLng(46.7712, 23.6236);
+
+  void locatePosition(GoogleMapController controller) async {
+    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
+    currentPosition = position;
+
+    latlngPos = LatLng(position.latitude, position.longitude);
+    controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: latlngPos, zoom: 14)));
+  }
+
+
   void _onMapCreated(GoogleMapController controller) {
     controller.setMapStyle(MapStyling.mapStyle);
+    locatePosition(controller);
+
   }
+
+  late Future<String?> permissionStatusFuture;
+
+  var nPermGranted = "granted";
+  var nPermDenied = "denied";
+  var nPermUnknown = "unknown";
+  var nPermProvisional = "provisional";
+
+  @override
+  void initState() {
+    super.initState();
+    permissionStatusFuture = getCheckNotificationPermStatus();
+    WidgetsBinding.instance!.addObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      setState(() {
+        permissionStatusFuture = getCheckNotificationPermStatus();
+      });
+    }
+  }
+
+  /// Checks the notification permission status
+  Future <String?> getCheckNotificationPermStatus() {
+    return NotificationPermissions.getNotificationPermissionStatus()
+        .then((status) {
+      switch (status) {
+        case PermissionStatus.denied:
+          return nPermDenied;
+        case PermissionStatus.granted:
+          return nPermGranted;
+        case PermissionStatus.unknown:
+          return nPermUnknown;
+        case PermissionStatus.provisional:
+          return nPermProvisional;
+        default:
+          return null;
+      }
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +87,11 @@ class _MainScreen extends State<MainScreen> {
             GoogleMap(
               onMapCreated: _onMapCreated,
               initialCameraPosition:
-                  CameraPosition(target: LatLng(46.7712, 23.6236), zoom: 11.5),
+                  CameraPosition(target: latlngPos, zoom: 14),
               myLocationButtonEnabled: false,
+              myLocationEnabled: true,
+              zoomGesturesEnabled: true,
+              zoomControlsEnabled: true,
             ),
             Column(
               children: <Widget>[
@@ -103,7 +168,16 @@ class _MainScreen extends State<MainScreen> {
                                             borderRadius: BorderRadius.vertical(
                                           top: Radius.circular(23),
                                         )), // BorderRadius. vertical// RoundedRectangleBorder
-                                        builder: (context) => showSettings())
+                                        builder: (context) => showSettings()),
+
+                                NotificationPermissions.requestNotificationPermissions(iosSettings:
+                                const NotificationSettingsIos(sound: true, badge: true, alert: true)).then((_) {
+                                  setState(() {
+                                    permissionStatusFuture =
+                                        getCheckNotificationPermStatus();
+                                  });
+                                })
+
                                   }),
                           padding: EdgeInsets.only(right: 15.0),
                         )
@@ -332,6 +406,16 @@ class _MainScreen extends State<MainScreen> {
                     ]);
               },
             );
+          } else if( title == "Notifications"){
+            Navigator.pop(context);
+            showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(23),
+                    )), // BorderRadius. vertical// RoundedRectangleBorder
+                builder: (context) => notifications(context));
           } else
             print(FirebaseAuth.instance.currentUser?.uid);
         },
