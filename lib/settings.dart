@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+String selectedMapsApp = 'Apple Maps';
+
 Widget showNotifications(BuildContext context) => Container(
     height: 253,
     child: Column(
@@ -168,7 +170,7 @@ Widget showDirectionsApp(BuildContext context) => Container(
           children: <Widget>[
             Container(
               width: 200,
-              height: 90,
+              height: 60,
               padding: EdgeInsets.only(left: 20.0, top: 30.0),
               child: Text(
                 "Directions App",
@@ -181,9 +183,9 @@ Widget showDirectionsApp(BuildContext context) => Container(
             ),
             Spacer(),
             Container(
-              height: 90,
+              height: 50,
               width: 50,
-              padding: EdgeInsets.only(right: 8.0),
+              padding: EdgeInsets.only(right: 8.0, top: 17.0),
               child: IconButton(
                 icon: const Icon(CupertinoIcons.xmark, size: 23),
                 onPressed: () {
@@ -195,36 +197,64 @@ Widget showDirectionsApp(BuildContext context) => Container(
             )
           ],
         ),
+        Container(
+          height: 10.0,
+        ),
         ListView(
             primary: false,
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
             children: [
-              _appTile("Apple Maps", 'assets/apple-maps.png', true),
-              _appTile("Google Maps", 'assets/google-maps.png', false),
-              _appTile("Waze", 'assets/waze.png', false)
+              _appTile("Apple Maps", 'assets/apple-maps.png', 0.0, context),
+              _appTile("Google Maps", 'assets/google-maps.png', 0.0, context),
+              _appTile("Waze", 'assets/waze.png', 0.0, context)
             ])
       ],
     ));
 
-ListTile _appTile(String name, String imageName, bool isSelected) =>
-    ListTile(
-        title: Transform(
-            transform: Matrix4.translationValues(-20, 0.0, 0.0),
-            child: Row(
-              children: <Widget>[
-                Container(
-                  width: 70.0,
-                  height: 50.0,
-                  child: Image.asset(imageName),
-                  padding: EdgeInsets.only(left: 15.0, right: 5.0)
-                ),
-                Text(name, textAlign: TextAlign.left,
-                  style: GoogleFonts.karla(
-                      fontSize: 17,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black),
-                )
-              ],
-            )),
-        leading: null);
+ListTile _appTile(String name, String imageName, double opacity, BuildContext context) {
+  if (selectedMapsApp == name)
+      opacity = 1.0;
+  return ListTile(
+          title: Transform(
+              transform: Matrix4.translationValues(-20, 0.0, 0.0),
+              child: Stack(
+                children: <Widget> [
+                  Row(
+                    children: <Widget> [
+                      Container(width: 20,),
+                          Container(
+                            height: 48,
+                            width: MediaQuery.of(context).size.width - 52,
+                            decoration: BoxDecoration(
+                              color: Color.fromRGBO(233, 233, 233, opacity),
+                              borderRadius: BorderRadius.all(Radius.circular(16)),
+                            )
+                        ),
+                    ],
+                  ),
+                  Column(
+                    children: <Widget> [
+                      Container(height: 3.5,),
+                      Row(
+                        children: <Widget>[
+                          Container(
+                              width: 77.0,
+                              height: 40.0,
+                              child: Image.asset(imageName),
+                              padding: EdgeInsets.only(left: 25.0, right: 12.0)
+                          ),
+                          Text(name, textAlign: TextAlign.left,
+                            style: GoogleFonts.karla(
+                                fontSize: 17,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.black),
+                          )
+                        ],
+                      )
+                    ],
+                  )
+                ],
+              )),
+          leading: null);
+}
