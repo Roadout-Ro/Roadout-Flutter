@@ -21,9 +21,8 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
   LatLng latlngPos = LatLng(46.7712, 23.6236);
 
   void locatePosition(GoogleMapController controller) async {
-    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
+    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
     currentPosition = position;
-
     latlngPos = LatLng(position.latitude, position.longitude);
     controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: latlngPos, zoom: 14)));
   }
@@ -369,9 +368,11 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
       ));
 
   ListTile _tile(String title, IconData icon) => ListTile(
-        title: Text(title,
+        title: Transform(
+            transform: Matrix4.translationValues(-15, 0.0, 0.0),
+            child: Text(title,
             style:
-                GoogleFonts.karla(fontSize: 17.0, fontWeight: FontWeight.bold)),
+                GoogleFonts.karla(fontSize: 17.0, fontWeight: FontWeight.bold))),
         leading: Icon(
           icon,
           color: Color.fromRGBO(229, 167, 0, 1.0),
@@ -406,7 +407,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                     ]);
               },
             );
-          } else if( title == "Notifications"){
+          } else if (title == "Notifications") {
             Navigator.pop(context);
             showModalBottomSheet(
                 context: context,
@@ -415,7 +416,27 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                     borderRadius: BorderRadius.vertical(
                       top: Radius.circular(23),
                     )), // BorderRadius. vertical// RoundedRectangleBorder
-                builder: (context) => notifications(context));
+                builder: (context) => showNotifications(context));
+          } else if (title == "Payment Methods") {
+            Navigator.pop(context);
+            showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(23),
+                    )), // BorderRadius. vertical// RoundedRectangleBorder
+                builder: (context) => showPayment(context));
+          } else if (title == "Default Directions App") {
+            Navigator.pop(context);
+            showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(23),
+                    )), // BorderRadius. vertical// RoundedRectangleBorder
+                builder: (context) => showDirectionsApp(context));
           } else
             print(FirebaseAuth.instance.currentUser?.uid);
         },

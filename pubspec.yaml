@@ -61,6 +61,9 @@ flutter:
   assets:
      - assets/Logo.jpeg
      - assets/mapIcon.png
+     - assets/apple-maps.png
+     - assets/google-maps.png
+     - assets/waze.png
 
   fonts:
     - family: sficonsets

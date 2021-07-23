@@ -30,7 +30,7 @@
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>ok.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>ok.</string>
+    <string>ok.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
