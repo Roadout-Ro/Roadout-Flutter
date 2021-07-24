@@ -6,6 +6,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 Widget showNotifications(BuildContext context) => Container(
     height: 253,
+    decoration: BoxDecoration(
+      color: Theme.of(context).dialogBackgroundColor,
+      borderRadius: BorderRadius.all(Radius.circular(23)),),
     child: Column(
       children: <Widget>[
         Row(
@@ -20,7 +23,7 @@ Widget showNotifications(BuildContext context) => Container(
                 style: GoogleFonts.karla(
                     fontSize: 21.5,
                     fontWeight: FontWeight.w600,
-                    color: Colors.black),
+                    color: Theme.of(context).primaryColor),
               ),
             ),
             Spacer(),
@@ -45,6 +48,9 @@ Widget showNotifications(BuildContext context) => Container(
 
 Widget showPayment(BuildContext context) => Container(
     height: 300,
+    decoration: BoxDecoration(
+      color: Theme.of(context).dialogBackgroundColor,
+      borderRadius: BorderRadius.all(Radius.circular(23)),),
     padding: MediaQuery.of(context).viewInsets,
     child: Column(
       mainAxisSize: MainAxisSize.min,
@@ -61,7 +67,7 @@ Widget showPayment(BuildContext context) => Container(
                 style: GoogleFonts.karla(
                     fontSize: 21.5,
                     fontWeight: FontWeight.w600,
-                    color: Colors.black),
+                    color: Theme.of(context).primaryColor),
               ),
             ),
             Spacer(),
@@ -113,7 +119,7 @@ Widget showPayment(BuildContext context) => Container(
             child: Text(
               'Add Card',
               style: GoogleFonts.karla(
-                  fontSize: 17.0, fontWeight: FontWeight.w600, color: Color.fromRGBO(103, 72, 5, 1.0)),
+                  fontSize: 17.0, fontWeight: FontWeight.w600, color: Color.fromRGBO(143, 102, 13, 1.0)),
             ),
             onPressed: () => {
               print("Nice")
@@ -166,6 +172,9 @@ ListTile _cardTile(String number, Gradient gradient, Color numberColor) =>
 
 Widget showDirectionsApp(BuildContext context) => Container(
     height: 300,
+    decoration: BoxDecoration(
+      color: Theme.of(context).dialogBackgroundColor,
+      borderRadius: BorderRadius.all(Radius.circular(23)),),
     child: Column(
       children: <Widget>[
         Row(
@@ -180,7 +189,7 @@ Widget showDirectionsApp(BuildContext context) => Container(
                 style: GoogleFonts.karla(
                     fontSize: 21.5,
                     fontWeight: FontWeight.w600,
-                    color: Colors.black),
+                    color: Theme.of(context).primaryColor),
               ),
             ),
             Spacer(),
@@ -216,7 +225,7 @@ Widget showDirectionsApp(BuildContext context) => Container(
 
 ListTile _appTile(String name, String imageName, double opacity, BuildContext context) {
   if (selectedMapsApp == name)
-      opacity = 1.0;
+      opacity = 0.3;
   return ListTile(
           title: Transform(
               transform: Matrix4.translationValues(-20, 0.0, 0.0),
@@ -229,7 +238,7 @@ ListTile _appTile(String name, String imageName, double opacity, BuildContext co
                             height: 48,
                             width: MediaQuery.of(context).size.width - 52,
                             decoration: BoxDecoration(
-                              color: Color.fromRGBO(233, 233, 233, opacity),
+                              color: Color.fromRGBO(180, 180, 180, opacity),
                               borderRadius: BorderRadius.all(Radius.circular(16)),
                             )
                         ),
@@ -250,7 +259,7 @@ ListTile _appTile(String name, String imageName, double opacity, BuildContext co
                             style: GoogleFonts.karla(
                                 fontSize: 17,
                                 fontWeight: FontWeight.w500,
-                                color: Colors.black),
+                                color: Theme.of(context).primaryColor),
                           )
                         ],
                       )

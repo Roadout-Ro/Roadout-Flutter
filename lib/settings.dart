@@ -13,12 +13,14 @@ Widget showSettings(BuildContext context) {
   _readPrefferedMapsApp();
   _readUserName();
   return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).dialogBackgroundColor,
+        borderRadius: BorderRadius.all(Radius.circular(23)),),
       width: 390,
-      height: 600,
-      //padding: MediaQuery.of(context).viewInsets,
+      //height: 600,
       padding: EdgeInsets.all(15.0),
       child: Column(
-        //mainAxisSize: MainAxisSize.min,
+        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Row(
             children: <Widget>[
@@ -119,7 +121,7 @@ Widget showSettings(BuildContext context) {
                       style: GoogleFonts.karla(
                           fontSize: 20.0,
                           fontWeight: FontWeight.w600,
-                          color: Colors.black)),
+                          color: Theme.of(context).primaryColor)),
                 ),
               ),
               Spacer(),
@@ -146,7 +148,7 @@ Widget showSettings(BuildContext context) {
                   style: GoogleFonts.karla(
                       fontSize: 16.0,
                       fontWeight: FontWeight.w600,
-                      color: Colors.black)),
+                      color: Theme.of(context).primaryColor)),
             )
           ]),
           ListView(

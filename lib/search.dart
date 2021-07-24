@@ -4,6 +4,9 @@ import 'package:google_fonts/google_fonts.dart';
 
 Widget showSearchBar(BuildContext context) => Container(
     width: 390,
+    decoration: BoxDecoration(
+      color: Theme.of(context).dialogBackgroundColor,
+      borderRadius: BorderRadius.all(Radius.circular(23)),),
     padding: MediaQuery.of(context).viewInsets,
     child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -14,7 +17,7 @@ Widget showSearchBar(BuildContext context) => Container(
               width: MediaQuery.of(context).size.width - 30,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Theme.of(context).scaffoldBackgroundColor,
                   borderRadius: BorderRadius.all(Radius.circular(23)),
                   boxShadow: [
                     BoxShadow(
@@ -72,7 +75,7 @@ ListTile _tile2(int spots, String location, String km, int colorR, int colorG,
             style: GoogleFonts.karla(
                 fontSize: 15.0,
                 fontWeight: FontWeight.w500,
-                color: Colors.black)),
+                color: Theme.of(context).primaryColor)),
         leading: Container(
             padding: EdgeInsets.only(left: 15),
             alignment: Alignment.topLeft,

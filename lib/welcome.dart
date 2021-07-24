@@ -144,7 +144,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           Container(
                             width: 42.0,
                             height: 42.0,
-                            child: Image.asset('assets/Logo.jpeg'),
+                            child: Image.asset('assets/Logo.png'),
                             padding: EdgeInsets.only(right: 10.0),
                           ),
                           Text('Terms of Use & Privacy Policy',
