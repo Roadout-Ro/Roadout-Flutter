@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:roadout/theme_provider.dart';
 import 'package:roadout/welcome.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -26,6 +27,9 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       title: 'Roadout',
       debugShowCheckedModeBanner: false,
+      themeMode: ThemeMode.system,
+      theme: Themes.lightRoadout,
+      darkTheme: Themes.darkRoadout,
       home: firstWidget,
     );
   }

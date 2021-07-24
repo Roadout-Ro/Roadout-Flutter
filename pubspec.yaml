@@ -60,7 +60,7 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
-     - assets/Logo.jpeg
+     - assets/Logo.png
      - assets/mapIcon.png
      - assets/apple-maps.png
      - assets/google-maps.png

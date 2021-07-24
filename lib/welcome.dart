@@ -27,7 +27,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(
           children: <Widget>[
@@ -173,7 +172,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             style: GoogleFonts.karla(
                 fontSize: 15.0,
                 fontWeight: FontWeight.w500,
-                color: Colors.black54)),
+                color: Theme.of(context).accentColor)),
         leading: Icon(
           icon,
           color: Color.fromRGBO(colorR, colorG, colorB, 1.0),
@@ -182,6 +181,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       );
 
   Widget showSignUp() => Container(
+    decoration: BoxDecoration(
+      color: Theme.of(context).dialogBackgroundColor,
+      borderRadius: BorderRadius.all(Radius.circular(23)),),
     padding: MediaQuery.of(context).viewInsets,
     child: Column(
       mainAxisSize: MainAxisSize.min,
@@ -417,6 +419,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   );
 
   Widget showSignIn() => Container(
+    decoration: BoxDecoration(
+        color: Theme.of(context).dialogBackgroundColor,
+        borderRadius: BorderRadius.all(Radius.circular(23)),),
     padding: MediaQuery.of(context).viewInsets,
     child: Column(
       mainAxisSize: MainAxisSize.min,
