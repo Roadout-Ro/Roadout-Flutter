@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:roadout/homescreen.dart';
 
-Widget showSearchBar(BuildContext context) => Container(
+Widget showSearchBar(BuildContext context, StateSetter setState) => Container(
     width: 390,
     decoration: BoxDecoration(
       color: Theme.of(context).dialogBackgroundColor,
@@ -34,6 +35,9 @@ Widget showSearchBar(BuildContext context) => Container(
                       width: 300,
                       child: TextField(
                         autofocus: true,
+                        enableSuggestions: false,
+                        autocorrect: false,
+                        keyboardAppearance: MediaQuery.of(context).platformBrightness,
                         cursorColor: Color.fromRGBO(255, 193, 25, 1.0),
                         decoration: InputDecoration(
                             border: InputBorder.none, hintText: 'Search for a place...'),
@@ -42,6 +46,8 @@ Widget showSearchBar(BuildContext context) => Container(
                   IconButton(
                     icon: const Icon(CupertinoIcons.xmark, size: 27),
                     onPressed: () {
+                      currentCard = Cards.searchBar;
+                      setState(() {});
                       Navigator.pop(context);
                     },
                     disabledColor: Color.fromRGBO(255, 193, 25, 1.0),
@@ -57,16 +63,16 @@ Widget showSearchBar(BuildContext context) => Container(
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
             children: [
-              _tile2(5, "Location Name 1", "10 km", 255, 193, 25, context),
-              _tile2(3, "Location Name 2", "11 km", 255, 158, 25, context),
-              _tile2(11, "Location Name 3", " 14 km", 143, 102, 13, context),
-              _tile2(7, "Location Name 4", "18 km", 103, 72, 5, context)
+              _tile2(5, "Location Name 1", "10 km", 255, 193, 25, context, setState),
+              _tile2(3, "Location Name 2", "11 km", 255, 158, 25, context, setState),
+              _tile2(11, "Location Name 3", " 14 km", 143, 102, 13, context, setState),
+              _tile2(7, "Location Name 4", "18 km", 103, 72, 5, context, setState)
             ],
           )
         ]));
 
 ListTile _tile2(int spots, String location, String km, int colorR, int colorG,
-    int colorB, BuildContext context) =>
+    int colorB, BuildContext context, StateSetter setState) =>
     ListTile(
         title: Text(location,
             style: GoogleFonts.karla(
@@ -111,4 +117,14 @@ ListTile _tile2(int spots, String location, String km, int colorR, int colorG,
                   ],
                 )
               ],
-            )));
+            )),
+        onTap: () {
+          if (location == 'Location Name 1')
+            currentCard = Cards.resultBar;
+          else if (location == 'Location Name 2')
+            currentCard = Cards.spotCard;
+          setState(() {});
+          Navigator.pop(context);
+        },
+    );
+

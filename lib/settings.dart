@@ -1,6 +1,6 @@
 import 'package:roadout/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:roadout/database_service.dart';
+import 'package:roadout/homescreen.dart';
 import 'package:roadout/menus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,9 +9,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 String selectedMapsApp = '';
 
-Widget showSettings(BuildContext context) {
-  _readPrefferedMapsApp();
+Widget showSettings(BuildContext context, StateSetter setState) {
   _readUserName();
+  _readPrefferedMapsApp();
   return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).dialogBackgroundColor,
@@ -44,7 +44,11 @@ Widget showSettings(BuildContext context) {
                               color: Color.fromRGBO(229, 167, 0, 1.0))),
                     ],
                   ),
-                  onPressed: null,
+                  onPressed: () {
+                    currentCard = Cards.unlockCard;
+                    setState(() {});
+                    Navigator.pop(context);
+                  },
                   disabledColor: Color.fromRGBO(255, 193, 25, 0.4),
                   color: Color.fromRGBO(255, 193, 25, 0.4),
                   borderRadius: BorderRadius.all(Radius.circular(16.0)),
@@ -56,7 +60,7 @@ Widget showSettings(BuildContext context) {
                 child: Text("   "),
               ),
               Container(
-                width: 114,
+                width: 87,
                 height: 44,
                 child: CupertinoButton(
                   padding: EdgeInsets.symmetric(vertical: 0, horizontal: 5),
@@ -67,7 +71,7 @@ Widget showSettings(BuildContext context) {
                       color: Color.fromRGBO(229, 167, 0, 1.0),
                       size: 23,
                     ),
-                    Text(' 1 Free Spot',
+                    Text(' Prizes',
                         style: GoogleFonts.karla(
                             fontSize: 14.0,
                             fontWeight: FontWeight.w600,
@@ -82,7 +86,7 @@ Widget showSettings(BuildContext context) {
               Spacer(),
               Container(
                 width: 37,
-                height: 27,
+                height: 39,
                 child: IconButton(
                   icon: const Icon(CupertinoIcons.xmark, size: 27),
                   onPressed: () {
@@ -156,21 +160,21 @@ Widget showSettings(BuildContext context) {
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
               children: [
-                _tile("Notifications", CupertinoIcons.bell, context),
-                _tile("Payment Methods", CupertinoIcons.creditcard, context),
+                _tile("Notifications", CupertinoIcons.bell, context, setState),
+                _tile("Payment Methods", CupertinoIcons.creditcard, context, setState),
                 _tile("Default Directions App", CupertinoIcons.arrow_branch,
-                    context),
-                _tile("Invite Friends", CupertinoIcons.envelope_open, context),
-                _tile("About Roadout", CupertinoIcons.app, context),
+                    context, setState),
+                _tile("Invite Friends", CupertinoIcons.envelope_open, context, setState),
+                _tile("About Roadout", CupertinoIcons.app, context, setState),
                 _tile("Privacy Policy & Terms of Use",
-                    CupertinoIcons.doc_plaintext, context),
-                _tile("Sign Out", CupertinoIcons.lock_open, context)
+                    CupertinoIcons.doc_plaintext, context, setState),
+                _tile("Sign Out", CupertinoIcons.lock_open, context, setState),
               ])
         ],
       ));
 }
 
-ListTile _tile(String title, IconData icon, BuildContext context) => ListTile(
+ListTile _tile(String title, IconData icon, BuildContext context, StateSetter setState) => ListTile(
       title: Transform(
           transform: Matrix4.translationValues(-15, 0.0, 0.0),
           child: Text(title,
@@ -219,7 +223,7 @@ ListTile _tile(String title, IconData icon, BuildContext context) => ListTile(
                   borderRadius: BorderRadius.vertical(
                 top: Radius.circular(23),
               )), // BorderRadius. vertical// RoundedRectangleBorder
-              builder: (context) => showNotifications(context));
+              builder: (context) => showNotifications(context, setState));
         } else if (title == "Payment Methods") {
           Navigator.pop(context);
           showModalBottomSheet(
@@ -238,8 +242,25 @@ ListTile _tile(String title, IconData icon, BuildContext context) => ListTile(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.vertical(
                 top: Radius.circular(23),
-              )), // BorderRadius. vertical// RoundedRectangleBorder
-              builder: (context) => showDirectionsApp(context));
+              )), builder: (context) => showDirectionsApp(context));
+        } else if (title == "About Roadout") {
+            Navigator.pop(context);
+            showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+            top: Radius.circular(23),
+            )), builder: (context) => showAbout(context));
+        } else if (title == "Privacy Policy & Terms of Use") {
+          Navigator.pop(context);
+          showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(23),
+                  )), builder: (context) => showLegal(context));
         } else
           print(FirebaseAuth.instance.currentUser?.uid);
       },

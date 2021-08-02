@@ -208,7 +208,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   controller: nameController,
                   cursorColor: Color.fromRGBO(103, 72, 5, 1.0),
                   autocorrect: false,
-                  keyboardAppearance: Brightness.light,
+                  keyboardAppearance: MediaQuery.of(context).platformBrightness,
                   decoration: InputDecoration(
                       labelText: 'Name',
                       labelStyle: TextStyle(
@@ -236,7 +236,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   controller: emailController,
                   cursorColor: Color.fromRGBO(255, 158, 25, 1.0),
                   autocorrect: false,
-                  keyboardAppearance: Brightness.light,
+                  keyboardAppearance: MediaQuery.of(context).platformBrightness,
                   decoration: InputDecoration(
                       labelText: 'Email',
                       labelStyle: TextStyle(
@@ -265,7 +265,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   cursorColor: Color.fromRGBO(255, 193, 25, 1.0),
                   obscureText: true,
                   autocorrect: false,
-                  keyboardAppearance: Brightness.light,
+                  keyboardAppearance: MediaQuery.of(context).platformBrightness,
                   decoration: InputDecoration(
                       labelText: 'Password',
                       labelStyle: TextStyle(
@@ -294,7 +294,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   cursorColor: Color.fromRGBO(143, 102, 13, 1.0),
                   obscureText: true,
                   autocorrect: false,
-                  keyboardAppearance: Brightness.light,
+                  keyboardAppearance: MediaQuery.of(context).platformBrightness,
                   decoration: InputDecoration(
                       labelText: 'Confirm Password',
                       labelStyle: TextStyle(
@@ -445,7 +445,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   controller: signInEmailController,
                   cursorColor: Color.fromRGBO(255, 193, 25, 1.0),
                   autocorrect: false,
-                  keyboardAppearance: Brightness.light,
+                  keyboardAppearance: MediaQuery.of(context).platformBrightness,
                   decoration: InputDecoration(
                       labelText: 'Email',
                       labelStyle: TextStyle(
@@ -474,7 +474,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   cursorColor: Color.fromRGBO(143, 102, 13, 1.0),
                   obscureText: true,
                   autocorrect: false,
-                  keyboardAppearance: Brightness.light,
+                  keyboardAppearance: MediaQuery.of(context).platformBrightness,
                   decoration: InputDecoration(
                       labelText: 'Password',
                       labelStyle: TextStyle(
