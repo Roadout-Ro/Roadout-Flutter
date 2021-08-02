@@ -22,8 +22,8 @@ Widget showNotifications(BuildContext context, StateSetter setState) => Containe
                 "Notifications",
                 textAlign: TextAlign.left,
                 style: GoogleFonts.karla(
-                    fontSize: 21.5,
-                    fontWeight: FontWeight.w500,
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.w600,
                     color: Colors.black),
               ),
             ),
@@ -139,29 +139,31 @@ Widget showNotifications(BuildContext context, StateSetter setState) => Containe
             ),
           ],
         ),
-        Row(
-          children: <Widget>[
-            Container(
-                padding: EdgeInsets.only(top: 10, left: 80),
-                alignment: Alignment.center,
-                height: 30,
-                child: Row(children: <Widget>[
-                  Text(
-                    "Notifications are enabled.",
-                    style: GoogleFonts.karla(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromRGBO(152, 152, 152, 1.0)),
-                  ),
-                  Text(
-                    "See settings",
-                    style: GoogleFonts.karla(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromRGBO(143, 102, 13, 1.0)),
-                  )
-                ]))
-          ],
+        Center(
+          child: Row(
+            children: <Widget>[
+              Container(
+                  padding: EdgeInsets.only(top: 10, left: 80),
+                  alignment: Alignment.center,
+                  height: 30,
+                  child: Row(children: <Widget>[
+                    Text(
+                      "Notifications are enabled.",
+                      style: GoogleFonts.karla(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                          color: Color.fromRGBO(152, 152, 152, 1.0)),
+                    ),
+                    Text(
+                      "See settings",
+                      style: GoogleFonts.karla(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                          color: Color.fromRGBO(143, 102, 13, 1.0)),
+                    )
+                  ]))
+            ],
+          ),
         )
       ],
     ));
@@ -411,8 +413,8 @@ Widget showAbout(BuildContext context) => Container(
                 "About",
                 textAlign: TextAlign.left,
                 style: GoogleFonts.karla(
-                    fontSize: 21.5,
-                    fontWeight: FontWeight.w500,
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.w600,
                     color: Colors.black),
               ),
             ),
@@ -494,8 +496,8 @@ Widget showLegal(BuildContext context) => Container(
                 "Legal",
                 textAlign: TextAlign.left,
                 style: GoogleFonts.karla(
-                    fontSize: 21.5,
-                    fontWeight: FontWeight.w500,
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.w600,
                     color: Colors.black),
               ),
             ),

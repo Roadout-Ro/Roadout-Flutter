@@ -986,8 +986,8 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                         "Unlock Spot",
                                         textAlign: TextAlign.left,
                                         style: GoogleFonts.karla(
-                                            fontSize: 17,
-                                            fontWeight: FontWeight.w500,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w600,
                                             color: Colors.black),
                                       ),
                                     ),
@@ -1032,8 +1032,8 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                         child: Text(
                                           'Unlocked',
                                           style: GoogleFonts.karla(
-                                              fontSize: 15.0,
-                                              fontWeight: FontWeight.w500,
+                                              fontSize: 17.0,
+                                              fontWeight: FontWeight.w600,
                                               color: Color.fromRGBO(143, 102, 13, 1.0)),
                                         ),
                                         onPressed: null,
@@ -1051,8 +1051,8 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                         child: Text(
                                           "Get Directions to Spot",
                                           style: GoogleFonts.karla(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.w500,
+                                              fontSize: 17,
+                                              fontWeight: FontWeight.w600,
                                               color: Color.fromRGBO(143, 102, 13, 1.0)),
                                         )))
                               ],
@@ -1088,8 +1088,8 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                           "Delay",
                                           textAlign: TextAlign.left,
                                           style: GoogleFonts.karla(
-                                              fontSize: 17,
-                                              fontWeight: FontWeight.w500,
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w600,
                                               color: Colors.black),
                                         ),
                                       ),
@@ -1204,7 +1204,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                           child: Text(
                                             "Delay for " + progress.toInt().toString() + " minutes",
                                             style: GoogleFonts.karla(
-                                                fontSize: 15.0,
+                                                fontSize: 16.0,
                                                 fontWeight: FontWeight.w600,
                                                 color: Color.fromRGBO(143, 102, 13, 1.0)),
                                           ),
@@ -1250,8 +1250,8 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                           "Pay Delay",
                                           textAlign: TextAlign.left,
                                           style: GoogleFonts.karla(
-                                              fontSize: 17,
-                                              fontWeight: FontWeight.w500,
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w600,
                                               color: Colors.black),
                                         ),
                                       ),
@@ -1283,7 +1283,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                                 color: Colors.black)),
                                       ),
                                       Container(
-                                        child: Text(" " + progress.toString() + " RON",
+                                        child: Text("  " + progress.toString() + " RON",
                                             style: GoogleFonts.karla(
                                                 fontSize: 20,
                                                 fontWeight: FontWeight.w500,
@@ -1297,7 +1297,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                     padding: EdgeInsets.only(top: 10),
                                     child: CupertinoButton(
                                       onPressed: null,
-                                      child: Text("Pay with ApplePay",style: GoogleFonts.karla(
+                                      child: Text("Pay with Apple Pay",style: GoogleFonts.karla(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w500,
                                           color: Colors.white)),
