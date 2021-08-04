@@ -1,5 +1,7 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:notification_permissions/notification_permissions.dart';
@@ -11,6 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'auth_service.dart';
 import 'menus.dart';
 
+
 enum Cards {
   searchBar,
   resultBar,
@@ -19,7 +22,8 @@ enum Cards {
   unlockCard,
   unlockedCard,
   delayCard,
-  payDelayCard
+  payDelayCard,
+  pickCard
 }
 
 Cards currentCard = Cards.searchBar;
@@ -36,6 +40,21 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
   var geolocator = Geolocator();
   LatLng latlngPos = LatLng(46.7712, 23.6236);
 
+  Set<Marker> _markers = {};
+  late BitmapDescriptor mapMarker;
+
+  @override
+  void initState() {
+    super.initState();
+    permissionStatusFuture = getCheckNotificationPermStatus();
+    WidgetsBinding.instance!.addObserver(this);
+    setCustomMarker();
+  }
+
+  void setCustomMarker() async {
+    mapMarker = await BitmapDescriptor.fromAssetImage(ImageConfiguration(), 'assets/Marker.png');
+  }
+
   void locatePosition(GoogleMapController controller) async {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.bestForNavigation);
@@ -47,13 +66,34 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
 
   void _onMapCreated(GoogleMapController controller) {
     _readUserName();
+
+    setState(() {
+      _markers.add(
+        Marker(
+            markerId: MarkerId('id-1'),
+            icon: mapMarker,
+            onTap: () {
+              currentCard = Cards.pickCard;
+              setState(() {});
+            },
+            position: LatLng(46.768728,23.592564),
+            infoWindow: InfoWindow(
+              title: 'Old Town',
+            )
+        )
+      );
+    });
+
     var brightness = MediaQuery.of(context).platformBrightness;
     bool darkModeOn = brightness == Brightness.dark;
     if (darkModeOn)
       controller.setMapStyle(MapStyling.darkMapStyle);
     else
       controller.setMapStyle(MapStyling.lightMapStyle);
-    locatePosition(controller);
+    //locatePosition(controller);
+    //sterge aici
+    controller.animateCamera(CameraUpdate.newCameraPosition(
+        CameraPosition(target:LatLng(46.770439,23.591423), zoom: 14)));
   }
 
   late Future<String?> permissionStatusFuture;
@@ -63,12 +103,6 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
   var nPermUnknown = "unknown";
   var nPermProvisional = "provisional";
 
-  @override
-  void initState() {
-    super.initState();
-    permissionStatusFuture = getCheckNotificationPermStatus();
-    WidgetsBinding.instance!.addObserver(this);
-  }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -106,6 +140,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
           children: <Widget>[
             GoogleMap(
               onMapCreated: _onMapCreated,
+              markers: _markers,
               initialCameraPosition:
                   CameraPosition(target: latlngPos, zoom: 14),
               myLocationButtonEnabled: false,
@@ -1359,6 +1394,180 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                   )
                                 ],
                               ));
+                        } else if (currentCard == Cards.pickCard) {
+                          return Container(
+                              width: MediaQuery.of(context).size.width - 22,
+                              height: 335,
+                              decoration: BoxDecoration(
+                                  color:
+                                  Theme.of(context).scaffoldBackgroundColor,
+                                  borderRadius:
+                                  BorderRadius.all(Radius.circular(26)),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.3),
+                                      spreadRadius: 5,
+                                      blurRadius: 67,
+                                      offset: Offset(
+                                          0, 0), // changes position of shadow
+                                    ),
+                                  ]),
+                              child: Column(
+                                children: <Widget>[
+                                  Row(
+                                    children: <Widget>[
+                                      Container(
+                                        width: 130,
+                                        height: 60,
+                                        padding: EdgeInsets.only(
+                                            left: 20.0, top: 20.0),
+                                        child: Text(
+                                          "Pick Spot",
+                                          textAlign: TextAlign.left,
+                                          style: GoogleFonts.karla(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w600,
+                                              color: Colors.black),
+                                        ),
+                                      ),
+                                      Spacer(),
+                                      Container(
+                                        height: 60,
+                                        width: 50,
+                                        padding: EdgeInsets.only(right: 8.0),
+                                        child: IconButton(
+                                          icon: const Icon(CupertinoIcons.xmark,
+                                              size: 23),
+                                          onPressed: () {
+                                            currentCard = Cards.paySpotCard;
+                                            setState(() {});
+                                          },
+                                          disabledColor:
+                                          Color.fromRGBO(255, 193, 25, 1.0),
+                                          color:
+                                          Color.fromRGBO(255, 193, 25, 1.0),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  Container(
+                                      alignment: Alignment.center,
+                                      child: Column(
+                                        children: <Widget>[
+                                          Row(
+                                            children: [
+                                              Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: (MediaQuery.of(
+                                                          context)
+                                                          .size
+                                                          .width -
+                                                          308) /
+                                                          2)),
+                                              _spotTile(0),
+                                              Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: 2.0)),
+                                              _spotTile(2),
+                                              Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: 2.0)),
+                                              _spotTile(0),
+                                              Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: 2.0)),
+                                              _spotTile(1),
+                                              Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: 2.0)),
+                                              _spotTile(0),
+                                              Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: 2.0)),
+                                              _spotTile(0),
+                                              Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: 2.0)),
+                                              _spotTile(1),
+                                              Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: 2.0)),
+                                              _spotTile(0),
+                                            ],
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.only(top: 41),
+                                          ),
+                                          Row(
+                                            children: [
+                                              Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: (MediaQuery.of(
+                                                          context)
+                                                          .size
+                                                          .width -
+                                                          308) /
+                                                          2)),
+                                              _spotTile(2),
+                                              Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: 2.0)),
+                                              _spotTile(0),
+                                              Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: 2.0)),
+                                              _spotTile(0),
+                                              Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: 2.0)),
+                                              _spotTile(1),
+                                              Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: 2.0)),
+                                              _spotTile(0),
+                                              Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: 2.0)),
+                                              _spotTile(0),
+                                              Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: 2.0)),
+                                              _spotTile(1),
+                                              Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: 2.0)),
+                                              _spotTile(0),
+                                            ],
+                                          ),
+                                        ],
+                                      )),
+                                  Padding(
+                                    padding: EdgeInsets.only(top: 10.0),
+                                  ),
+                                  Container(
+                                      height: 36,
+                                      width: 300,
+                                      decoration: BoxDecoration(
+                                        color: Color.fromRGBO(243, 243, 243, 1.0),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(9)),
+                                      ),
+                                      child: Row(
+                                        children: <Widget> [
+                                          Container(
+                                            child: Icon(
+                                              CupertinoIcons.checkmark,
+                                              color: Color.fromRGBO(255, 193, 25, 1.0),
+                                            ),
+                                            padding: EdgeInsets.only(left: 6.0),
+                                          ),
+                                          Padding(padding: EdgeInsets.only(left: 6.0),),
+
+                                        ],
+                                      )
+                                  ),
+                                ],
+                              ));
                         }
                         return Container(
                           height: 60,
@@ -1460,6 +1669,37 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
         ),
       ),
     );
+  }
+
+  Container _spotTile(int state) {
+    Color spotColor = Color.fromRGBO(255, 193, 25, 1.0);
+    IconData icon = CupertinoIcons.checkmark;
+    if (state == 0) {
+      spotColor = Color.fromRGBO(255, 193, 25, 1.0);
+      icon = CupertinoIcons.checkmark;
+    } else if (state == 1) {
+      spotColor = Color.fromRGBO(149, 46, 0, 1.0);
+      icon = CupertinoIcons.xmark;
+    } else {
+      spotColor = Color.fromRGBO(143, 102, 13, 1.0);
+      icon = CupertinoIcons.hammer;
+    }
+
+    return Container(
+        height: 48,
+        width: 34,
+        decoration: BoxDecoration(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          borderRadius: BorderRadius.all(Radius.circular(6)),
+          border: Border.all(
+            color: spotColor, //
+            width: 2.0,
+          ),
+        ),
+        child: Icon(
+          icon,
+          color: spotColor,
+        ));
   }
 
   _readUserName() async {
