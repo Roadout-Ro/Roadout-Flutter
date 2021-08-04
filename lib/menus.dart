@@ -8,10 +8,13 @@ import 'package:flutter/services.dart';
 var reservationStatusNot = true;
 var promoUpdatesNote = true;
 
-Widget showNotifications(BuildContext context, StateSetter setState) =>
-    Container(
+Widget showNotifications(BuildContext context, StateSetter setState) => Container(
         width: 390,
         height: 280,
+        decoration: BoxDecoration(
+          color: Theme.of(context).dialogBackgroundColor,
+          borderRadius: BorderRadius.all(Radius.circular(23)),
+        ),
         child: Column(
           children: <Widget>[
             Row(
@@ -25,8 +28,7 @@ Widget showNotifications(BuildContext context, StateSetter setState) =>
                     textAlign: TextAlign.left,
                     style: GoogleFonts.karla(
                         fontSize: 20.0,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black),
+                        fontWeight: FontWeight.w600),
                   ),
                 ),
                 Spacer(),
@@ -59,8 +61,7 @@ Widget showNotifications(BuildContext context, StateSetter setState) =>
                             "Reservation Status Notifications",
                             style: GoogleFonts.karla(
                                 fontSize: 15,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.black),
+                                fontWeight: FontWeight.w500),
                           )),
                       Container(
                           padding: EdgeInsets.only(left: 20),
@@ -109,8 +110,7 @@ Widget showNotifications(BuildContext context, StateSetter setState) =>
                             "Promo Updates",
                             style: GoogleFonts.karla(
                                 fontSize: 15,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.black),
+                                fontWeight: FontWeight.w500),
                           )),
                       Container(
                           padding: EdgeInsets.only(left: 20),
@@ -141,6 +141,7 @@ Widget showNotifications(BuildContext context, StateSetter setState) =>
                 ),
               ],
             ),
+            Padding(padding: EdgeInsets.only(top: 10.0)),
             Center(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -410,6 +411,10 @@ ListTile _appTile(
 Widget showAbout(BuildContext context) => Container(
     width: 390,
     height: 250,
+    decoration: BoxDecoration(
+      color: Theme.of(context).dialogBackgroundColor,
+      borderRadius: BorderRadius.all(Radius.circular(23)),
+    ),
     child: Column(
       children: <Widget>[
         Row(
@@ -423,8 +428,7 @@ Widget showAbout(BuildContext context) => Container(
                 textAlign: TextAlign.left,
                 style: GoogleFonts.karla(
                     fontSize: 20.0,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black),
+                    fontWeight: FontWeight.w600),
               ),
             ),
             Spacer(),
@@ -459,8 +463,7 @@ Widget showAbout(BuildContext context) => Container(
                     "Roadout",
                     style: GoogleFonts.karla(
                         fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black),
+                        fontWeight: FontWeight.w500),
                   ),
                   Container(
                       padding: EdgeInsets.only(right: 42),
@@ -484,8 +487,7 @@ Widget showAbout(BuildContext context) => Container(
               "Copyright © 2021 Codebranch",
               style: GoogleFonts.karla(
                   fontSize: 13,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.black),
+                  fontWeight: FontWeight.w500),
             ))
       ],
     ));
@@ -493,6 +495,10 @@ Widget showAbout(BuildContext context) => Container(
 Widget showLegal(BuildContext context) => Container(
     width: 390,
     height: 536,
+    decoration: BoxDecoration(
+      color: Theme.of(context).dialogBackgroundColor,
+      borderRadius: BorderRadius.all(Radius.circular(23)),
+    ),
     child: Column(
       children: <Widget>[
         Row(
@@ -506,8 +512,7 @@ Widget showLegal(BuildContext context) => Container(
                 textAlign: TextAlign.left,
                 style: GoogleFonts.karla(
                     fontSize: 20.0,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black),
+                    fontWeight: FontWeight.w600),
               ),
             ),
             Spacer(),
@@ -532,6 +537,10 @@ Widget showLegal(BuildContext context) => Container(
 Widget showInviteFriends(BuildContext context) => Container(
     width: 390,
     height: 265,
+    decoration: BoxDecoration(
+      color: Theme.of(context).dialogBackgroundColor,
+      borderRadius: BorderRadius.all(Radius.circular(23)),
+    ),
     child: Column(
       children: <Widget>[
         Row(
@@ -539,14 +548,13 @@ Widget showInviteFriends(BuildContext context) => Container(
             Container(
               width: 100,
               height: 60,
-              padding: EdgeInsets.only(left: 20.0,top: 26.0),
+              padding: EdgeInsets.only(left: 20.0, top: 26.0),
               child: Text(
                 "Invites",
                 textAlign: TextAlign.left,
                 style: GoogleFonts.karla(
                     fontSize: 20.0,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black),
+                    fontWeight: FontWeight.w600),
               ),
             ),
             Spacer(),
@@ -566,26 +574,28 @@ Widget showInviteFriends(BuildContext context) => Container(
           ],
         ),
         Container(
-          width: 405,
-          height: 59,
+          width: MediaQuery.of(context).size.width - 22,
+          height: 50,
           padding: EdgeInsets.only(top: 5),
           child:
               CupertinoButton(
                 onPressed: null,
+                padding: EdgeInsets.all(0.0),
                 child: Container(
                     alignment: Alignment.center,
-                  width: 300,
-                    padding: EdgeInsets.only(top: 3),
+                  //width: 300,
+                    //padding: EdgeInsets.only(top: 3),
                     child: Text("https://roadout.com/invite-friends",
                         style: GoogleFonts.karla(
                             fontSize: 17.0,
                             fontWeight: FontWeight.w600,
                             color: Color.fromRGBO(220, 170, 57, 1.0)))),
-                disabledColor: Color.fromRGBO(220, 220, 220, 0.5),
-                color: Color.fromRGBO(220, 220, 220, 0.5),
+                disabledColor: Color.fromRGBO(130, 130, 130, 0.18),
+                color: Color.fromRGBO(130, 130, 130, 0.18),
                 borderRadius: BorderRadius.all(Radius.circular(16.0)),
               ),
         ),
+        Spacer(),
         Container(
           width: 274,
           height: 35,
@@ -598,11 +608,13 @@ Widget showInviteFriends(BuildContext context) => Container(
                   color: Color.fromRGBO(152, 152, 152, 1.0))
           ) ,
           ),
+        Padding(padding: EdgeInsets.only(top: 10.0),),
         Container(
-          width: 375,
-          height: 57,
-          padding: EdgeInsets.only(top: 10),
+          width: MediaQuery.of(context).size.width - 58,
+          height: 80,
+          padding: EdgeInsets.only(bottom: 35.0),
           child: CupertinoButton(
+            padding: EdgeInsets.all(0.0),
             onPressed:(){ Clipboard.setData(ClipboardData(text: "https://roadout.com/invite-friends"));},
             child: Text("Copy Invite Link",
                 style: GoogleFonts.karla(

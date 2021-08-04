@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -12,7 +11,6 @@ import 'package:roadout/settings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'auth_service.dart';
 import 'menus.dart';
-
 
 enum Cards {
   searchBar,
@@ -28,6 +26,11 @@ enum Cards {
 
 Cards currentCard = Cards.searchBar;
 double progress = 0.0;
+int selectedNumber = -1;
+IconData infoIcon = CupertinoIcons.info_circle;
+Color infoColor = Color.fromRGBO(255, 193, 25, 1.0);
+String infoText = "Select a spot to get info about it.";
+
 
 class MainScreen extends StatefulWidget {
   @override
@@ -52,7 +55,8 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
   }
 
   void setCustomMarker() async {
-    mapMarker = await BitmapDescriptor.fromAssetImage(ImageConfiguration(), 'assets/Marker.png');
+    mapMarker = await BitmapDescriptor.fromAssetImage(
+        ImageConfiguration(), 'assets/Marker.png');
   }
 
   void locatePosition(GoogleMapController controller) async {
@@ -68,20 +72,17 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
     _readUserName();
 
     setState(() {
-      _markers.add(
-        Marker(
-            markerId: MarkerId('id-1'),
-            icon: mapMarker,
-            onTap: () {
-              currentCard = Cards.pickCard;
-              setState(() {});
-            },
-            position: LatLng(46.768728,23.592564),
-            infoWindow: InfoWindow(
-              title: 'Old Town',
-            )
-        )
-      );
+      _markers.add(Marker(
+          markerId: MarkerId('id-1'),
+          icon: mapMarker,
+          onTap: () {
+            currentCard = Cards.pickCard;
+            setState(() {});
+          },
+          position: LatLng(46.768728, 23.592564),
+          infoWindow: InfoWindow(
+            title: 'Old Town',
+          )));
     });
 
     var brightness = MediaQuery.of(context).platformBrightness;
@@ -93,7 +94,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
     //locatePosition(controller);
     //sterge aici
     controller.animateCamera(CameraUpdate.newCameraPosition(
-        CameraPosition(target:LatLng(46.770439,23.591423), zoom: 14)));
+        CameraPosition(target: LatLng(46.770439, 23.591423), zoom: 14)));
   }
 
   late Future<String?> permissionStatusFuture;
@@ -102,7 +103,6 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
   var nPermDenied = "denied";
   var nPermUnknown = "unknown";
   var nPermProvisional = "provisional";
-
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -305,53 +305,41 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                       child: Text('5',
                                           style: GoogleFonts.karla(
                                               fontSize: 25.0,
-                                              fontWeight: FontWeight.w500,
-                                              color: Color.fromRGBO(
-                                                  255, 193, 25, 1.0))),
+                                              fontWeight: FontWeight.w500)),
                                       padding: EdgeInsets.only(top: 5.0),
                                     ),
                                     Container(
                                       height: 30,
                                       child: Text('Free Spots',
                                           style: GoogleFonts.karla(
-                                              fontSize: 15.0,
-                                              fontWeight: FontWeight.w500,
-                                              color: Color.fromRGBO(
-                                                  255, 193, 25, 1.0))),
+                                            fontSize: 15.0,
+                                            fontWeight: FontWeight.w500,
+                                          )),
                                       padding: EdgeInsets.only(top: 3.0),
                                     )
                                   ],
                                 ),
                                 Spacer(),
                                 Container(
-                                  width: 150,
-                                  padding: EdgeInsets.only(right: 17.0),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: <Widget>[
-                                      Container(
-                                        height: 30,
-                                        child: Text('Location Name',
-                                            style: GoogleFonts.karla(
-                                                fontSize: 17.0,
-                                                fontWeight: FontWeight.w500,
-                                                color: Theme.of(context)
-                                                    .primaryColor)),
-                                        padding: EdgeInsets.only(top: 7.0),
-                                      ),
-                                      Container(
-                                        height: 30,
-                                        child: Text('10 km',
-                                            style: GoogleFonts.karla(
-                                                fontSize: 15.0,
-                                                fontWeight: FontWeight.w500,
-                                                color: Theme.of(context)
-                                                    .primaryColor)),
-                                        padding: EdgeInsets.only(top: 1.0),
-                                      )
-                                    ],
-                                  ),
-                                )
+                                  width: 80,
+                                  height: 35,
+                                  padding: EdgeInsets.only(right: 15.0),
+                                  child: CupertinoButton(
+                                      padding: EdgeInsets.all(0.0),
+                                      onPressed: () {
+                                        currentCard = Cards.pickCard;
+                                        setState(() {});
+                                      },
+                                      child: Text("Pick",
+                                          style: GoogleFonts.karla(
+                                              fontSize: 15.0,
+                                              fontWeight: FontWeight.w600,
+                                              color: Color.fromRGBO(
+                                                  220, 170, 57, 1.0))),
+                                      color: Color.fromRGBO(220, 170, 57, 0.39),
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(13.0))),
+                                ),
                               ],
                             ),
                           );
@@ -403,7 +391,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                         icon: const Icon(CupertinoIcons.xmark,
                                             size: 23),
                                         onPressed: () {
-                                          currentCard = Cards.resultBar;
+                                          currentCard = Cards.pickCard;
                                           setState(() {});
                                         },
                                         disabledColor:
@@ -930,47 +918,60 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                 ),
                                 Padding(padding: EdgeInsets.only(top: 20.0)),
                                 Row(
-                                children: <Widget>[
-                                  Padding(padding: EdgeInsets.only(left: (MediaQuery.of(context).size.width-289)/2)),
-                                  Container(
-                                  width: 134,
-                                  height: 84,
-                                  child: CupertinoButton(
-                                    padding: EdgeInsets.all(0.0),
-                                    child: Icon(CupertinoIcons.lock, color: Color.fromRGBO(149, 46, 0, 1.0), size: 47,),
-                                    onPressed: () => {
-                                      currentCard = Cards.unlockedCard,
-                                      setState(() {})
-                                    },
-                                    disabledColor:
-                                    Color.fromRGBO(149, 46, 0, 0.44),
-                                    color: Color.fromRGBO(149, 46, 0, 0.44),
-                                    borderRadius:
-                                    BorderRadius.all(Radius.circular(27.0)),
-                                  ),
-                                ),
-                                  Padding(padding: EdgeInsets.only(right: 30.0)),
-                                  Column(
                                   children: <Widget>[
-                                    Text(
-                                      'Time left',
-                                      style: GoogleFonts.karla(
-                                          fontSize: 20.0,
-                                          fontWeight: FontWeight.w600,
-                                          color: Theme.of(context)
-                                              .primaryColor),
+                                    Padding(
+                                        padding: EdgeInsets.only(
+                                            left: (MediaQuery.of(context)
+                                                        .size
+                                                        .width -
+                                                    289) /
+                                                2)),
+                                    Container(
+                                      width: 134,
+                                      height: 84,
+                                      child: CupertinoButton(
+                                        padding: EdgeInsets.all(0.0),
+                                        child: Icon(
+                                          CupertinoIcons.lock,
+                                          color:
+                                              Color.fromRGBO(149, 46, 0, 1.0),
+                                          size: 47,
+                                        ),
+                                        onPressed: () => {
+                                          currentCard = Cards.unlockedCard,
+                                          setState(() {})
+                                        },
+                                        disabledColor:
+                                            Color.fromRGBO(149, 46, 0, 0.44),
+                                        color: Color.fromRGBO(149, 46, 0, 0.44),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(27.0)),
+                                      ),
                                     ),
-                                    Text(
-                                      '6:23',
-                                      style: GoogleFonts.karla(
-                                          fontSize: 20.0,
-                                          fontWeight: FontWeight.w600,
-                                          color: Color.fromRGBO(149, 46, 0, 1.0)),
+                                    Padding(
+                                        padding: EdgeInsets.only(right: 30.0)),
+                                    Column(
+                                      children: <Widget>[
+                                        Text(
+                                          'Time left',
+                                          style: GoogleFonts.karla(
+                                              fontSize: 20.0,
+                                              fontWeight: FontWeight.w600,
+                                              color: Theme.of(context)
+                                                  .primaryColor),
+                                        ),
+                                        Text(
+                                          '6:23',
+                                          style: GoogleFonts.karla(
+                                              fontSize: 20.0,
+                                              fontWeight: FontWeight.w600,
+                                              color: Color.fromRGBO(
+                                                  149, 46, 0, 1.0)),
+                                        )
+                                      ],
                                     )
                                   ],
-                                )
-                              ],
-                            ),
+                                ),
                                 Padding(padding: EdgeInsets.only(top: 5.0)),
                                 Container(
                                   child: CupertinoButton(
@@ -979,7 +980,8 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                       style: GoogleFonts.karla(
                                           fontSize: 16.0,
                                           fontWeight: FontWeight.w600,
-                                          color: Color.fromRGBO(149, 46, 0, 1.0)),
+                                          color:
+                                              Color.fromRGBO(149, 46, 0, 1.0)),
                                       textAlign: TextAlign.center,
                                     ),
                                     onPressed: () {
@@ -997,9 +999,9 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                             width: MediaQuery.of(context).size.width - 22,
                             decoration: BoxDecoration(
                                 color:
-                                Theme.of(context).scaffoldBackgroundColor,
+                                    Theme.of(context).scaffoldBackgroundColor,
                                 borderRadius:
-                                BorderRadius.all(Radius.circular(26)),
+                                    BorderRadius.all(Radius.circular(26)),
                                 boxShadow: [
                                   BoxShadow(
                                     color: Colors.black.withOpacity(0.3),
@@ -1016,14 +1018,14 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                     Container(
                                       width: 130,
                                       height: 60,
-                                      padding: EdgeInsets.only(left: 20.0, top: 20.0),
+                                      padding: EdgeInsets.only(
+                                          left: 17.0, top: 20.0),
                                       child: Text(
                                         "Unlock Spot",
                                         textAlign: TextAlign.left,
                                         style: GoogleFonts.karla(
                                             fontSize: 18,
-                                            fontWeight: FontWeight.w600,
-                                            color: Colors.black),
+                                            fontWeight: FontWeight.w600),
                                       ),
                                     ),
                                     Spacer(),
@@ -1032,19 +1034,23 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                       width: 50,
                                       padding: EdgeInsets.only(right: 8.0),
                                       child: IconButton(
-                                        icon: const Icon(CupertinoIcons.xmark, size: 23),
+                                        icon: const Icon(CupertinoIcons.xmark,
+                                            size: 23),
                                         onPressed: () {
-                                              currentCard = Cards.searchBar;
-                                              setState(() {});
+                                          currentCard = Cards.searchBar;
+                                          setState(() {});
                                         },
-                                        disabledColor: Color.fromRGBO(143, 102, 13, 1.0),
-                                        color: Color.fromRGBO(143, 102, 13, 1.0),
+                                        disabledColor:
+                                            Color.fromRGBO(143, 102, 13, 1.0),
+                                        color:
+                                            Color.fromRGBO(143, 102, 13, 1.0),
                                       ),
                                     )
                                   ],
                                 ),
                                 Container(
-                                    padding: EdgeInsets.only(left: 20, right: 20),
+                                    padding:
+                                        EdgeInsets.only(left: 20, right: 20),
                                     alignment: Alignment.center,
                                     child: Container(
                                       child: Text(
@@ -1052,7 +1058,9 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                         style: GoogleFonts.karla(
                                             fontSize: 13,
                                             fontWeight: FontWeight.w500,
-                                            color: Color.fromRGBO(161, 161, 161, 1.0)), textAlign: TextAlign.center,
+                                            color: Color.fromRGBO(
+                                                161, 161, 161, 1.0)),
+                                        textAlign: TextAlign.center,
                                       ),
                                     )),
                                 Container(
@@ -1067,32 +1075,42 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                           style: GoogleFonts.karla(
                                               fontSize: 17.0,
                                               fontWeight: FontWeight.w600,
-                                              color: Color.fromRGBO(143, 102, 13, 1.0)),
+                                              color: Color.fromRGBO(
+                                                  143, 102, 13, 1.0)),
                                         ),
                                         onPressed: null,
-                                        disabledColor: Color.fromRGBO(142, 102, 13, 0.44),
-                                        color: Color.fromRGBO(143, 102, 13, 0.44),
-                                        borderRadius: BorderRadius.all(Radius.circular(14.0)),
+                                        disabledColor:
+                                            Color.fromRGBO(142, 102, 13, 0.44),
+                                        color:
+                                            Color.fromRGBO(143, 102, 13, 0.44),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(14.0)),
                                       ),
                                     )),
                                 Container(
-                                    padding: EdgeInsets.only(top: 5, bottom: 15),
+                                    padding:
+                                        EdgeInsets.only(top: 5, bottom: 15),
                                     alignment: Alignment.center,
                                     child: Container(
                                       width: 330,
                                       height: 45,
                                       child: CupertinoButton(
+                                        padding: EdgeInsets.all(0.0),
                                         child: Text(
                                           'Get Directions to Spot',
                                           style: GoogleFonts.karla(
                                               fontSize: 17.0,
                                               fontWeight: FontWeight.w600,
-                                              color: Color.fromRGBO(143, 102, 13, 1.0)),
+                                              color: Color.fromRGBO(
+                                                  143, 102, 13, 1.0)),
                                         ),
                                         onPressed: null,
-                                        disabledColor: Color.fromRGBO(142, 102, 13, 0.0),
-                                        color: Color.fromRGBO(143, 102, 13, 0.0),
-                                        borderRadius: BorderRadius.all(Radius.circular(14.0)),
+                                        disabledColor:
+                                            Color.fromRGBO(142, 102, 13, 0.0),
+                                        color:
+                                            Color.fromRGBO(143, 102, 13, 0.0),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(14.0)),
                                       ),
                                     ))
                               ],
@@ -1104,305 +1122,9 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                               height: 275,
                               decoration: BoxDecoration(
                                   color:
-                                  Theme.of(context).scaffoldBackgroundColor,
+                                      Theme.of(context).scaffoldBackgroundColor,
                                   borderRadius:
-                                  BorderRadius.all(Radius.circular(26)),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.3),
-                                      spreadRadius: 5,
-                                      blurRadius: 67,
-                                      offset: Offset(
-                                          0, 0), // changes position of shadow
-                                    ),
-                                  ]),
-                              child: Column(
-                                children: <Widget>[
-                                  Row(
-                                    children: <Widget>[
-                                      Container(
-                                        width: 130,
-                                        height: 60,
-                                        padding: EdgeInsets.only(left: 20.0, top: 20.0),
-                                        child: Text(
-                                          "Delay",
-                                          textAlign: TextAlign.left,
-                                          style: GoogleFonts.karla(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w600,
-                                              color: Colors.black),
-                                        ),
-                                      ),
-                                      Spacer(),
-                                      Container(
-                                        height: 60,
-                                        width: 50,
-                                        padding: EdgeInsets.only(right: 8.0),
-                                        child: IconButton(
-                                          icon: const Icon(CupertinoIcons.xmark, size: 23),
-                                          onPressed: () {
-                                            currentCard = Cards.unlockCard;
-                                            setState(() {});
-                                          },
-                                          disabledColor: Color.fromRGBO(143, 102, 13, 1.0),
-                                          color: Color.fromRGBO(143, 102, 13, 1.0),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Container(
-                                    width: 327,
-                                    height: 45,
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      "You can delay your reservation by up to 20 minutes if caught in traffic, first 5 minutes are free, then you are extra charged for every minute.",
-                                      style: GoogleFonts.karla(
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w500,
-                                          color: Color.fromRGBO(161, 161, 161, 1.0)),
-                                    ),
-                                  ),
-                                  Container(
-                                      padding: EdgeInsets.only( top: 10, left: 5),
-                                      child: Row(
-                                        children: <Widget>[
-                                          Container(
-                                            child: Column(
-                                              children: <Widget>[
-                                                Text("0",
-                                                    style: GoogleFonts.karla(
-                                                        fontSize: 16,
-                                                        fontWeight: FontWeight.w500,
-                                                        color: Color.fromRGBO(143, 102, 13, 1.0))),
-                                                Text("min",
-                                                    style: GoogleFonts.karla(
-                                                        fontSize: 16,
-                                                        fontWeight: FontWeight.w500,
-                                                        color: Color.fromRGBO(143, 102, 13, 1.0))),
-                                              ],
-                                            ),
-                                          ),
-                                          Container(
-                                              width: 295,
-                                              child: CupertinoSlider(
-                                                value: progress,
-                                                min: 0.0,
-                                                max: 20.0,
-                                                activeColor: Color.fromRGBO(143, 102, 13, 1.0),
-                                                divisions: 20,
-                                                onChanged: (value) {
-                                                  setState(() {
-                                                    progress = value.roundToDouble();
-                                                  });
-                                                },
-                                              )),
-                                          Container(
-                                            child: Column(
-                                              children: <Widget>[
-                                                Text("20",
-                                                    style: GoogleFonts.karla(
-                                                        fontSize: 16,
-                                                        fontWeight: FontWeight.w500,
-                                                        color: Color.fromRGBO(143, 102, 13, 1.0))),
-                                                Text("min",
-                                                    style: GoogleFonts.karla(
-                                                        fontSize: 16,
-                                                        fontWeight: FontWeight.w500,
-                                                        color: Color.fromRGBO(143, 102, 13, 1.0))),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      )),
-                                  Row(
-                                    children: <Widget>[
-                                      Container(
-                                        padding: EdgeInsets.only(top: 5, left: 125),
-                                        child: Text("Charge",
-                                            style: GoogleFonts.karla(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w500,
-                                                color: Colors.black)),
-                                      ),
-                                      Container(
-                                        padding: EdgeInsets.only(top: 5),
-                                        child: Text("-" + progress.toString() + " RON",
-                                            style: GoogleFonts.karla(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w500,
-                                                color: Color.fromRGBO(143, 102, 13, 1.0))),
-                                      )
-                                    ],
-                                  ),
-                                  Container(
-                                      alignment: Alignment.center,
-                                      child: Container(
-                                        width: 330,
-                                        height: 55,
-                                        child: CupertinoButton(
-                                          child: Text(
-                                            "Delay for " + progress.toInt().toString() + " minutes",
-                                            style: GoogleFonts.karla(
-                                                fontSize: 16.0,
-                                                fontWeight: FontWeight.w600,
-                                                color: Color.fromRGBO(143, 102, 13, 1.0)),
-                                          ),
-                                          onPressed:() => {
-                                            currentCard = Cards.payDelayCard,
-                                            setState(() {})
-                                          },
-                                          disabledColor: Color.fromRGBO(142, 102, 13, 0.44),
-                                          color: Color.fromRGBO(142, 102, 13, 0.44),
-                                          borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                                        ),
-                                        padding: EdgeInsets.only(top: 10),
-                                      )),
-                                ],
-                              ));
-                        }  else if (currentCard == Cards.payDelayCard) {
-                          return Container(
-                              width: MediaQuery.of(context).size.width - 22,
-                              height: 285,
-                              decoration: BoxDecoration(
-                                  color:
-                                  Theme.of(context).scaffoldBackgroundColor,
-                                  borderRadius:
-                                  BorderRadius.all(Radius.circular(26)),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.3),
-                                      spreadRadius: 5,
-                                      blurRadius: 67,
-                                      offset: Offset(
-                                          0, 0), // changes position of shadow
-                                    ),
-                                  ]),
-                              child: Column(
-                                children: <Widget>[
-                                  Row(
-                                    children: <Widget>[
-                                      Container(
-                                        width: 130,
-                                        height: 60,
-                                        padding: EdgeInsets.only(left: 20.0, top: 20.0),
-                                        child: Text(
-                                          "Pay Delay",
-                                          textAlign: TextAlign.left,
-                                          style: GoogleFonts.karla(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w600,
-                                              color: Colors.black),
-                                        ),
-                                      ),
-                                      Spacer(),
-                                      Container(
-                                        height: 60,
-                                        width: 50,
-                                        padding: EdgeInsets.only(right: 8.0),
-                                        child: IconButton(
-                                          icon: const Icon(CupertinoIcons.xmark, size: 23),
-                                          onPressed: () {
-                                            currentCard = Cards.delayCard;
-                                            setState(() {});
-                                          },
-                                          disabledColor: Color.fromRGBO(143, 102, 13, 1.0),
-                                          color: Color.fromRGBO(143, 102, 13, 1.0),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                  Row(
-                                    children: <Widget>[
-                                      Container(
-                                        padding: EdgeInsets.only(left: 110),
-                                        child: Text("Charge",
-                                            style: GoogleFonts.karla(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.w500,
-                                                color: Colors.black)),
-                                      ),
-                                      Container(
-                                        child: Text("  " + progress.toString() + " RON",
-                                            style: GoogleFonts.karla(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.w500,
-                                                color: Color.fromRGBO(143, 102, 13, 1.0))),
-                                      )
-                                    ],
-                                  ),
-                                  Spacer(),
-                                  Container(
-                                    width: MediaQuery.of(context).size.width - 58,
-                                    height: 45,
-                                    child: CupertinoButton(
-                                      padding: EdgeInsets.all(0.0),
-                                      child: Text(
-                                        'Pay with **** **** **** 9000',
-                                        style: GoogleFonts.karla(
-                                            fontSize: 17.0,
-                                            fontWeight: FontWeight.w600,
-                                            color:
-                                            Color.fromRGBO(214, 109, 0, 1.0)),
-                                      ),
-                                      onPressed: () => {
-                                        //Paid
-                                      },
-                                      disabledColor:
-                                      Color.fromRGBO(214, 109, 0, 0.43),
-                                      color: Color.fromRGBO(214, 109, 0, 0.43),
-                                      borderRadius:
-                                      BorderRadius.all(Radius.circular(13.0)),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.only(top: 8.0),
-                                  ),
-                                  Container(
-                                    width: MediaQuery.of(context).size.width - 58,
-                                    height: 45,
-                                    child: CupertinoButton(
-                                      padding: EdgeInsets.all(0.0),
-                                      child: Text(
-                                        'Different Payment Method',
-                                        style: GoogleFonts.karla(
-                                            fontSize: 17.0,
-                                            fontWeight: FontWeight.w600,
-                                            color: Color.fromRGBO(
-                                                255, 158, 25, 1.0)),
-                                      ),
-                                      onPressed: () => {
-                                        showModalBottomSheet(
-                                            context: context,
-                                            isScrollControlled: true,
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                BorderRadius.vertical(
-                                                  top: Radius.circular(23),
-                                                )), // BorderRadius. vertical// RoundedRectangleBorder
-                                            builder: (context) =>
-                                                showPayment(context))
-                                      },
-                                      disabledColor:
-                                      Color.fromRGBO(255, 158, 25, 0.43),
-                                      color: Color.fromRGBO(255, 158, 25, 0.43),
-                                      borderRadius:
-                                      BorderRadius.all(Radius.circular(13.0)),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.only(bottom: 15.0),
-                                  )
-                                ],
-                              ));
-                        } else if (currentCard == Cards.pickCard) {
-                          return Container(
-                              width: MediaQuery.of(context).size.width - 22,
-                              height: 335,
-                              decoration: BoxDecoration(
-                                  color:
-                                  Theme.of(context).scaffoldBackgroundColor,
-                                  borderRadius:
-                                  BorderRadius.all(Radius.circular(26)),
+                                      BorderRadius.all(Radius.circular(26)),
                                   boxShadow: [
                                     BoxShadow(
                                       color: Colors.black.withOpacity(0.3),
@@ -1420,14 +1142,13 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                         width: 130,
                                         height: 60,
                                         padding: EdgeInsets.only(
-                                            left: 20.0, top: 20.0),
+                                            left: 17.0, top: 20.0),
                                         child: Text(
-                                          "Pick Spot",
+                                          "Delay",
                                           textAlign: TextAlign.left,
                                           style: GoogleFonts.karla(
                                               fontSize: 18,
-                                              fontWeight: FontWeight.w600,
-                                              color: Colors.black),
+                                              fontWeight: FontWeight.w600),
                                         ),
                                       ),
                                       Spacer(),
@@ -1439,13 +1160,355 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                           icon: const Icon(CupertinoIcons.xmark,
                                               size: 23),
                                           onPressed: () {
-                                            currentCard = Cards.paySpotCard;
+                                            currentCard = Cards.unlockCard;
                                             setState(() {});
                                           },
                                           disabledColor:
-                                          Color.fromRGBO(255, 193, 25, 1.0),
+                                              Color.fromRGBO(143, 102, 13, 1.0),
                                           color:
-                                          Color.fromRGBO(255, 193, 25, 1.0),
+                                              Color.fromRGBO(143, 102, 13, 1.0),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Container(
+                                    width: 327,
+                                    height: 45,
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "You can delay your reservation by up to 20 minutes if caught in traffic, first 5 minutes are free, then you are extra charged for every minute.",
+                                      style: GoogleFonts.karla(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w500,
+                                          color: Color.fromRGBO(
+                                              161, 161, 161, 1.0)),
+                                    ),
+                                  ),
+                                  Container(
+                                      padding:
+                                          EdgeInsets.only(top: 10, left: 5),
+                                      child: Row(
+                                        children: <Widget>[
+                                          Container(
+                                            child: Column(
+                                              children: <Widget>[
+                                                Text("0",
+                                                    style: GoogleFonts.karla(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        color: Color.fromRGBO(
+                                                            143,
+                                                            102,
+                                                            13,
+                                                            1.0))),
+                                                Text("min",
+                                                    style: GoogleFonts.karla(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        color: Color.fromRGBO(
+                                                            143,
+                                                            102,
+                                                            13,
+                                                            1.0))),
+                                              ],
+                                            ),
+                                          ),
+                                          Container(
+                                              width: 295,
+                                              child: CupertinoSlider(
+                                                value: progress,
+                                                min: 0.0,
+                                                max: 20.0,
+                                                activeColor: Color.fromRGBO(
+                                                    143, 102, 13, 1.0),
+                                                divisions: 20,
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    progress =
+                                                        value.roundToDouble();
+                                                  });
+                                                },
+                                              )),
+                                          Container(
+                                            child: Column(
+                                              children: <Widget>[
+                                                Text("20",
+                                                    style: GoogleFonts.karla(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        color: Color.fromRGBO(
+                                                            143,
+                                                            102,
+                                                            13,
+                                                            1.0))),
+                                                Text("min",
+                                                    style: GoogleFonts.karla(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        color: Color.fromRGBO(
+                                                            143,
+                                                            102,
+                                                            13,
+                                                            1.0))),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      )),
+                                  Row(
+                                    children: <Widget>[
+                                      Container(
+                                        padding:
+                                            EdgeInsets.only(top: 5, left: 125),
+                                        child: Text("Charge",
+                                            style: GoogleFonts.karla(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500)),
+                                      ),
+                                      Container(
+                                        padding: EdgeInsets.only(top: 5),
+                                        child: Text(
+                                            "  " +
+                                                progress.toInt().toString() +
+                                                " RON",
+                                            style: GoogleFonts.karla(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w600,
+                                                color: Color.fromRGBO(
+                                                    143, 102, 13, 1.0))),
+                                      )
+                                    ],
+                                  ),
+                                  Spacer(),
+                                  Container(
+                                      alignment: Alignment.center,
+                                      child: Container(
+                                        width: 330,
+                                        height: 60,
+                                        child: CupertinoButton(
+                                          child: Text(
+                                            "Delay for " +
+                                                progress.toInt().toString() +
+                                                " minutes",
+                                            style: GoogleFonts.karla(
+                                                fontSize: 16.0,
+                                                fontWeight: FontWeight.w600,
+                                                color: Color.fromRGBO(
+                                                    143, 102, 13, 1.0)),
+                                          ),
+                                          onPressed: () => {
+                                            currentCard = Cards.payDelayCard,
+                                            setState(() {})
+                                          },
+                                          disabledColor: Color.fromRGBO(
+                                              142, 102, 13, 0.44),
+                                          color: Color.fromRGBO(
+                                              142, 102, 13, 0.44),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(15.0)),
+                                        ),
+                                        padding: EdgeInsets.only(bottom: 15),
+                                      )),
+                                ],
+                              ));
+                        } else if (currentCard == Cards.payDelayCard) {
+                          return Container(
+                              width: MediaQuery.of(context).size.width - 22,
+                              height: 285,
+                              decoration: BoxDecoration(
+                                  color:
+                                      Theme.of(context).scaffoldBackgroundColor,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(26)),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.3),
+                                      spreadRadius: 5,
+                                      blurRadius: 67,
+                                      offset: Offset(
+                                          0, 0), // changes position of shadow
+                                    ),
+                                  ]),
+                              child: Column(
+                                children: <Widget>[
+                                  Row(
+                                    children: <Widget>[
+                                      Container(
+                                        width: 130,
+                                        height: 60,
+                                        padding: EdgeInsets.only(
+                                            left: 17.0, top: 20.0),
+                                        child: Text(
+                                          "Pay Delay",
+                                          textAlign: TextAlign.left,
+                                          style: GoogleFonts.karla(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                      ),
+                                      Spacer(),
+                                      Container(
+                                        height: 60,
+                                        width: 50,
+                                        padding: EdgeInsets.only(right: 8.0),
+                                        child: IconButton(
+                                          icon: const Icon(CupertinoIcons.xmark,
+                                              size: 23),
+                                          onPressed: () {
+                                            currentCard = Cards.delayCard;
+                                            setState(() {});
+                                          },
+                                          disabledColor:
+                                              Color.fromRGBO(214, 109, 0, 1.0),
+                                          color:
+                                              Color.fromRGBO(214, 109, 0, 1.0),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  Row(
+                                    children: <Widget>[
+                                      Container(
+                                          padding: EdgeInsets.only(left: 110),
+                                          child: Text("Charge",
+                                              style: GoogleFonts.karla(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.w500,
+                                              ))),
+                                      Container(
+                                        child: Text(
+                                            "  " +
+                                                progress.toInt().toString() +
+                                                " RON",
+                                            style: GoogleFonts.karla(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.w600,
+                                                color: Color.fromRGBO(
+                                                    214, 109, 0, 1.0))),
+                                      )
+                                    ],
+                                  ),
+                                  Spacer(),
+                                  Container(
+                                    width:
+                                        MediaQuery.of(context).size.width - 58,
+                                    height: 45,
+                                    child: CupertinoButton(
+                                      padding: EdgeInsets.all(0.0),
+                                      child: Text(
+                                        'Pay with **** **** **** 9000',
+                                        style: GoogleFonts.karla(
+                                            fontSize: 17.0,
+                                            fontWeight: FontWeight.w600,
+                                            color: Color.fromRGBO(
+                                                214, 109, 0, 1.0)),
+                                      ),
+                                      onPressed: () => {
+                                        //Paid
+                                      },
+                                      disabledColor:
+                                          Color.fromRGBO(214, 109, 0, 0.43),
+                                      color: Color.fromRGBO(214, 109, 0, 0.43),
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(13.0)),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(top: 8.0),
+                                  ),
+                                  Container(
+                                    width:
+                                        MediaQuery.of(context).size.width - 58,
+                                    height: 45,
+                                    child: CupertinoButton(
+                                      padding: EdgeInsets.all(0.0),
+                                      child: Text(
+                                        'Different Payment Method',
+                                        style: GoogleFonts.karla(
+                                            fontSize: 17.0,
+                                            fontWeight: FontWeight.w600,
+                                            color: Color.fromRGBO(
+                                                255, 158, 25, 1.0)),
+                                      ),
+                                      onPressed: () => {
+                                        showModalBottomSheet(
+                                            context: context,
+                                            isScrollControlled: true,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.vertical(
+                                              top: Radius.circular(23),
+                                            )), // BorderRadius. vertical// RoundedRectangleBorder
+                                            builder: (context) =>
+                                                showPayment(context))
+                                      },
+                                      disabledColor:
+                                          Color.fromRGBO(255, 158, 25, 0.43),
+                                      color: Color.fromRGBO(255, 158, 25, 0.43),
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(13.0)),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(bottom: 15.0),
+                                  )
+                                ],
+                              ));
+                        } else if (currentCard == Cards.pickCard) {
+                          return Container(
+                              width: MediaQuery.of(context).size.width - 22,
+                              height: 335,
+                              decoration: BoxDecoration(
+                                  color:
+                                      Theme.of(context).scaffoldBackgroundColor,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(26)),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.3),
+                                      spreadRadius: 5,
+                                      blurRadius: 67,
+                                      offset: Offset(
+                                          0, 0), // changes position of shadow
+                                    ),
+                                  ]),
+                              child: Column(
+                                children: <Widget>[
+                                  Row(
+                                    children: <Widget>[
+                                      Container(
+                                        width: 130,
+                                        height: 60,
+                                        padding: EdgeInsets.only(
+                                            left: 17.0, top: 20.0),
+                                        child: Text(
+                                          "Pick Spot",
+                                          textAlign: TextAlign.left,
+                                          style: GoogleFonts.karla(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                      ),
+                                      Spacer(),
+                                      Container(
+                                        height: 60,
+                                        width: 50,
+                                        padding: EdgeInsets.only(right: 8.0),
+                                        child: IconButton(
+                                          icon: const Icon(CupertinoIcons.xmark,
+                                              size: 23),
+                                          onPressed: () {
+                                            currentCard = Cards.resultBar;
+                                            setState(() {});
+                                          },
+                                          disabledColor:
+                                              Color.fromRGBO(255, 193, 25, 1.0),
+                                          color:
+                                              Color.fromRGBO(255, 193, 25, 1.0),
                                         ),
                                       )
                                     ],
@@ -1459,40 +1522,40 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                               Padding(
                                                   padding: EdgeInsets.only(
                                                       left: (MediaQuery.of(
-                                                          context)
-                                                          .size
-                                                          .width -
-                                                          308) /
+                                                                      context)
+                                                                  .size
+                                                                  .width -
+                                                              308) /
                                                           2)),
-                                              _spotTile(0),
+                                              _spotTile(0, 1),
                                               Padding(
                                                   padding: EdgeInsets.only(
                                                       left: 2.0)),
-                                              _spotTile(2),
+                                              _spotTile(2, 2),
                                               Padding(
                                                   padding: EdgeInsets.only(
                                                       left: 2.0)),
-                                              _spotTile(0),
+                                              _spotTile(0, 3),
                                               Padding(
                                                   padding: EdgeInsets.only(
                                                       left: 2.0)),
-                                              _spotTile(1),
+                                              _spotTile(1, 4),
                                               Padding(
                                                   padding: EdgeInsets.only(
                                                       left: 2.0)),
-                                              _spotTile(0),
+                                              _spotTile(0, 5),
                                               Padding(
                                                   padding: EdgeInsets.only(
                                                       left: 2.0)),
-                                              _spotTile(0),
+                                              _spotTile(0, 6),
                                               Padding(
                                                   padding: EdgeInsets.only(
                                                       left: 2.0)),
-                                              _spotTile(1),
+                                              _spotTile(1, 7),
                                               Padding(
                                                   padding: EdgeInsets.only(
                                                       left: 2.0)),
-                                              _spotTile(0),
+                                              _spotTile(0, 8),
                                             ],
                                           ),
                                           Padding(
@@ -1503,40 +1566,40 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                               Padding(
                                                   padding: EdgeInsets.only(
                                                       left: (MediaQuery.of(
-                                                          context)
-                                                          .size
-                                                          .width -
-                                                          308) /
+                                                                      context)
+                                                                  .size
+                                                                  .width -
+                                                              308) /
                                                           2)),
-                                              _spotTile(2),
+                                              _spotTile(2, 9),
                                               Padding(
                                                   padding: EdgeInsets.only(
                                                       left: 2.0)),
-                                              _spotTile(0),
+                                              _spotTile(0, 10),
                                               Padding(
                                                   padding: EdgeInsets.only(
                                                       left: 2.0)),
-                                              _spotTile(0),
+                                              _spotTile(0, 11),
                                               Padding(
                                                   padding: EdgeInsets.only(
                                                       left: 2.0)),
-                                              _spotTile(1),
+                                              _spotTile(1, 12),
                                               Padding(
                                                   padding: EdgeInsets.only(
                                                       left: 2.0)),
-                                              _spotTile(0),
+                                              _spotTile(0, 13),
                                               Padding(
                                                   padding: EdgeInsets.only(
                                                       left: 2.0)),
-                                              _spotTile(0),
+                                              _spotTile(0, 14),
                                               Padding(
                                                   padding: EdgeInsets.only(
                                                       left: 2.0)),
-                                              _spotTile(1),
+                                              _spotTile(1, 15),
                                               Padding(
                                                   padding: EdgeInsets.only(
                                                       left: 2.0)),
-                                              _spotTile(0),
+                                              _spotTile(0, 16),
                                             ],
                                           ),
                                         ],
@@ -1546,26 +1609,67 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                   ),
                                   Container(
                                       height: 36,
-                                      width: 300,
+                                      width: MediaQuery.of(context).size.width -
+                                          50,
                                       decoration: BoxDecoration(
-                                        color: Color.fromRGBO(243, 243, 243, 1.0),
+                                        color:
+                                            Color.fromRGBO(130, 130, 130, 0.18),
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(9)),
                                       ),
                                       child: Row(
-                                        children: <Widget> [
+                                        children: <Widget>[
                                           Container(
                                             child: Icon(
-                                              CupertinoIcons.checkmark,
-                                              color: Color.fromRGBO(255, 193, 25, 1.0),
+                                              infoIcon,
+                                              color: infoColor,
                                             ),
                                             padding: EdgeInsets.only(left: 6.0),
                                           ),
-                                          Padding(padding: EdgeInsets.only(left: 6.0),),
-
+                                          Padding(
+                                            padding: EdgeInsets.only(left: 6.0),
+                                          ),
+                                          Text(
+                                            infoText,
+                                            textAlign: TextAlign.left,
+                                            style: GoogleFonts.karla(
+                                                fontSize: 13,
+                                                fontWeight: FontWeight.w600,
+                                                color: Theme.of(context)
+                                                    .accentColor),
+                                          )
                                         ],
-                                      )
+                                      )),
+                                  Spacer(),
+                                  Container(
+                                    width:
+                                        MediaQuery.of(context).size.width - 58,
+                                    height: 45,
+                                    child: CupertinoButton(
+                                      padding: EdgeInsets.all(0.0),
+                                      child: Text(
+                                        'Continue',
+                                        style: GoogleFonts.karla(
+                                            fontSize: 17.0,
+                                            fontWeight: FontWeight.w600,
+                                            color: Color.fromRGBO(
+                                                237, 178, 19, 1.0)),
+                                      ),
+                                      onPressed: infoIcon == CupertinoIcons.checkmark
+                                          ? () => {
+                                        currentCard = Cards.spotCard,
+                                        setState(() {})
+                                      } : null,
+                                      disabledColor:
+                                          Color.fromRGBO(255, 193, 25, 0.23),
+                                      color: Color.fromRGBO(255, 193, 25, 0.43),
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(13.0)),
+
+                                    ),
                                   ),
+                                  Padding(
+                                      padding: EdgeInsets.only(bottom: 15.0)),
                                 ],
                               ));
                         }
@@ -1671,7 +1775,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
     );
   }
 
-  Container _spotTile(int state) {
+  InkWell _spotTile(int state, int nr) {
     Color spotColor = Color.fromRGBO(255, 193, 25, 1.0);
     IconData icon = CupertinoIcons.checkmark;
     if (state == 0) {
@@ -1684,12 +1788,20 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
       spotColor = Color.fromRGBO(143, 102, 13, 1.0);
       icon = CupertinoIcons.hammer;
     }
+    Color bgColor = Theme.of(context).scaffoldBackgroundColor;
+    Color iconColor = spotColor;
 
-    return Container(
+    if (selectedNumber == nr) {
+      iconColor = Theme.of(context).scaffoldBackgroundColor;
+      bgColor = spotColor;
+    }
+
+    InkWell spot = InkWell(
+      child: Container(
         height: 48,
         width: 34,
         decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor,
+          color: bgColor,
           borderRadius: BorderRadius.all(Radius.circular(6)),
           border: Border.all(
             color: spotColor, //
@@ -1698,8 +1810,29 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
         ),
         child: Icon(
           icon,
-          color: spotColor,
-        ));
+          color: iconColor,
+        ),
+      ),
+      onTap: () {
+        if (state == 0) {
+          infoText = " Selected spot is free, you can continue";
+          infoIcon = CupertinoIcons.checkmark;
+          infoColor = Color.fromRGBO(255, 193, 25, 1.0);
+        } else if (state == 1) {
+          infoText = " Selected spot is taken by a vehicle";
+          infoIcon = CupertinoIcons.xmark;
+          infoColor = Color.fromRGBO(149, 46, 0, 1.0);
+        } else {
+          infoText = " Selected spot is under maintenance";
+          infoIcon = CupertinoIcons.hammer;
+          infoColor = Color.fromRGBO(143, 102, 13, 1.0);
+        }
+        selectedNumber = nr;
+        setState(() {});
+      },
+    );
+
+    return spot;
   }
 
   _readUserName() async {
