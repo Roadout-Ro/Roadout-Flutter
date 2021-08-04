@@ -143,9 +143,10 @@ Widget showNotifications(BuildContext context, StateSetter setState) =>
             ),
             Center(
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Container(
-                      padding: EdgeInsets.only(top: 10, left: 80),
+                      padding: EdgeInsets.only(top: 10),
                       alignment: Alignment.center,
                       height: 30,
                       child: Row(children: <Widget>[

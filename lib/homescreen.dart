@@ -1010,7 +1010,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                 ),
                                 Container(
                                     padding: EdgeInsets.only(left: 52),
-                                    alignment: Alignment.centerLeft,
+                                    //alignment: Alignment.centerLeft,
                                     child: Container(
                                       width: 327,
                                       height: 30,
@@ -1019,7 +1019,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                         style: GoogleFonts.karla(
                                             fontSize: 13,
                                             fontWeight: FontWeight.w500,
-                                            color: Color.fromRGBO(161, 161, 161, 1.0)),
+                                            color: Color.fromRGBO(161, 161, 161, 1.0)), textAlign: TextAlign.center,
                                       ),
                                     )),
                                 Container(
@@ -1044,6 +1044,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                     )),
                                 Spacer(),
                                 Container(
+                                    height: 45,
                                     padding: EdgeInsets.only(bottom: 20),
                                     alignment: Alignment.center,
                                     child: CupertinoButton(
@@ -1115,8 +1116,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                     height: 45,
                                     alignment: Alignment.center,
                                     child: Text(
-                                      "You can delay your reservation by up to 20 minutes if "
-                                          "caught in traffic, first 5 minutes are free, then you are extra charged for every minute.",
+                                      "You can delay your reservation by up to 20 minutes if caught in traffic, first 5 minutes are free, then you are extra charged for every minute.",
                                       style: GoogleFonts.karla(
                                           fontSize: 13,
                                           fontWeight: FontWeight.w500,
@@ -1291,53 +1291,68 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                       )
                                     ],
                                   ),
+                                  Spacer(),
                                   Container(
-                                    width: 350,
-                                    height: 57,
-                                    padding: EdgeInsets.only(top: 10),
+                                    width: MediaQuery.of(context).size.width - 58,
+                                    height: 45,
                                     child: CupertinoButton(
-                                      onPressed: null,
-                                      child: Text("Pay with Apple Pay",style: GoogleFonts.karla(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500,
-                                          color: Colors.white)),
-                                      disabledColor: Colors.black,
-                                      color: Colors.black,
-                                      borderRadius: BorderRadius.all(Radius.circular(13.0)),
-                                    ),
-                                  ),
-                                  Container(
-                                    width: 350,
-                                    height: 57,
-                                    padding: EdgeInsets.only(top: 10),
-                                    child: CupertinoButton(
-                                      onPressed: () {
-
+                                      padding: EdgeInsets.all(0.0),
+                                      child: Text(
+                                        'Pay with **** **** **** 9000',
+                                        style: GoogleFonts.karla(
+                                            fontSize: 17.0,
+                                            fontWeight: FontWeight.w600,
+                                            color:
+                                            Color.fromRGBO(214, 109, 0, 1.0)),
+                                      ),
+                                      onPressed: () => {
+                                        //Paid
                                       },
-                                      child: Text("Pay with **** **** **** 9000",style: GoogleFonts.karla(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500,
-                                          color: Color.fromRGBO(143, 102, 13, 1.0))),
-                                      disabledColor: Color.fromRGBO(142, 102, 13, 0.44),
-                                      color: Color.fromRGBO(142, 102, 13, 0.44),
-                                      borderRadius: BorderRadius.all(Radius.circular(13.0)),
+                                      disabledColor:
+                                      Color.fromRGBO(214, 109, 0, 0.43),
+                                      color: Color.fromRGBO(214, 109, 0, 0.43),
+                                      borderRadius:
+                                      BorderRadius.all(Radius.circular(13.0)),
                                     ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(top: 8.0),
                                   ),
                                   Container(
-                                    width: 350,
-                                    height: 57,
-                                    padding: EdgeInsets.only(top: 10),
+                                    width: MediaQuery.of(context).size.width - 58,
+                                    height: 45,
                                     child: CupertinoButton(
-                                      onPressed: null,
-                                      child: Text("Add Payment Method",style: GoogleFonts.karla(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500,
-                                          color: Color.fromRGBO(255, 158, 25, 1.0))),
-                                      disabledColor: Color.fromRGBO(255, 158, 25, 0.43),
+                                      padding: EdgeInsets.all(0.0),
+                                      child: Text(
+                                        'Different Payment Method',
+                                        style: GoogleFonts.karla(
+                                            fontSize: 17.0,
+                                            fontWeight: FontWeight.w600,
+                                            color: Color.fromRGBO(
+                                                255, 158, 25, 1.0)),
+                                      ),
+                                      onPressed: () => {
+                                        showModalBottomSheet(
+                                            context: context,
+                                            isScrollControlled: true,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                BorderRadius.vertical(
+                                                  top: Radius.circular(23),
+                                                )), // BorderRadius. vertical// RoundedRectangleBorder
+                                            builder: (context) =>
+                                                showPayment(context))
+                                      },
+                                      disabledColor:
+                                      Color.fromRGBO(255, 158, 25, 0.43),
                                       color: Color.fromRGBO(255, 158, 25, 0.43),
-                                      borderRadius: BorderRadius.all(Radius.circular(13.0)),
+                                      borderRadius:
+                                      BorderRadius.all(Radius.circular(13.0)),
                                     ),
                                   ),
+                                  Padding(
+                                    padding: EdgeInsets.only(bottom: 15.0),
+                                  )
                                 ],
                               ));
                         }
