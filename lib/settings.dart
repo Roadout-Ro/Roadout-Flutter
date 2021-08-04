@@ -261,7 +261,16 @@ ListTile _tile(String title, IconData icon, BuildContext context, StateSetter se
                   borderRadius: BorderRadius.vertical(
                     top: Radius.circular(23),
                   )), builder: (context) => showLegal(context));
-        } else
+        } else if (title == "Invite Friends") {
+          Navigator.pop(context);
+          showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(23),
+                  )), builder: (context) => showInviteFriends(context));
+        }else
           print(FirebaseAuth.instance.currentUser?.uid);
       },
     );

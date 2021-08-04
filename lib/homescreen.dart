@@ -1124,7 +1124,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                     ),
                                   ),
                                   Container(
-                                      padding: EdgeInsets.only(left: 27, top: 10),
+                                      padding: EdgeInsets.only( top: 10, left: 5),
                                       child: Row(
                                         children: <Widget>[
                                           Container(
@@ -1144,7 +1144,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                             ),
                                           ),
                                           Container(
-                                              width: 311,
+                                              width: 295,
                                               child: CupertinoSlider(
                                                 value: progress,
                                                 min: 0.0,
@@ -1178,7 +1178,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                   Row(
                                     children: <Widget>[
                                       Container(
-                                        padding: EdgeInsets.only(top: 5, left: 160),
+                                        padding: EdgeInsets.only(top: 5, left: 125),
                                         child: Text("Charge",
                                             style: GoogleFonts.karla(
                                                 fontSize: 16,
@@ -1275,7 +1275,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                   Row(
                                     children: <Widget>[
                                       Container(
-                                        padding: EdgeInsets.only(left: 145),
+                                        padding: EdgeInsets.only(left: 110),
                                         child: Text("Charge",
                                             style: GoogleFonts.karla(
                                                 fontSize: 20,

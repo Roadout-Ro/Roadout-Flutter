@@ -3,176 +3,179 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:roadout/settings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/services.dart';
 
 var reservationStatusNot = true;
 var promoUpdatesNote = true;
 
-Widget showNotifications(BuildContext context, StateSetter setState) => Container(
-    width: 390,
-    height: 280,
-    child: Column(
-      children: <Widget>[
-        Row(
+Widget showNotifications(BuildContext context, StateSetter setState) =>
+    Container(
+        width: 390,
+        height: 280,
+        child: Column(
           children: <Widget>[
-            Container(
-              width: 200,
-              height: 80,
-              padding: EdgeInsets.only(left: 20.0, top: 30.0),
-              child: Text(
-                "Notifications",
-                textAlign: TextAlign.left,
-                style: GoogleFonts.karla(
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black),
-              ),
+            Row(
+              children: <Widget>[
+                Container(
+                  width: 200,
+                  height: 80,
+                  padding: EdgeInsets.only(left: 20.0, top: 30.0),
+                  child: Text(
+                    "Notifications",
+                    textAlign: TextAlign.left,
+                    style: GoogleFonts.karla(
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black),
+                  ),
+                ),
+                Spacer(),
+                Container(
+                  height: 80,
+                  width: 50,
+                  padding: EdgeInsets.only(right: 8.0),
+                  child: IconButton(
+                    icon: const Icon(CupertinoIcons.xmark, size: 23),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    disabledColor: Color.fromRGBO(255, 193, 25, 1.0),
+                    color: Color.fromRGBO(255, 193, 25, 1.0),
+                  ),
+                )
+              ],
             ),
-            Spacer(),
+            Row(
+              children: <Widget>[
+                Container(
+                  width: 250,
+                  height: 50,
+                  //padding: EdgeInsets.only(left: 10),
+                  child: Column(
+                    children: <Widget>[
+                      Container(
+                          padding: EdgeInsets.only(left: 15),
+                          child: Text(
+                            "Reservation Status Notifications",
+                            style: GoogleFonts.karla(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.black),
+                          )),
+                      Container(
+                          padding: EdgeInsets.only(left: 20),
+                          child: Text(
+                            "Get timely notifications about the remaining time",
+                            style: GoogleFonts.karla(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w500,
+                                color: Color.fromRGBO(152, 152, 152, 1.0)),
+                          ))
+                    ],
+                  ),
+                ),
+                Spacer(),
+                Container(
+                  width: 51,
+                  height: 55,
+                  padding: EdgeInsets.only(right: 30),
+                  child: CupertinoSwitch(
+                    value: reservationStatusNot,
+                    onChanged: (bool value) {
+                      setState(() {
+                        reservationStatusNot = value;
+                      });
+                    },
+                    activeColor: Color.fromRGBO(255, 193, 25, 1.0),
+                  ),
+                ),
+              ],
+            ),
             Container(
-              height: 80,
-              width: 50,
-              padding: EdgeInsets.only(right: 8.0),
-              child: IconButton(
-                icon: const Icon(CupertinoIcons.xmark, size: 23),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                disabledColor: Color.fromRGBO(255, 193, 25, 1.0),
-                color: Color.fromRGBO(255, 193, 25, 1.0),
+              height: 10,
+            ),
+            Row(
+              children: <Widget>[
+                Container(
+                  width: 250,
+                  height: 50,
+                  //padding: EdgeInsets.only(left: 10),
+                  child: Column(
+                    children: <Widget>[
+                      Container(
+                          //padding: EdgeInsets.only(left: 21),
+                          padding: EdgeInsets.only(right: 104),
+                          child: Text(
+                            "Promo Updates",
+                            style: GoogleFonts.karla(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.black),
+                          )),
+                      Container(
+                          padding: EdgeInsets.only(left: 20),
+                          child: Text(
+                            "Get notifications when free spots or discounts are available",
+                            style: GoogleFonts.karla(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w500,
+                                color: Color.fromRGBO(152, 152, 152, 1.0)),
+                          ))
+                    ],
+                  ),
+                ),
+                Spacer(),
+                Container(
+                  width: 51,
+                  height: 55,
+                  padding: EdgeInsets.only(right: 30),
+                  child: CupertinoSwitch(
+                    value: promoUpdatesNote,
+                    onChanged: (bool value) {
+                      setState(() {
+                        promoUpdatesNote = value;
+                      });
+                    },
+                    activeColor: Color.fromRGBO(255, 193, 25, 1.0),
+                  ),
+                ),
+              ],
+            ),
+            Center(
+              child: Row(
+                children: <Widget>[
+                  Container(
+                      padding: EdgeInsets.only(top: 10, left: 80),
+                      alignment: Alignment.center,
+                      height: 30,
+                      child: Row(children: <Widget>[
+                        Text(
+                          "Notifications are enabled.",
+                          style: GoogleFonts.karla(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                              color: Color.fromRGBO(152, 152, 152, 1.0)),
+                        ),
+                        Text(
+                          "See settings",
+                          style: GoogleFonts.karla(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                              color: Color.fromRGBO(143, 102, 13, 1.0)),
+                        )
+                      ]))
+                ],
               ),
             )
           ],
-        ),
-        Row(
-          children: <Widget>[
-            Container(
-              width: 250,
-              height: 50,
-              //padding: EdgeInsets.only(left: 10),
-              child: Column(
-                children: <Widget>[
-                  Container(
-                      padding: EdgeInsets.only(left: 15),
-                      child: Text(
-                        "Reservation Status Notifications",
-                        style: GoogleFonts.karla(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.black),
-                      )),
-                  Container(
-                      padding: EdgeInsets.only(left: 20),
-                      child: Text(
-                        "Get timely notifications about the remaining time",
-                        style: GoogleFonts.karla(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500,
-                            color: Color.fromRGBO(152, 152, 152, 1.0)),
-                      ))
-                ],
-              ),
-            ),
-            Spacer(),
-            Container(
-              width: 51,
-              height: 55,
-              padding: EdgeInsets.only(right: 30),
-              child: CupertinoSwitch(
-                value: reservationStatusNot,
-                onChanged: (bool value) {
-                  setState(() {
-                    reservationStatusNot = value;
-                  });
-                },
-                activeColor: Color.fromRGBO(255, 193, 25, 1.0),
-              ),
-            ),
-          ],
-        ),
-        Container(
-          height: 10,
-        ),
-        Row(
-          children: <Widget>[
-            Container(
-              width: 250,
-              height: 50,
-              //padding: EdgeInsets.only(left: 10),
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    //padding: EdgeInsets.only(left: 21),
-                      padding: EdgeInsets.only(right: 104),
-                      child: Text(
-                        "Promo Updates",
-                        style: GoogleFonts.karla(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.black),
-                      )),
-                  Container(
-                      padding: EdgeInsets.only(left: 20),
-                      child: Text(
-                        "Get notifications when free spots or discounts are available",
-                        style: GoogleFonts.karla(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500,
-                            color: Color.fromRGBO(152, 152, 152, 1.0)),
-                      ))
-                ],
-              ),
-            ),
-            Spacer(),
-            Container(
-              width: 51,
-              height: 55,
-              padding: EdgeInsets.only(right: 30),
-              child: CupertinoSwitch(
-                value: promoUpdatesNote,
-                onChanged: (bool value) {
-                  setState(() {
-                    promoUpdatesNote = value;
-                  });
-                },
-                activeColor: Color.fromRGBO(255, 193, 25, 1.0),
-              ),
-            ),
-          ],
-        ),
-        Center(
-          child: Row(
-            children: <Widget>[
-              Container(
-                  padding: EdgeInsets.only(top: 10, left: 80),
-                  alignment: Alignment.center,
-                  height: 30,
-                  child: Row(children: <Widget>[
-                    Text(
-                      "Notifications are enabled.",
-                      style: GoogleFonts.karla(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500,
-                          color: Color.fromRGBO(152, 152, 152, 1.0)),
-                    ),
-                    Text(
-                      "See settings",
-                      style: GoogleFonts.karla(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500,
-                          color: Color.fromRGBO(143, 102, 13, 1.0)),
-                    )
-                  ]))
-            ],
-          ),
-        )
-      ],
-    ));
+        ));
 
 Widget showPayment(BuildContext context) => Container(
     height: 300,
     decoration: BoxDecoration(
       color: Theme.of(context).dialogBackgroundColor,
-      borderRadius: BorderRadius.all(Radius.circular(23)),),
+      borderRadius: BorderRadius.all(Radius.circular(23)),
+    ),
     padding: MediaQuery.of(context).viewInsets,
     child: Column(
       mainAxisSize: MainAxisSize.min,
@@ -242,11 +245,11 @@ Widget showPayment(BuildContext context) => Container(
             child: Text(
               'Add Card',
               style: GoogleFonts.karla(
-                  fontSize: 17.0, fontWeight: FontWeight.w600, color: Color.fromRGBO(241, 179, 11, 1.0)),
+                  fontSize: 17.0,
+                  fontWeight: FontWeight.w600,
+                  color: Color.fromRGBO(241, 179, 11, 1.0)),
             ),
-            onPressed: () => {
-              print("Nice")
-            },
+            onPressed: () => {print("Nice")},
             disabledColor: Color.fromRGBO(255, 193, 25, 0.44),
             color: Color.fromRGBO(255, 193, 25, 0.44),
             borderRadius: BorderRadius.all(Radius.circular(13.0)),
@@ -292,12 +295,12 @@ ListTile _cardTile(String number, Gradient gradient, Color numberColor) =>
           ),
         ));
 
-
 Widget showDirectionsApp(BuildContext context) => Container(
     height: 300,
     decoration: BoxDecoration(
       color: Theme.of(context).dialogBackgroundColor,
-      borderRadius: BorderRadius.all(Radius.circular(23)),),
+      borderRadius: BorderRadius.all(Radius.circular(23)),
+    ),
     child: Column(
       children: <Widget>[
         Row(
@@ -346,56 +349,61 @@ Widget showDirectionsApp(BuildContext context) => Container(
       ],
     ));
 
-ListTile _appTile(String name, String imageName, double opacity, BuildContext context) {
-  if (selectedMapsApp == name)
-      opacity = 0.3;
+ListTile _appTile(
+    String name, String imageName, double opacity, BuildContext context) {
+  if (selectedMapsApp == name) opacity = 0.3;
   return ListTile(
-          title: Transform(
-              transform: Matrix4.translationValues(-20, 0.0, 0.0),
-              child: Stack(
-                children: <Widget> [
-                  Row(
-                    children: <Widget> [
-                      Container(width: 20,),
-                          Container(
-                            height: 48,
-                            width: MediaQuery.of(context).size.width - 52,
-                            decoration: BoxDecoration(
-                              color: Color.fromRGBO(180, 180, 180, opacity),
-                              borderRadius: BorderRadius.all(Radius.circular(16)),
-                            )
-                        ),
-                    ],
-                  ),
-                  Column(
-                    children: <Widget> [
-                      Container(height: 3.5,),
-                      Row(
-                        children: <Widget>[
-                          Container(
-                              width: 77.0,
-                              height: 40.0,
-                              child: Image.asset(imageName),
-                              padding: EdgeInsets.only(left: 25.0, right: 12.0)
-                          ),
-                          Text(name, textAlign: TextAlign.left,
-                            style: GoogleFonts.karla(
-                                fontSize: 17,
-                                fontWeight: FontWeight.w500,
-                                color: Theme.of(context).primaryColor),
-                          )
-                        ],
-                      )
-                    ],
-                  )
-                ],
-              )),
-          leading: null,
-          onTap: () => {
-              selectedMapsApp = name,
-              _savePrefferedMapsApp(name),
-              Navigator.pop(context)
-          },);
+    title: Transform(
+        transform: Matrix4.translationValues(-20, 0.0, 0.0),
+        child: Stack(
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                Container(
+                  width: 20,
+                ),
+                Container(
+                    height: 48,
+                    width: MediaQuery.of(context).size.width - 52,
+                    decoration: BoxDecoration(
+                      color: Color.fromRGBO(180, 180, 180, opacity),
+                      borderRadius: BorderRadius.all(Radius.circular(16)),
+                    )),
+              ],
+            ),
+            Column(
+              children: <Widget>[
+                Container(
+                  height: 3.5,
+                ),
+                Row(
+                  children: <Widget>[
+                    Container(
+                        width: 77.0,
+                        height: 40.0,
+                        child: Image.asset(imageName),
+                        padding: EdgeInsets.only(left: 25.0, right: 12.0)),
+                    Text(
+                      name,
+                      textAlign: TextAlign.left,
+                      style: GoogleFonts.karla(
+                          fontSize: 17,
+                          fontWeight: FontWeight.w500,
+                          color: Theme.of(context).primaryColor),
+                    )
+                  ],
+                )
+              ],
+            )
+          ],
+        )),
+    leading: null,
+    onTap: () => {
+      selectedMapsApp = name,
+      _savePrefferedMapsApp(name),
+      Navigator.pop(context)
+    },
+  );
 }
 
 Widget showAbout(BuildContext context) => Container(
@@ -505,7 +513,7 @@ Widget showLegal(BuildContext context) => Container(
             Container(
               height: 90,
               width: 50,
-              padding: EdgeInsets.only(right: 8.0),
+              padding: EdgeInsets.only(right: 8.0, bottom: 10),
               child: IconButton(
                 icon: const Icon(CupertinoIcons.xmark, size: 23),
                 onPressed: () {
@@ -520,6 +528,94 @@ Widget showLegal(BuildContext context) => Container(
       ],
     ));
 
+Widget showInviteFriends(BuildContext context) => Container(
+    width: 390,
+    height: 265,
+    child: Column(
+      children: <Widget>[
+        Row(
+          children: <Widget>[
+            Container(
+              width: 100,
+              height: 60,
+              padding: EdgeInsets.only(left: 20.0,top: 26.0),
+              child: Text(
+                "Invites",
+                textAlign: TextAlign.left,
+                style: GoogleFonts.karla(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black),
+              ),
+            ),
+            Spacer(),
+            Container(
+              height: 60,
+              width: 50,
+              padding: EdgeInsets.only(right: 8.0, bottom: 10,top: 17),
+              child: IconButton(
+                icon: const Icon(CupertinoIcons.xmark, size: 23),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                disabledColor: Color.fromRGBO(229, 167, 0, 1.0),
+                color: Color.fromRGBO(229, 167, 0, 1.0),
+              ),
+            )
+          ],
+        ),
+        Container(
+          width: 405,
+          height: 59,
+          padding: EdgeInsets.only(top: 5),
+          child:
+              CupertinoButton(
+                onPressed: null,
+                child: Container(
+                    alignment: Alignment.center,
+                  width: 300,
+                    padding: EdgeInsets.only(top: 3),
+                    child: Text("https://roadout.com/invite-friends",
+                        style: GoogleFonts.karla(
+                            fontSize: 17.0,
+                            fontWeight: FontWeight.w600,
+                            color: Color.fromRGBO(220, 170, 57, 1.0)))),
+                disabledColor: Color.fromRGBO(220, 220, 220, 0.5),
+                color: Color.fromRGBO(220, 220, 220, 0.5),
+                borderRadius: BorderRadius.all(Radius.circular(16.0)),
+              ),
+        ),
+        Container(
+          width: 274,
+          height: 35,
+          padding: EdgeInsets.only(top: 5),
+          child: Text("When you invite 5 friends you get a free reservation for a parking spot",
+              textAlign: TextAlign.center,
+              style: GoogleFonts.karla(
+                  fontSize: 13.0,
+                  fontWeight: FontWeight.w600,
+                  color: Color.fromRGBO(152, 152, 152, 1.0))
+          ) ,
+          ),
+        Container(
+          width: 375,
+          height: 57,
+          padding: EdgeInsets.only(top: 10),
+          child: CupertinoButton(
+            onPressed:(){ Clipboard.setData(ClipboardData(text: "https://roadout.com/invite-friends"));},
+            child: Text("Copy Invite Link",
+                style: GoogleFonts.karla(
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w600,
+                    color: Color.fromRGBO(220, 170, 57, 1.0))
+            ),
+            disabledColor: Color.fromRGBO(220, 170, 57, 0.44),
+            color: Color.fromRGBO(220, 170, 57, 0.44),
+            borderRadius: BorderRadius.all(Radius.circular(13.0)),
+          ),
+        )
+      ],
+    ));
 
 _savePrefferedMapsApp(String app) async {
   final prefs = await SharedPreferences.getInstance();

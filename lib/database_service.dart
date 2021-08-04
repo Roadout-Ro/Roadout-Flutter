@@ -12,7 +12,7 @@ class DatabaseService {
    Future<String> getUserData() async {
     String firestoreName = "Name";
     await usersCollection.doc(uid).get().then((value) {
-      print(value['name'].toString());
+      //print(value['name'].toString());
       firestoreName = value['name'].toString();
     });
     username = firestoreName;
