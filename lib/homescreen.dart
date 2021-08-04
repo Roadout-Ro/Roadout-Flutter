@@ -1311,7 +1311,9 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                     height: 57,
                                     padding: EdgeInsets.only(top: 10),
                                     child: CupertinoButton(
-                                      onPressed: null,
+                                      onPressed: () {
+
+                                      },
                                       child: Text("Pay with **** **** **** 9000",style: GoogleFonts.karla(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w500,
