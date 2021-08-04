@@ -143,7 +143,7 @@ Widget showNotifications(BuildContext context, StateSetter setState) =>
             ),
             Center(
               child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Container(
                       padding: EdgeInsets.only(top: 10),
@@ -151,7 +151,7 @@ Widget showNotifications(BuildContext context, StateSetter setState) =>
                       height: 30,
                       child: Row(children: <Widget>[
                         Text(
-                          "Notifications are enabled.",
+                          "Notifications are enabled. ",
                           style: GoogleFonts.karla(
                               fontSize: 15,
                               fontWeight: FontWeight.w500,

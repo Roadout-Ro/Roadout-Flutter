@@ -959,7 +959,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                         } else if (currentCard == Cards.unlockedCard) {
                           return Container(
                             height: 220,
-                            width: 365,
+                            width: MediaQuery.of(context).size.width - 22,
                             decoration: BoxDecoration(
                                 color:
                                 Theme.of(context).scaffoldBackgroundColor,
@@ -1009,11 +1009,9 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                   ],
                                 ),
                                 Container(
-                                    padding: EdgeInsets.only(left: 52),
-                                    //alignment: Alignment.centerLeft,
+                                    padding: EdgeInsets.only(left: 20, right: 20),
+                                    alignment: Alignment.center,
                                     child: Container(
-                                      width: 327,
-                                      height: 30,
                                       child: Text(
                                         "Your spot is unlocked now, after parking you can come back here to find your car",
                                         style: GoogleFonts.karla(
@@ -1023,7 +1021,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                       ),
                                     )),
                                 Container(
-                                    padding: EdgeInsets.only(top: 10),
+                                    padding: EdgeInsets.only(top: 20),
                                     alignment: Alignment.center,
                                     child: Container(
                                       width: 330,
@@ -1042,26 +1040,32 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                         borderRadius: BorderRadius.all(Radius.circular(14.0)),
                                       ),
                                     )),
-                                Spacer(),
                                 Container(
-                                    height: 45,
-                                    padding: EdgeInsets.only(bottom: 20),
+                                    padding: EdgeInsets.only(top: 5, bottom: 15),
                                     alignment: Alignment.center,
-                                    child: CupertinoButton(
-                                        onPressed: null,
+                                    child: Container(
+                                      width: 330,
+                                      height: 45,
+                                      child: CupertinoButton(
                                         child: Text(
-                                          "Get Directions to Spot",
+                                          'Get Directions to Spot',
                                           style: GoogleFonts.karla(
-                                              fontSize: 17,
+                                              fontSize: 17.0,
                                               fontWeight: FontWeight.w600,
                                               color: Color.fromRGBO(143, 102, 13, 1.0)),
-                                        )))
+                                        ),
+                                        onPressed: null,
+                                        disabledColor: Color.fromRGBO(142, 102, 13, 0.0),
+                                        color: Color.fromRGBO(143, 102, 13, 0.0),
+                                        borderRadius: BorderRadius.all(Radius.circular(14.0)),
+                                      ),
+                                    ))
                               ],
                             ),
                           );
                         } else if (currentCard == Cards.delayCard) {
                           return Container(
-                              width: 365,
+                              width: MediaQuery.of(context).size.width - 22,
                               height: 275,
                               decoration: BoxDecoration(
                                   color:
@@ -1222,7 +1226,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                               ));
                         }  else if (currentCard == Cards.payDelayCard) {
                           return Container(
-                              width: 365,
+                              width: MediaQuery.of(context).size.width - 22,
                               height: 285,
                               decoration: BoxDecoration(
                                   color:
