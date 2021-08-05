@@ -185,7 +185,7 @@ ListTile _tile(String title, IconData icon, BuildContext context, StateSetter se
         color: Color.fromRGBO(229, 167, 0, 1.0),
         size: 25,
       ),
-      onTap: () {
+      onTap: () async {
         if (title == "Sign Out") {
           showDialog(
             context: context,

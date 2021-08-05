@@ -1176,7 +1176,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                   ),
                                   Container(
                                       padding:
-                                          EdgeInsets.only(top: 10, left: 5),
+                                          EdgeInsets.only(top: 10, left: 25),
                                       child: Row(
                                         children: <Widget>[
                                           Container(
@@ -1253,7 +1253,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                     children: <Widget>[
                                       Container(
                                         padding:
-                                            EdgeInsets.only(top: 5, left: 125),
+                                            EdgeInsets.only(top: 5, left: 150),
                                         child: Text("Charge",
                                             style: GoogleFonts.karla(
                                                 fontSize: 16,
@@ -1361,7 +1361,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                   Row(
                                     children: <Widget>[
                                       Container(
-                                          padding: EdgeInsets.only(left: 110),
+                                          padding: EdgeInsets.only(left: 130),
                                           child: Text("Charge",
                                               style: GoogleFonts.karla(
                                                 fontSize: 20,

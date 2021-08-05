@@ -5,10 +5,23 @@ import 'package:roadout/settings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/services.dart';
 
-var reservationStatusNot = true;
-var promoUpdatesNote = true;
+Future<bool> getReservationStatusNot() async {
+  final prefs = await SharedPreferences.getInstance();
+  final key = 'reservationStatusNot';
+  final value = prefs.getBool(key) ?? true;
+  return value;
+}
 
-Widget showNotifications(BuildContext context, StateSetter setState) => Container(
+Future<bool> getPromoUpdatesNot() async {
+  final prefs = await SharedPreferences.getInstance();
+  final key = 'promoUpdatesNot';
+  final value = prefs.getBool(key) ?? true;
+  return value;
+}
+
+
+Widget showNotifications(BuildContext context, StateSetter setState) {
+  return Container(
         width: 390,
         height: 280,
         decoration: BoxDecoration(
@@ -81,11 +94,13 @@ Widget showNotifications(BuildContext context, StateSetter setState) => Containe
                   height: 55,
                   padding: EdgeInsets.only(right: 30),
                   child: CupertinoSwitch(
-                    value: reservationStatusNot,
-                    onChanged: (bool value) {
-                      setState(() {
-                        reservationStatusNot = value;
-                      });
+                    value: true,
+                    onChanged: (bool value) async {
+                      final prefs = await SharedPreferences.getInstance();
+                      final key = 'reservationStatusNot';
+                      prefs.setBool(key, value);
+                      print('Saved $value');
+                      setState(() {});
                     },
                     activeColor: Color.fromRGBO(255, 193, 25, 1.0),
                   ),
@@ -130,14 +145,16 @@ Widget showNotifications(BuildContext context, StateSetter setState) => Containe
                   height: 55,
                   padding: EdgeInsets.only(right: 30),
                   child: CupertinoSwitch(
-                    value: promoUpdatesNote,
-                    onChanged: (bool value) {
-                      setState(() {
-                        promoUpdatesNote = value;
-                      });
-                    },
-                    activeColor: Color.fromRGBO(255, 193, 25, 1.0),
-                  ),
+                      value:true,
+                     onChanged: (bool value) async {
+                    final prefs = await SharedPreferences.getInstance();
+                   final key = 'promoUpdatesNot';
+                    prefs.setBool(key, value);
+                    print('Saved $value');
+                     setState(() {});
+                     },
+                     activeColor: Color.fromRGBO(255, 193, 25, 1.0),
+                     ),
                 ),
               ],
             ),
@@ -170,7 +187,7 @@ Widget showNotifications(BuildContext context, StateSetter setState) => Containe
               ),
             )
           ],
-        ));
+        ));}
 
 Widget showPayment(BuildContext context) => Container(
     height: 300,
@@ -191,8 +208,7 @@ Widget showPayment(BuildContext context) => Container(
               child: Text(
                 "Payment",
                 textAlign: TextAlign.left,
-                style: GoogleFonts.karla(
-                    fontSize: 20.0,
+                style: GoogleFonts.karla(               fontSize: 20.0,
                     fontWeight: FontWeight.w600,
                     color: Theme.of(context).primaryColor),
               ),
