@@ -1206,7 +1206,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                             ),
                                           ),
                                           Container(
-                                              width: 295,
+                                              width: MediaQuery.of(context).size.width-127,
                                               child: CupertinoSlider(
                                                 value: progress,
                                                 min: 0.0,
@@ -1250,29 +1250,28 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                         ],
                                       )),
                                   Row(
-                                    children: <Widget>[
-                                      Container(
-                                        padding:
-                                            EdgeInsets.only(top: 5, left: 150),
-                                        child: Text("Charge",
-                                            style: GoogleFonts.karla(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w500)),
-                                      ),
-                                      Container(
-                                        padding: EdgeInsets.only(top: 5),
-                                        child: Text(
-                                            "  " +
-                                                progress.toInt().toString() +
-                                                " RON",
-                                            style: GoogleFonts.karla(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w600,
-                                                color: Color.fromRGBO(
-                                                    143, 102, 13, 1.0))),
-                                      )
-                                    ],
-                                  ),
+                                      children: <Widget>[
+                                        Container(
+                                          padding: EdgeInsets.only(top: 5, left: (MediaQuery.of(context).size.width-130)/2),
+                                          child: Text("Charge",
+                                              style: GoogleFonts.karla(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w500)),
+                                        ),
+                                        Container(
+                                          padding: EdgeInsets.only(top: 5),
+                                          child: Text(
+                                              "  " +
+                                                  progress.toInt().toString() +
+                                                  " RON",
+                                              style: GoogleFonts.karla(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w600,
+                                                  color: Color.fromRGBO(
+                                                      143, 102, 13, 1.0))),
+                                        )
+                                      ],
+                                    ),
                                   Spacer(),
                                   Container(
                                       alignment: Alignment.center,
@@ -1361,7 +1360,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                   Row(
                                     children: <Widget>[
                                       Container(
-                                          padding: EdgeInsets.only(left: 130),
+                                          padding: EdgeInsets.only(left: (MediaQuery.of(context).size.width-160)/2),
                                           child: Text("Charge",
                                               style: GoogleFonts.karla(
                                                 fontSize: 20,
