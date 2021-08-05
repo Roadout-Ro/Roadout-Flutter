@@ -333,10 +333,8 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                       child: Text("Pick",
                                           style: GoogleFonts.karla(
                                               fontSize: 15.0,
-                                              fontWeight: FontWeight.w600,
-                                              color: Color.fromRGBO(
-                                                  220, 170, 57, 1.0))),
-                                      color: Color.fromRGBO(220, 170, 57, 0.39),
+                                              fontWeight: FontWeight.w600)),
+                                      color: Color.fromRGBO(220, 170, 57, 1.0),
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(13.0))),
                                 ),
@@ -582,18 +580,16 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                           'Pay Spot',
                                           style: GoogleFonts.karla(
                                               fontSize: 17.0,
-                                              fontWeight: FontWeight.w600,
-                                              color: Color.fromRGBO(
-                                                  227, 167, 27, 1.0)),
+                                              fontWeight: FontWeight.w600),
                                         ),
                                         onPressed: () => {
                                           currentCard = Cards.paySpotCard,
                                           setState(() {})
                                         },
                                         disabledColor:
-                                            Color.fromRGBO(220, 170, 57, 0.43),
+                                            Color.fromRGBO(220, 170, 57, 1.0),
                                         color:
-                                            Color.fromRGBO(220, 170, 57, 0.43),
+                                            Color.fromRGBO(220, 170, 57, 1.0),
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(13.0)),
                                       ),
@@ -791,16 +787,14 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                       'Pay with **** **** **** 9000',
                                       style: GoogleFonts.karla(
                                           fontSize: 17.0,
-                                          fontWeight: FontWeight.w600,
-                                          color:
-                                              Color.fromRGBO(214, 109, 0, 1.0)),
+                                          fontWeight: FontWeight.w600),
                                     ),
                                     onPressed: () => {
                                       //Paid
                                     },
                                     disabledColor:
-                                        Color.fromRGBO(214, 109, 0, 0.43),
-                                    color: Color.fromRGBO(214, 109, 0, 0.43),
+                                        Color.fromRGBO(214, 109, 0, 1.0),
+                                    color: Color.fromRGBO(214, 109, 0, 1.0),
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(13.0)),
                                   ),
@@ -817,9 +811,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                       'Different Payment Method',
                                       style: GoogleFonts.karla(
                                           fontSize: 17.0,
-                                          fontWeight: FontWeight.w600,
-                                          color: Color.fromRGBO(
-                                              255, 158, 25, 1.0)),
+                                          fontWeight: FontWeight.w600),
                                     ),
                                     onPressed: () => {
                                       showModalBottomSheet(
@@ -834,8 +826,8 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                               showPayment(context))
                                     },
                                     disabledColor:
-                                        Color.fromRGBO(255, 158, 25, 0.43),
-                                    color: Color.fromRGBO(255, 158, 25, 0.43),
+                                        Color.fromRGBO(255, 158, 25, 1.0),
+                                    color: Color.fromRGBO(255, 158, 25, 1.0),
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(13.0)),
                                   ),
@@ -934,7 +926,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                         child: Icon(
                                           CupertinoIcons.lock,
                                           color:
-                                              Color.fromRGBO(149, 46, 0, 1.0),
+                                              Theme.of(context).scaffoldBackgroundColor,
                                           size: 47,
                                         ),
                                         onPressed: () => {
@@ -942,8 +934,8 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                           setState(() {})
                                         },
                                         disabledColor:
-                                            Color.fromRGBO(149, 46, 0, 0.44),
-                                        color: Color.fromRGBO(149, 46, 0, 0.44),
+                                            Color.fromRGBO(149, 46, 0, 1.0),
+                                        color: Color.fromRGBO(149, 46, 0, 1.0),
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(27.0)),
                                       ),
@@ -1074,15 +1066,13 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                           'Unlocked',
                                           style: GoogleFonts.karla(
                                               fontSize: 17.0,
-                                              fontWeight: FontWeight.w600,
-                                              color: Color.fromRGBO(
-                                                  143, 102, 13, 1.0)),
+                                              fontWeight: FontWeight.w600),
                                         ),
                                         onPressed: null,
                                         disabledColor:
-                                            Color.fromRGBO(142, 102, 13, 0.44),
+                                            Color.fromRGBO(142, 102, 13, 1.0),
                                         color:
-                                            Color.fromRGBO(143, 102, 13, 0.44),
+                                            Color.fromRGBO(143, 102, 13, 1.0),
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(14.0)),
                                       ),
@@ -1296,18 +1286,16 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                                 " minutes",
                                             style: GoogleFonts.karla(
                                                 fontSize: 16.0,
-                                                fontWeight: FontWeight.w600,
-                                                color: Color.fromRGBO(
-                                                    143, 102, 13, 1.0)),
+                                                fontWeight: FontWeight.w600),
                                           ),
                                           onPressed: () => {
                                             currentCard = Cards.payDelayCard,
                                             setState(() {})
                                           },
                                           disabledColor: Color.fromRGBO(
-                                              142, 102, 13, 0.44),
+                                              142, 102, 13, 1.0),
                                           color: Color.fromRGBO(
-                                              142, 102, 13, 0.44),
+                                              142, 102, 13, 1.0),
                                           borderRadius: BorderRadius.all(
                                               Radius.circular(15.0)),
                                         ),
@@ -1403,16 +1391,14 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                         'Pay with **** **** **** 9000',
                                         style: GoogleFonts.karla(
                                             fontSize: 17.0,
-                                            fontWeight: FontWeight.w600,
-                                            color: Color.fromRGBO(
-                                                214, 109, 0, 1.0)),
+                                            fontWeight: FontWeight.w600),
                                       ),
                                       onPressed: () => {
                                         //Paid
                                       },
                                       disabledColor:
-                                          Color.fromRGBO(214, 109, 0, 0.43),
-                                      color: Color.fromRGBO(214, 109, 0, 0.43),
+                                          Color.fromRGBO(214, 109, 0, 1.0),
+                                      color: Color.fromRGBO(214, 109, 0, 1.0),
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(13.0)),
                                     ),
@@ -1430,9 +1416,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                         'Different Payment Method',
                                         style: GoogleFonts.karla(
                                             fontSize: 17.0,
-                                            fontWeight: FontWeight.w600,
-                                            color: Color.fromRGBO(
-                                                255, 158, 25, 1.0)),
+                                            fontWeight: FontWeight.w600),
                                       ),
                                       onPressed: () => {
                                         showModalBottomSheet(
@@ -1447,8 +1431,8 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                                 showPayment(context))
                                       },
                                       disabledColor:
-                                          Color.fromRGBO(255, 158, 25, 0.43),
-                                      color: Color.fromRGBO(255, 158, 25, 0.43),
+                                          Color.fromRGBO(255, 158, 25, 1.0),
+                                      color: Color.fromRGBO(255, 158, 25, 1.0),
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(13.0)),
                                     ),
@@ -1651,9 +1635,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                         'Continue',
                                         style: GoogleFonts.karla(
                                             fontSize: 17.0,
-                                            fontWeight: FontWeight.w600,
-                                            color: Color.fromRGBO(
-                                                237, 178, 19, 1.0)),
+                                            fontWeight: FontWeight.w600),
                                       ),
                                       onPressed: infoIcon == CupertinoIcons.checkmark
                                           ? () => {
@@ -1661,8 +1643,8 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                         setState(() {})
                                       } : null,
                                       disabledColor:
-                                          Color.fromRGBO(255, 193, 25, 0.23),
-                                      color: Color.fromRGBO(255, 193, 25, 0.43),
+                                          Color.fromRGBO(255, 193, 25, 0.5),
+                                      color: Color.fromRGBO(255, 193, 25, 1.0),
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(13.0)),
 

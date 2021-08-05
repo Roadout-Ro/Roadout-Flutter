@@ -248,12 +248,11 @@ Widget showPayment(BuildContext context) => Container(
               'Add Card',
               style: GoogleFonts.karla(
                   fontSize: 17.0,
-                  fontWeight: FontWeight.w600,
-                  color: Color.fromRGBO(241, 179, 11, 1.0)),
+                  fontWeight: FontWeight.w600),
             ),
             onPressed: () => {print("Nice")},
-            disabledColor: Color.fromRGBO(255, 193, 25, 0.44),
-            color: Color.fromRGBO(255, 193, 25, 0.44),
+            disabledColor: Color.fromRGBO(255, 193, 25, 1.0),
+            color: Color.fromRGBO(255, 193, 25, 1.0),
             borderRadius: BorderRadius.all(Radius.circular(13.0)),
           ),
         )
@@ -619,11 +618,10 @@ Widget showInviteFriends(BuildContext context) => Container(
             child: Text("Copy Invite Link",
                 style: GoogleFonts.karla(
                     fontSize: 16.0,
-                    fontWeight: FontWeight.w600,
-                    color: Color.fromRGBO(220, 170, 57, 1.0))
+                    fontWeight: FontWeight.w600)
             ),
-            disabledColor: Color.fromRGBO(220, 170, 57, 0.44),
-            color: Color.fromRGBO(220, 170, 57, 0.44),
+            disabledColor: Color.fromRGBO(220, 170, 57, 1.0),
+            color: Color.fromRGBO(220, 170, 57, 1.0),
             borderRadius: BorderRadius.all(Radius.circular(13.0)),
           ),
         )
