@@ -5,6 +5,11 @@ import 'package:roadout/settings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/services.dart';
 
+TextEditingController cvvController = TextEditingController();
+TextEditingController expiryController = TextEditingController();
+TextEditingController nameController = TextEditingController();
+TextEditingController numberController = TextEditingController();
+
 bool getReservationStatusNot(SharedPreferences prefs) {
   final key = 'reservationStatusNot';
   final value = prefs.getBool(key) ?? true;
@@ -20,7 +25,6 @@ bool getPromoUpdatesNot(SharedPreferences prefs) {
 
 Widget showNotifications(BuildContext context, StateSetter setState, SharedPreferences preferences) {
   return Container(
-        width: 390,
         height: 280,
         decoration: BoxDecoration(
           color: Theme.of(context).dialogBackgroundColor,
@@ -232,7 +236,7 @@ Widget showPayment(BuildContext context) => Container(
               child: Text(
                 "Payment",
                 textAlign: TextAlign.left,
-                style: GoogleFonts.karla(               fontSize: 20.0,
+                style: GoogleFonts.karla(fontSize: 20.0,
                     fontWeight: FontWeight.w600,
                     color: Theme.of(context).primaryColor),
               ),
@@ -294,7 +298,13 @@ Widget showPayment(BuildContext context) => Container(
                   fontSize: 17.0,
                   fontWeight: FontWeight.w600),
             ),
-            onPressed: () => {print("Nice")},
+            onPressed: () => {
+              Navigator.pop(context),
+            showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(23),)), builder: (context) => showAddCard(context))
+            },
             disabledColor: Color.fromRGBO(255, 193, 25, 1.0),
             color: Color.fromRGBO(255, 193, 25, 1.0),
             borderRadius: BorderRadius.all(Radius.circular(13.0)),
@@ -452,7 +462,6 @@ ListTile _appTile(
 }
 
 Widget showAbout(BuildContext context) => Container(
-    width: 390,
     height: 250,
     decoration: BoxDecoration(
       color: Theme.of(context).dialogBackgroundColor,
@@ -536,7 +545,6 @@ Widget showAbout(BuildContext context) => Container(
     ));
 
 Widget showLegal(BuildContext context) => Container(
-    width: 390,
     height: 536,
     decoration: BoxDecoration(
       color: Theme.of(context).dialogBackgroundColor,
@@ -578,13 +586,12 @@ Widget showLegal(BuildContext context) => Container(
     ));
 
 Widget showInviteFriends(BuildContext context) => Container(
-    width: 390,
-    height: 265,
     decoration: BoxDecoration(
       color: Theme.of(context).dialogBackgroundColor,
       borderRadius: BorderRadius.all(Radius.circular(23)),
     ),
     child: Column(
+      mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Row(
           children: <Widget>[
@@ -626,8 +633,6 @@ Widget showInviteFriends(BuildContext context) => Container(
                 padding: EdgeInsets.all(0.0),
                 child: Container(
                     alignment: Alignment.center,
-                  //width: 300,
-                    //padding: EdgeInsets.only(top: 3),
                     child: Text("https://roadout.com/invite-friends",
                         style: GoogleFonts.karla(
                             fontSize: 17.0,
@@ -638,7 +643,6 @@ Widget showInviteFriends(BuildContext context) => Container(
                 borderRadius: BorderRadius.all(Radius.circular(16.0)),
               ),
         ),
-        Spacer(),
         Container(
           width: 274,
           height: 35,
@@ -671,6 +675,504 @@ Widget showInviteFriends(BuildContext context) => Container(
         )
       ],
     ));
+
+
+Widget showAddCard(BuildContext context) => Container(
+    decoration: BoxDecoration(
+      color: Theme.of(context).dialogBackgroundColor,
+      borderRadius: BorderRadius.all(Radius.circular(23)),
+    ),
+    padding: MediaQuery.of(context).viewInsets,
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Padding(padding: EdgeInsets.only(top: 15.0)),
+        Row(
+          children: <Widget>[
+            Container(
+              width: 200,
+              padding: EdgeInsets.only(left: 20.0),
+              child: Text(
+                "Add Card",
+                textAlign: TextAlign.left,
+                style: GoogleFonts.karla(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.w600),
+              ),
+            ),
+            Spacer(),
+            Container(
+              width: 50,
+              padding: EdgeInsets.only(right: 8.0),
+              child: IconButton(
+                icon: const Icon(CupertinoIcons.xmark, size: 23),
+                onPressed: () {
+                  Navigator.pop(context);
+                  showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(23),)), builder: (context) => showPayment(context));
+                },
+                disabledColor: Color.fromRGBO(149, 46, 0, 1.0),
+                color: Color.fromRGBO(149, 46, 0, 1.0),
+              ),
+            )
+          ],
+        ),
+        Row(
+          children: <Widget> [
+            Padding(padding: EdgeInsets.only(left: 20.0)),
+            InkWell(
+              child: Container(
+                width: 85,
+                height: 47,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Color.fromRGBO(149, 46, 0, 1.0),
+                        Color.fromRGBO(11, 7, 0, 1.0)
+                      ]),
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                ),
+              ),
+              onTap: () {
+                Navigator.pop(context);
+                showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(23),)), builder: (context) => showCardStyle(context));
+              },
+            ),
+            Padding(padding: EdgeInsets.only(left: 15.0)),
+            Expanded(
+                child: Container(
+                  height: 45,
+                  child: TextFormField(
+                    controller: expiryController,
+                    cursorColor: Color.fromRGBO(103, 72, 5, 1.0),
+                    autocorrect: false,
+                    keyboardAppearance: MediaQuery.of(context).platformBrightness,
+                    decoration: InputDecoration(
+                        labelText: 'MM/YY',
+                        labelStyle: TextStyle(
+                            color: Color.fromRGBO(103, 72, 5, 1.0),
+                            fontWeight: FontWeight.w600),
+                        filled: true,
+                        fillColor: Color.fromRGBO(103, 72, 5, 0.22),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              width: 3,
+                              color: Color.fromRGBO(103, 72, 5, 0.0)),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              width: 3,
+                              color: Color.fromRGBO(255, 158, 25, 0.0)),
+                          borderRadius: BorderRadius.circular(15),
+                        )),
+                  ),
+                )
+            ),
+            Padding(padding: EdgeInsets.only(left: 10.0)),
+            Expanded(
+                child: Container(
+                    height: 45,
+                    child: TextFormField(
+                      controller: cvvController,
+                      cursorColor: Color.fromRGBO(103, 72, 5, 1.0),
+                      autocorrect: false,
+                      keyboardAppearance: MediaQuery.of(context).platformBrightness,
+                      decoration: InputDecoration(
+                          labelText: 'CVV',
+                          labelStyle: TextStyle(
+                              color: Color.fromRGBO(103, 72, 5, 1.0),
+                              fontWeight: FontWeight.w600),
+                          filled: true,
+                          fillColor: Color.fromRGBO(103, 72, 5, 0.22),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                width: 3,
+                                color: Color.fromRGBO(103, 72, 5, 0.0)),
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                width: 3,
+                                color: Color.fromRGBO(255, 158, 25, 0.0)),
+                            borderRadius: BorderRadius.circular(15),
+                          )),
+                    ),
+                )
+            ),
+            Padding(padding: EdgeInsets.only(right: 22.0)),
+          ],
+        ),
+        Padding(padding: EdgeInsets.only(top: 10.0)),
+        Container(
+            height: 55,
+            padding: EdgeInsets.only(left: 20, right: 22, bottom: 10),
+            child: TextFormField(
+              controller: nameController,
+              cursorColor: Color.fromRGBO(255, 158, 25, 1.0),
+              autocorrect: false,
+              keyboardAppearance: MediaQuery.of(context).platformBrightness,
+              decoration: InputDecoration(
+                  labelText: 'Card Holder',
+                  labelStyle: TextStyle(
+                      color: Color.fromRGBO(215, 109, 0, 1.0),
+                      fontWeight: FontWeight.w600),
+                  filled: true,
+                  fillColor: Color.fromRGBO(215, 109, 0, 0.22),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                        width: 3,
+                        color: Color.fromRGBO(215, 109, 0, 0.0)),
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                        width: 3,
+                        color: Color.fromRGBO(215, 109, 0, 0.0)),
+                    borderRadius: BorderRadius.circular(15),
+                  )),
+            )),
+        Container(
+            height: 55,
+            padding: EdgeInsets.only(left: 20, right: 22, bottom: 10),
+            child: TextFormField(
+              controller: numberController,
+              cursorColor: Color.fromRGBO(255, 193, 25, 1.0),
+              obscureText: true,
+              autocorrect: false,
+              keyboardAppearance: MediaQuery.of(context).platformBrightness,
+              decoration: InputDecoration(
+                  labelText: 'Card Number',
+                  labelStyle: TextStyle(
+                      color: Color.fromRGBO(149, 46, 0, 1.0),
+                      fontWeight: FontWeight.w600),
+                  filled: true,
+                  fillColor: Color.fromRGBO(149, 46, 0, 0.22),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                        width: 3,
+                        color: Color.fromRGBO(149, 46, 0, 0.0)),
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                        width: 3,
+                        color: Color.fromRGBO(149, 46, 0, 0.0)),
+                    borderRadius: BorderRadius.circular(15),
+                  )),
+            )),
+        Padding(padding: EdgeInsets.only(top: 20.0)),
+        Container(
+          width: MediaQuery.of(context).size.width - 58,
+          height: 45,
+          child: CupertinoButton(
+            padding: EdgeInsets.all(0.0),
+            child: Text(
+              'Add',
+              style: GoogleFonts.karla(
+                  fontSize: 17.0,
+                  fontWeight: FontWeight.w600),
+            ),
+            onPressed: () => {
+              Navigator.pop(context),
+              showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(23),)), builder: (context) => showPayment(context))
+            },
+            disabledColor: Color.fromRGBO(149, 46, 0, 1.0),
+            color: Color.fromRGBO(149, 46, 0, 1.0),
+            borderRadius: BorderRadius.all(Radius.circular(13.0)),
+          ),
+        ),
+        Padding(padding: EdgeInsets.only(bottom: 30.0)),
+      ],
+    ));
+
+Widget showCardStyle(BuildContext context) => Container(
+    height: 285,
+    decoration: BoxDecoration(
+      color: Theme.of(context).dialogBackgroundColor,
+      borderRadius: BorderRadius.all(Radius.circular(23)),
+    ),
+    child: Column(
+      children: <Widget>[
+        Padding(padding: EdgeInsets.only(top: 10.0)),
+        Row(
+          children: <Widget>[
+            Container(
+              width: 200,
+              padding: EdgeInsets.only(left: 20.0),
+              child: Text(
+                "Card Style",
+                textAlign: TextAlign.left,
+                style: GoogleFonts.karla(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.w600),
+              ),
+            ),
+            Spacer(),
+            Container(
+              width: 50,
+              padding: EdgeInsets.only(right: 8.0),
+              child: IconButton(
+                icon: const Icon(CupertinoIcons.xmark, size: 23),
+                onPressed: () {
+                  Navigator.pop(context);
+                  showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(23),)), builder: (context) => showAddCard(context));
+                },
+                disabledColor: Colors.grey,
+                color: Colors.grey,
+              ),
+            )
+          ],
+        ),
+        Padding(padding: EdgeInsets.only(top: 10.0)),
+        Row(
+          children: <Widget>[
+            Padding(padding: EdgeInsets.only(left: (MediaQuery.of(context).size.width-303)/2),),
+            InkWell(
+              child: Container(
+                width: 85,
+                height: 47,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Color.fromRGBO(255, 193, 25, 1.0),
+                        Color.fromRGBO(103, 72, 5, 1.0)
+                      ]),
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                ),
+              ),
+              onTap: () {
+                Navigator.pop(context);
+                showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(23),)), builder: (context) => showAddCard(context));
+              },
+            ),
+            Padding(padding: EdgeInsets.only(left: 24.0),),
+            InkWell(
+              child: Container(
+                width: 85,
+                height: 47,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: Alignment.bottomLeft,
+                      end: Alignment.topRight,
+                      colors: [
+                        Color.fromRGBO(255, 158, 25, 1.0),
+                        Color.fromRGBO(57, 49, 30, 1.0)
+                      ]),
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                ),
+              ),
+              onTap: () {
+                Navigator.pop(context);
+                showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(23),)), builder: (context) => showAddCard(context));
+              },
+            ),
+            Padding(padding: EdgeInsets.only(left: 24.0),),
+            InkWell(
+              child: Container(
+                width: 85,
+                height: 47,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                      colors: [
+                        Color.fromRGBO(214, 109, 0, 1.0),
+                        Color.fromRGBO(66, 109, 121, 1.0)
+                      ]),
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                ),
+              ),
+              onTap: () {
+                Navigator.pop(context);
+                showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(23),)), builder: (context) => showAddCard(context));
+              },
+            ),
+          ],
+        ),
+        Padding(padding: EdgeInsets.only(top: 20.0)),
+        Row(
+          children: <Widget>[
+            Padding(padding: EdgeInsets.only(left: (MediaQuery.of(context).size.width-303)/2),),
+            InkWell(
+              child: Container(
+                width: 85,
+                height: 47,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Color.fromRGBO(149, 46, 0, 1.0),
+                        Color.fromRGBO(245, 204, 108, 1.0)
+                      ]),
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                ),
+              ),
+              onTap: () {
+                Navigator.pop(context);
+                showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(23),)), builder: (context) => showAddCard(context));
+              },
+            ),
+            Padding(padding: EdgeInsets.only(left: 24.0),),
+            InkWell(
+              child: Container(
+                width: 85,
+                height: 47,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Color.fromRGBO(149, 46, 0, 1.0),
+                        Color.fromRGBO(11, 7, 0, 1.0)
+                      ]),
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                ),
+              ),
+              onTap: () {
+                Navigator.pop(context);
+                showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(23),)), builder: (context) => showAddCard(context));
+              },
+            ),
+            Padding(padding: EdgeInsets.only(left: 24.0),),
+            InkWell(
+              child: Container(
+                width: 85,
+                height: 47,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Color.fromRGBO(143, 102, 13, 1.0),
+                        Color.fromRGBO(245, 232, 204, 1.0)
+                      ]),
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                ),
+              ),
+              onTap: () {
+                Navigator.pop(context);
+                showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(23),)), builder: (context) => showAddCard(context));
+              },
+            ),
+          ],
+        ),
+        Padding(padding: EdgeInsets.only(top: 20.0)),
+        Row(
+          children: <Widget>[
+            Padding(padding: EdgeInsets.only(left: (MediaQuery.of(context).size.width-303)/2),),
+            InkWell(
+              child: Container(
+                width: 85,
+                height: 47,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                      colors: [
+                        Color.fromRGBO(255, 193, 25, 1.0),
+                        Color.fromRGBO(111, 2, 95, 1.0)
+                      ]),
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                ),
+              ),
+              onTap: () {
+                Navigator.pop(context);
+                showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(23),)), builder: (context) => showAddCard(context));
+              },
+            ),
+            Padding(padding: EdgeInsets.only(left: 24.0),),
+            InkWell(
+              child: Container(
+                width: 85,
+                height: 47,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Color.fromRGBO(214, 109, 0, 1.0),
+                        Color.fromRGBO(70, 92, 205, 1.0)
+                      ]),
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                ),
+              ),
+              onTap: () {
+                Navigator.pop(context);
+                showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(23),)), builder: (context) => showAddCard(context));
+              },
+            ),
+            Padding(padding: EdgeInsets.only(left: 24.0),),
+            InkWell(
+              child: Container(
+                width: 85,
+                height: 47,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                      colors: [
+                        Color.fromRGBO(143, 102, 13, 1.0),
+                        Color.fromRGBO(158, 82, 24, 1.0),
+                        Color.fromRGBO(219, 0, 70, 1.0)
+                      ]),
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                ),
+              ),
+              onTap: () {
+                Navigator.pop(context);
+                showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(23),)), builder: (context) => showAddCard(context));
+              },
+            ),
+          ],
+        ),
+      ],
+    ));
+
+
 
 _savePrefferedMapsApp(String app) async {
   final prefs = await SharedPreferences.getInstance();
