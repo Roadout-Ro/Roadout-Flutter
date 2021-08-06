@@ -30,7 +30,7 @@ int selectedNumber = -1;
 IconData infoIcon = CupertinoIcons.info_circle;
 Color infoColor = Color.fromRGBO(255, 193, 25, 1.0);
 String infoText = "Select a spot to get info about it.";
-
+List<int> spotStates = [0, 0, 2, 0, 1, 0, 0, 1, 0, 2, 0, 0, 1, 1, 0, 0, 1];
 
 class MainScreen extends StatefulWidget {
   @override
@@ -76,13 +76,10 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
           markerId: MarkerId('id-1'),
           icon: mapMarker,
           onTap: () {
-            currentCard = Cards.pickCard;
+            currentCard = Cards.resultBar;
             setState(() {});
           },
-          position: LatLng(46.768728, 23.592564),
-          infoWindow: InfoWindow(
-            title: 'Old Town',
-          )));
+          position: LatLng(46.768728, 23.592564)));
     });
 
     var brightness = MediaQuery.of(context).platformBrightness;
@@ -167,6 +164,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                       future: null,
                       builder: (BuildContext context,
                           AsyncSnapshot<Widget> snapshot) {
+                          SharedPreferences prefs;
                         if (currentCard == Cards.searchBar) {
                           return Container(
                             height: 60,
@@ -228,7 +226,8 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                   child: CupertinoButton(
                                       child: Image.asset('assets/Logo.png'),
                                       padding: EdgeInsets.all(0.0),
-                                      onPressed: () => {
+                                      onPressed: () async => {
+                                            prefs = await SharedPreferences.getInstance(),
                                             showModalBottomSheet(
                                                 context: context,
                                                 isScrollControlled: true,
@@ -240,18 +239,13 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                                 // BorderRadius. vertical// RoundedRectangleBorder
                                                 builder: (context) =>
                                                     showSettings(
-                                                        context, setState)),
-                                            NotificationPermissions
-                                                    .requestNotificationPermissions(
-                                                        iosSettings:
-                                                            const NotificationSettingsIos(
+                                                        context, setState, prefs)),
+                                            NotificationPermissions.requestNotificationPermissions(iosSettings:const NotificationSettingsIos(
                                                                 sound: true,
                                                                 badge: true,
-                                                                alert: true))
-                                                .then((_) {
+                                                                alert: true)).then((_) {
                                               setState(() {
-                                                permissionStatusFuture =
-                                                    getCheckNotificationPermStatus();
+                                                permissionStatusFuture = getCheckNotificationPermStatus();
                                               });
                                             })
                                           }),
@@ -297,12 +291,16 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                   ),
                                   padding: EdgeInsets.only(left: 5.0),
                                 ),
+                                Text('Old Town', style: GoogleFonts.karla(
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.w600, color: Color.fromRGBO(255, 193, 25, 1.0))),
+                                Padding(padding: EdgeInsets.only(left: 15.0),),
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     Container(
                                       height: 30,
-                                      child: Text('5',
+                                      child: Text('9',
                                           style: GoogleFonts.karla(
                                               fontSize: 25.0,
                                               fontWeight: FontWeight.w500)),
@@ -1059,7 +1057,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                     padding: EdgeInsets.only(top: 20),
                                     alignment: Alignment.center,
                                     child: Container(
-                                      width: 330,
+                                      width: MediaQuery.of(context).size.width - 58,
                                       height: 45,
                                       child: CupertinoButton(
                                         child: Text(
@@ -1276,7 +1274,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                   Container(
                                       alignment: Alignment.center,
                                       child: Container(
-                                        width: 330,
+                                        width: MediaQuery.of(context).size.width - 58,
                                         height: 60,
                                         child: CupertinoButton(
                                           child: Text(
@@ -1510,35 +1508,35 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                                                   .width -
                                                               308) /
                                                           2)),
-                                              _spotTile(0, 1),
+                                              _spotTile(1),
                                               Padding(
                                                   padding: EdgeInsets.only(
                                                       left: 2.0)),
-                                              _spotTile(2, 2),
+                                              _spotTile(2),
                                               Padding(
                                                   padding: EdgeInsets.only(
                                                       left: 2.0)),
-                                              _spotTile(0, 3),
+                                              _spotTile(3),
                                               Padding(
                                                   padding: EdgeInsets.only(
                                                       left: 2.0)),
-                                              _spotTile(1, 4),
+                                              _spotTile(4),
                                               Padding(
                                                   padding: EdgeInsets.only(
                                                       left: 2.0)),
-                                              _spotTile(0, 5),
+                                              _spotTile(5),
                                               Padding(
                                                   padding: EdgeInsets.only(
                                                       left: 2.0)),
-                                              _spotTile(0, 6),
+                                              _spotTile(6),
                                               Padding(
                                                   padding: EdgeInsets.only(
                                                       left: 2.0)),
-                                              _spotTile(1, 7),
+                                              _spotTile(7),
                                               Padding(
                                                   padding: EdgeInsets.only(
                                                       left: 2.0)),
-                                              _spotTile(0, 8),
+                                              _spotTile(8),
                                             ],
                                           ),
                                           Padding(
@@ -1554,35 +1552,35 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                                                   .width -
                                                               308) /
                                                           2)),
-                                              _spotTile(2, 9),
+                                              _spotTile(9),
                                               Padding(
                                                   padding: EdgeInsets.only(
                                                       left: 2.0)),
-                                              _spotTile(0, 10),
+                                              _spotTile(10),
                                               Padding(
                                                   padding: EdgeInsets.only(
                                                       left: 2.0)),
-                                              _spotTile(0, 11),
+                                              _spotTile(11),
                                               Padding(
                                                   padding: EdgeInsets.only(
                                                       left: 2.0)),
-                                              _spotTile(1, 12),
+                                              _spotTile(12),
                                               Padding(
                                                   padding: EdgeInsets.only(
                                                       left: 2.0)),
-                                              _spotTile(0, 13),
+                                              _spotTile(13),
                                               Padding(
                                                   padding: EdgeInsets.only(
                                                       left: 2.0)),
-                                              _spotTile(0, 14),
+                                              _spotTile(14),
                                               Padding(
                                                   padding: EdgeInsets.only(
                                                       left: 2.0)),
-                                              _spotTile(1, 15),
+                                              _spotTile(15),
                                               Padding(
                                                   padding: EdgeInsets.only(
                                                       left: 2.0)),
-                                              _spotTile(0, 16),
+                                              _spotTile(16),
                                             ],
                                           ),
                                         ],
@@ -1713,7 +1711,8 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                 child: CupertinoButton(
                                     child: Image.asset('assets/Logo.png'),
                                     padding: EdgeInsets.all(0.0),
-                                    onPressed: () => {
+                                    onPressed: () async => {
+                                      prefs = await SharedPreferences.getInstance(),
                                           showModalBottomSheet(
                                               context: context,
                                               isScrollControlled: true,
@@ -1725,7 +1724,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                               // BorderRadius. vertical// RoundedRectangleBorder
                                               builder: (context) =>
                                                   showSettings(
-                                                      context, setState)),
+                                                      context, setState, prefs)),
                                           NotificationPermissions
                                                   .requestNotificationPermissions(
                                                       iosSettings:
@@ -1756,9 +1755,10 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
     );
   }
 
-  InkWell _spotTile(int state, int nr) {
+  InkWell _spotTile(int nr) {
     Color spotColor = Color.fromRGBO(255, 193, 25, 1.0);
     IconData icon = CupertinoIcons.checkmark;
+    int state = spotStates[nr];
     if (state == 0) {
       spotColor = Color.fromRGBO(255, 193, 25, 1.0);
       icon = CupertinoIcons.checkmark;

@@ -5,22 +5,20 @@ import 'package:roadout/settings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/services.dart';
 
-Future<bool> getReservationStatusNot() async {
-  final prefs = await SharedPreferences.getInstance();
+bool getReservationStatusNot(SharedPreferences prefs) {
   final key = 'reservationStatusNot';
   final value = prefs.getBool(key) ?? true;
   return value;
 }
 
-Future<bool> getPromoUpdatesNot() async {
-  final prefs = await SharedPreferences.getInstance();
+bool getPromoUpdatesNot(SharedPreferences prefs) {
   final key = 'promoUpdatesNot';
   final value = prefs.getBool(key) ?? true;
   return value;
 }
 
 
-Widget showNotifications(BuildContext context, StateSetter setState) {
+Widget showNotifications(BuildContext context, StateSetter setState, SharedPreferences preferences) {
   return Container(
         width: 390,
         height: 280,
@@ -94,13 +92,26 @@ Widget showNotifications(BuildContext context, StateSetter setState) {
                   height: 55,
                   padding: EdgeInsets.only(right: 30),
                   child: CupertinoSwitch(
-                    value: true,
+                    value: getReservationStatusNot(preferences),
                     onChanged: (bool value) async {
                       final prefs = await SharedPreferences.getInstance();
                       final key = 'reservationStatusNot';
                       prefs.setBool(key, value);
                       print('Saved $value');
                       setState(() {});
+                      Navigator.pop(context);
+                      showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          shape: RoundedRectangleBorder(
+                              borderRadius:
+                              BorderRadius.vertical(
+                                top: Radius.circular(23),
+                              )),
+                          // BorderRadius. vertical// RoundedRectangleBorder
+                          builder: (context) =>
+                              showSettings(
+                                  context, setState, prefs));
                     },
                     activeColor: Color.fromRGBO(255, 193, 25, 1.0),
                   ),
@@ -145,13 +156,26 @@ Widget showNotifications(BuildContext context, StateSetter setState) {
                   height: 55,
                   padding: EdgeInsets.only(right: 30),
                   child: CupertinoSwitch(
-                      value:true,
+                     value: getPromoUpdatesNot(preferences),
                      onChanged: (bool value) async {
-                    final prefs = await SharedPreferences.getInstance();
-                   final key = 'promoUpdatesNot';
-                    prefs.setBool(key, value);
-                    print('Saved $value');
-                     setState(() {});
+                      final prefs = await SharedPreferences.getInstance();
+                      final key = 'promoUpdatesNot';
+                      prefs.setBool(key, value);
+                      print('Saved $value');
+                      setState(() {});
+                      Navigator.pop(context);
+                      showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          shape: RoundedRectangleBorder(
+                              borderRadius:
+                              BorderRadius.vertical(
+                                top: Radius.circular(23),
+                              )),
+                          // BorderRadius. vertical// RoundedRectangleBorder
+                          builder: (context) =>
+                              showSettings(
+                                  context, setState, prefs));
                      },
                      activeColor: Color.fromRGBO(255, 193, 25, 1.0),
                      ),
@@ -229,32 +253,36 @@ Widget showPayment(BuildContext context) => Container(
             )
           ],
         ),
-        ListView(
+        Container(child: ListView(
             primary: false,
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
             children: [
-              _cardTile(
-                  '**** **** **** 9000',
-                  LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        Color.fromRGBO(255, 193, 25, 1.0),
-                        Color.fromRGBO(103, 72, 5, 1.0)
-                      ]),
-                  Color.fromRGBO(103, 72, 5, 1.0)),
-              _cardTile(
-                  '**** **** **** 9900',
-                  LinearGradient(
-                      begin: Alignment.bottomLeft,
-                      end: Alignment.topRight,
-                      colors: [
-                        Color.fromRGBO(255, 158, 25, 1.0),
-                        Color.fromRGBO(143, 102, 13, 1.0)
-                      ]),
-                  Color.fromRGBO(165, 104, 21, 1.0))
-            ]),
+              Center(
+                  child: _cardTile(
+                      '**** **** **** 9000',
+                      LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [
+                            Color.fromRGBO(255, 193, 25, 1.0),
+                            Color.fromRGBO(103, 72, 5, 1.0)
+                          ]),
+                      Color.fromRGBO(103, 72, 5, 1.0))
+              ),
+              Center(
+                child: _cardTile(
+                    '**** **** **** 9900',
+                    LinearGradient(
+                        begin: Alignment.bottomLeft,
+                        end: Alignment.topRight,
+                        colors: [
+                          Color.fromRGBO(255, 158, 25, 1.0),
+                          Color.fromRGBO(143, 102, 13, 1.0)
+                        ]),
+                    Color.fromRGBO(165, 104, 21, 1.0)),
+              )
+            ]), padding: EdgeInsets.only(left: 13.0),),
         Container(
           width: MediaQuery.of(context).size.width - 58,
           height: 45,
@@ -281,36 +309,36 @@ ListTile _cardTile(String number, Gradient gradient, Color numberColor) =>
             transform: Matrix4.translationValues(-10, 0.0, 0.0),
             child: Row(
               children: <Widget>[
+                Padding(padding: EdgeInsets.only(left: 8.0),),
                 Container(
-                  width: 220,
                   child: Text(number,
                       style: GoogleFonts.karla(
                           fontSize: 18.0,
                           fontWeight: FontWeight.w600,
                           color: numberColor)),
-                  padding: EdgeInsets.only(left: 8.0),
                 ),
                 Spacer(),
                 Container(
-                  width: 50,
+                  width: 50.0,
                   child: CupertinoButton(
                       child: Icon(
                         CupertinoIcons.minus_circle,
                         color: Color.fromRGBO(126, 75, 25, 1.0),
                       ),
                       onPressed: null),
-                  padding: EdgeInsets.only(right: 5.0, left: 20),
+                  padding: EdgeInsets.only(left: 7.0),
                 )
               ],
             )),
         leading: Container(
-          width: 69,
-          height: 38,
-          decoration: BoxDecoration(
-            gradient: gradient,
-            borderRadius: BorderRadius.all(Radius.circular(6)),
-          ),
-        ));
+              width: 69,
+              height: 38,
+              decoration: BoxDecoration(
+                gradient: gradient,
+                borderRadius: BorderRadius.all(Radius.circular(6)),
+              ),
+            )
+          );
 
 Widget showDirectionsApp(BuildContext context) => Container(
     height: 300,

@@ -9,7 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 String selectedMapsApp = '';
 
-Widget showSettings(BuildContext context, StateSetter setState) {
+Widget showSettings(BuildContext context, StateSetter setState, SharedPreferences preferences) {
   _readUserName();
   _readPrefferedMapsApp();
   return Container(
@@ -160,21 +160,21 @@ Widget showSettings(BuildContext context, StateSetter setState) {
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
               children: [
-                _tile("Notifications", CupertinoIcons.bell, context, setState),
-                _tile("Payment Methods", CupertinoIcons.creditcard, context, setState),
+                _tile("Notifications", CupertinoIcons.bell, context, setState, preferences),
+                _tile("Payment Methods", CupertinoIcons.creditcard, context, setState, preferences),
                 _tile("Default Directions App", CupertinoIcons.arrow_branch,
-                    context, setState),
-                _tile("Invite Friends", CupertinoIcons.envelope_open, context, setState),
-                _tile("About Roadout", CupertinoIcons.app, context, setState),
+                    context, setState, preferences),
+                _tile("Invite Friends", CupertinoIcons.envelope_open, context, setState, preferences),
+                _tile("About Roadout", CupertinoIcons.app, context, setState, preferences),
                 _tile("Privacy Policy & Terms of Use",
-                    CupertinoIcons.doc_plaintext, context, setState),
-                _tile("Sign Out", CupertinoIcons.lock_open, context, setState),
+                    CupertinoIcons.doc_plaintext, context, setState, preferences),
+                _tile("Sign Out", CupertinoIcons.lock_open, context, setState, preferences),
               ])
         ],
       ));
 }
 
-ListTile _tile(String title, IconData icon, BuildContext context, StateSetter setState) => ListTile(
+ListTile _tile(String title, IconData icon, BuildContext context, StateSetter setState, SharedPreferences preferences) => ListTile(
       title: Transform(
           transform: Matrix4.translationValues(-15, 0.0, 0.0),
           child: Text(title,
@@ -223,7 +223,9 @@ ListTile _tile(String title, IconData icon, BuildContext context, StateSetter se
                   borderRadius: BorderRadius.vertical(
                 top: Radius.circular(23),
               )), // BorderRadius. vertical// RoundedRectangleBorder
-              builder: (context) => showNotifications(context, setState));
+              builder: (context) {
+                return showNotifications(context, setState, preferences);
+              });
         } else if (title == "Payment Methods") {
           Navigator.pop(context);
           showModalBottomSheet(

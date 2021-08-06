@@ -119,10 +119,7 @@ ListTile _tile2(int spots, String location, String km, int colorR, int colorG,
               ],
             )),
         onTap: () {
-          if (location == 'Location Name 1')
-            currentCard = Cards.resultBar;
-          else if (location == 'Location Name 2')
-            currentCard = Cards.spotCard;
+          currentCard = Cards.resultBar;
           setState(() {});
           Navigator.pop(context);
         },

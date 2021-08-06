@@ -319,7 +319,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         ),
         ),
         Container(
-          width: 210,
+          width: MediaQuery.of(context).size.width - 58,
           height: 90,
           child: CupertinoButton(
             child: Align(
@@ -498,7 +498,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           ],
         ),
         Container(
-          width: 210,
+          width: MediaQuery.of(context).size.width - 58,
           height: 90,
           child: CupertinoButton(
             child: Align(
