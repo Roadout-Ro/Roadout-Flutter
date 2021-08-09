@@ -26,6 +26,7 @@ enum Cards {
 
 Cards currentCard = Cards.searchBar;
 double progress = 0.0;
+int selectedMinutes = 0;
 int selectedNumber = -1;
 IconData infoIcon = CupertinoIcons.info_circle;
 Color infoColor = Color.fromRGBO(255, 193, 25, 1.0);
@@ -518,7 +519,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                               child: CupertinoButton(
                                                 padding: EdgeInsets.all(0.0),
                                                 child: Text(
-                                                  '0 min',
+                                                  '$selectedMinutes min',
                                                   style: GoogleFonts.karla(
                                                       fontSize: 14.0,
                                                       fontWeight:
@@ -544,7 +545,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                                           onSelectedItemChanged:
                                                               (value) {
                                                             setState(() {
-                                                              print(value);
+                                                              selectedMinutes = value+1;
                                                             });
                                                           },
                                                           itemExtent: 32.0,
@@ -733,7 +734,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                             fontWeight: FontWeight.w500,
                                             color: Theme.of(context)
                                                 .primaryColor)),
-                                    Text('10 min',
+                                    Text('$selectedMinutes min',
                                         style: GoogleFonts.karla(
                                             fontSize: 15.0,
                                             fontWeight: FontWeight.w500,

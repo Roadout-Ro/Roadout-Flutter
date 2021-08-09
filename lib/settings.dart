@@ -67,7 +67,7 @@ Widget showSettings(BuildContext context, StateSetter setState, SharedPreference
                   child: Row(children: <Widget>[
                     Container(width: 3.0),
                     Icon(
-                      CupertinoIcons.lightbulb,
+                      CupertinoIcons.rosette,
                       color: Color.fromRGBO(229, 167, 0, 1.0),
                       size: 23,
                     ),
@@ -77,7 +77,25 @@ Widget showSettings(BuildContext context, StateSetter setState, SharedPreference
                             fontWeight: FontWeight.w600,
                             color: Color.fromRGBO(229, 167, 0, 1.0))),
                   ]),
-                  onPressed: null,
+                  onPressed: () {
+                    Navigator.pop(context);
+                    var brightness = MediaQuery.of(context).platformBrightness;
+                    bool darkModeOn = brightness == Brightness.dark;
+                    var themeName = 'Light';
+                    if (darkModeOn)
+                      themeName = 'Dark';
+                    showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        shape: RoundedRectangleBorder(
+                        borderRadius:
+                        BorderRadius.vertical(
+                        top: Radius.circular(23),
+                    )),
+                    // BorderRadius. vertical// RoundedRectangleBorder
+                    builder: (context) => showPrizes(context, themeName)
+                    );
+                  },
                   disabledColor: Color.fromRGBO(255, 193, 25, 0.4),
                   color: Color.fromRGBO(255, 193, 25, 0.4),
                   borderRadius: BorderRadius.all(Radius.circular(16.0)),
@@ -224,7 +242,7 @@ ListTile _tile(String title, IconData icon, BuildContext context, StateSetter se
                 top: Radius.circular(23),
               )), // BorderRadius. vertical// RoundedRectangleBorder
               builder: (context) {
-                return showNotifications(context, setState, preferences);
+                return showNotifications(context, preferences);
               });
         } else if (title == "Payment Methods") {
           Navigator.pop(context);

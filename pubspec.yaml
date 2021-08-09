@@ -68,6 +68,16 @@ flutter:
      - assets/google-maps.png
      - assets/waze.png
      - assets/Marker.png
+     - assets/prizes/Diploma-Light.png
+     - assets/prizes/Medal-Light.png
+     - assets/prizes/Trophy-Light.png
+     - assets/prizes/Cup-Light.png
+     - assets/prizes/Wreath-Light.png
+     - assets/prizes/Diploma-Dark.png
+     - assets/prizes/Medal-Dark.png
+     - assets/prizes/Trophy-Dark.png
+     - assets/prizes/Cup-Dark.png
+     - assets/prizes/Wreath-Dark.png
 
   fonts:
     - family: sficonsets
