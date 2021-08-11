@@ -21,7 +21,8 @@ enum Cards {
   unlockedCard,
   delayCard,
   payDelayCard,
-  pickCard
+  pickCard,
+  paidCard
 }
 
 Cards currentCard = Cards.searchBar;
@@ -89,8 +90,8 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
       controller.setMapStyle(MapStyling.darkMapStyle);
     else
       controller.setMapStyle(MapStyling.lightMapStyle);
-    //locatePosition(controller);
-    //sterge aici
+//locatePosition(controller);
+//sterge aici
     controller.animateCamera(CameraUpdate.newCameraPosition(
         CameraPosition(target: LatLng(46.770439, 23.591423), zoom: 14)));
   }
@@ -160,12 +161,12 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                 ),
                 Spacer(),
                 Container(
-                  // height: 101,
+// height: 101,
                   child: FutureBuilder<Widget>(
                       future: null,
                       builder: (BuildContext context,
                           AsyncSnapshot<Widget> snapshot) {
-                          SharedPreferences prefs;
+                        SharedPreferences prefs;
                         if (currentCard == Cards.searchBar) {
                           return Container(
                             height: 60,
@@ -216,7 +217,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                                     BorderRadius.vertical(
                                               top: Radius.circular(23),
                                             )),
-                                            // BorderRadius. vertical// RoundedRectangleBorder
+// BorderRadius. vertical// RoundedRectangleBorder
                                             builder: (context) => showSearchBar(
                                                 context, setState))
                                       },
@@ -228,7 +229,8 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                       child: Image.asset('assets/Logo.png'),
                                       padding: EdgeInsets.all(0.0),
                                       onPressed: () async => {
-                                            prefs = await SharedPreferences.getInstance(),
+                                            prefs = await SharedPreferences
+                                                .getInstance(),
                                             showModalBottomSheet(
                                                 context: context,
                                                 isScrollControlled: true,
@@ -237,16 +239,21 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                                         BorderRadius.vertical(
                                                   top: Radius.circular(23),
                                                 )),
-                                                // BorderRadius. vertical// RoundedRectangleBorder
+// BorderRadius. vertical// RoundedRectangleBorder
                                                 builder: (context) =>
-                                                    showSettings(
-                                                        context, setState, prefs)),
-                                            NotificationPermissions.requestNotificationPermissions(iosSettings:const NotificationSettingsIos(
+                                                    showSettings(context,
+                                                        setState, prefs)),
+                                            NotificationPermissions
+                                                    .requestNotificationPermissions(
+                                                        iosSettings:
+                                                            const NotificationSettingsIos(
                                                                 sound: true,
                                                                 badge: true,
-                                                                alert: true)).then((_) {
+                                                                alert: true))
+                                                .then((_) {
                                               setState(() {
-                                                permissionStatusFuture = getCheckNotificationPermStatus();
+                                                permissionStatusFuture =
+                                                    getCheckNotificationPermStatus();
                                               });
                                             })
                                           }),
@@ -292,10 +299,15 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                   ),
                                   padding: EdgeInsets.only(left: 5.0),
                                 ),
-                                Text('Old Town', style: GoogleFonts.karla(
-                                    fontSize: 18.0,
-                                    fontWeight: FontWeight.w600, color: Color.fromRGBO(255, 193, 25, 1.0))),
-                                Padding(padding: EdgeInsets.only(left: 15.0),),
+                                Text('Old Town',
+                                    style: GoogleFonts.karla(
+                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.w600,
+                                        color:
+                                            Color.fromRGBO(255, 193, 25, 1.0))),
+                                Padding(
+                                  padding: EdgeInsets.only(left: 15.0),
+                                ),
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
@@ -545,7 +557,8 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                                           onSelectedItemChanged:
                                                               (value) {
                                                             setState(() {
-                                                              selectedMinutes = value+1;
+                                                              selectedMinutes =
+                                                                  value + 1;
                                                             });
                                                           },
                                                           itemExtent: 32.0,
@@ -757,7 +770,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                   ],
                                 ),
                                 Spacer(),
-                                /*Container(
+/*Container(
                                   width: MediaQuery.of(context).size.width - 58,
                                   height: 45,
                                   child: CupertinoButton(
@@ -776,7 +789,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                     borderRadius: BorderRadius.all(Radius.circular(13.0)),
                                   ),
                                 ), */ //APPLE PAY/GOOGLE PAY button
-                                //Padding(padding: EdgeInsets.only(top: 8.0),),
+//Padding(padding: EdgeInsets.only(top: 8.0),),
                                 Container(
                                   width: MediaQuery.of(context).size.width - 58,
                                   height: 45,
@@ -789,7 +802,8 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                           fontWeight: FontWeight.w600),
                                     ),
                                     onPressed: () => {
-                                      //Paid
+                                      currentCard = Cards.paidCard,
+                                      setState(() {})
                                     },
                                     disabledColor:
                                         Color.fromRGBO(214, 109, 0, 1.0),
@@ -924,8 +938,8 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                         padding: EdgeInsets.all(0.0),
                                         child: Icon(
                                           CupertinoIcons.lock,
-                                          color:
-                                              Theme.of(context).scaffoldBackgroundColor,
+                                          color: Theme.of(context)
+                                              .scaffoldBackgroundColor,
                                           size: 47,
                                         ),
                                         onPressed: () => {
@@ -1058,7 +1072,8 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                     padding: EdgeInsets.only(top: 20),
                                     alignment: Alignment.center,
                                     child: Container(
-                                      width: MediaQuery.of(context).size.width - 58,
+                                      width: MediaQuery.of(context).size.width -
+                                          58,
                                       height: 45,
                                       child: CupertinoButton(
                                         child: Text(
@@ -1205,7 +1220,10 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                             ),
                                           ),
                                           Container(
-                                              width: MediaQuery.of(context).size.width-127,
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width -
+                                                  127,
                                               child: CupertinoSlider(
                                                 value: progress,
                                                 min: 0.0,
@@ -1249,33 +1267,41 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                         ],
                                       )),
                                   Row(
-                                      children: <Widget>[
-                                        Container(
-                                          padding: EdgeInsets.only(top: 5, left: (MediaQuery.of(context).size.width-130)/2),
-                                          child: Text("Charge",
-                                              style: GoogleFonts.karla(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w500)),
-                                        ),
-                                        Container(
-                                          padding: EdgeInsets.only(top: 5),
-                                          child: Text(
-                                              "  " +
-                                                  progress.toInt().toString() +
-                                                  " RON",
-                                              style: GoogleFonts.karla(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w600,
-                                                  color: Color.fromRGBO(
-                                                      143, 102, 13, 1.0))),
-                                        )
-                                      ],
-                                    ),
+                                    children: <Widget>[
+                                      Container(
+                                        padding: EdgeInsets.only(
+                                            top: 5,
+                                            left: (MediaQuery.of(context)
+                                                        .size
+                                                        .width -
+                                                    130) /
+                                                2),
+                                        child: Text("Charge",
+                                            style: GoogleFonts.karla(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500)),
+                                      ),
+                                      Container(
+                                        padding: EdgeInsets.only(top: 5),
+                                        child: Text(
+                                            "  " +
+                                                progress.toInt().toString() +
+                                                " RON",
+                                            style: GoogleFonts.karla(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w600,
+                                                color: Color.fromRGBO(
+                                                    143, 102, 13, 1.0))),
+                                      )
+                                    ],
+                                  ),
                                   Spacer(),
                                   Container(
                                       alignment: Alignment.center,
                                       child: Container(
-                                        width: MediaQuery.of(context).size.width - 58,
+                                        width:
+                                            MediaQuery.of(context).size.width -
+                                                58,
                                         height: 60,
                                         child: CupertinoButton(
                                           child: Text(
@@ -1290,10 +1316,10 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                             currentCard = Cards.payDelayCard,
                                             setState(() {})
                                           },
-                                          disabledColor: Color.fromRGBO(
-                                              142, 102, 13, 1.0),
-                                          color: Color.fromRGBO(
-                                              142, 102, 13, 1.0),
+                                          disabledColor:
+                                              Color.fromRGBO(142, 102, 13, 1.0),
+                                          color:
+                                              Color.fromRGBO(142, 102, 13, 1.0),
                                           borderRadius: BorderRadius.all(
                                               Radius.circular(15.0)),
                                         ),
@@ -1359,7 +1385,12 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                   Row(
                                     children: <Widget>[
                                       Container(
-                                          padding: EdgeInsets.only(left: (MediaQuery.of(context).size.width-160)/2),
+                                          padding: EdgeInsets.only(
+                                              left: (MediaQuery.of(context)
+                                                          .size
+                                                          .width -
+                                                      160) /
+                                                  2),
                                           child: Text("Charge",
                                               style: GoogleFonts.karla(
                                                 fontSize: 20,
@@ -1392,7 +1423,8 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                             fontWeight: FontWeight.w600),
                                       ),
                                       onPressed: () => {
-                                        //Paid
+                                        currentCard = Cards.paidCard,
+                                        setState(() {})
                                       },
                                       disabledColor:
                                           Color.fromRGBO(214, 109, 0, 1.0),
@@ -1635,17 +1667,108 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                             fontSize: 17.0,
                                             fontWeight: FontWeight.w600),
                                       ),
-                                      onPressed: infoIcon == CupertinoIcons.checkmark
+                                      onPressed: infoIcon ==
+                                              CupertinoIcons.checkmark
                                           ? () => {
-                                        currentCard = Cards.spotCard,
-                                        setState(() {})
-                                      } : null,
+                                                currentCard = Cards.spotCard,
+                                                setState(() {})
+                                              }
+                                          : null,
                                       disabledColor:
                                           Color.fromRGBO(255, 193, 25, 0.5),
                                       color: Color.fromRGBO(255, 193, 25, 1.0),
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(13.0)),
-
+                                    ),
+                                  ),
+                                  Padding(
+                                      padding: EdgeInsets.only(bottom: 15.0)),
+                                ],
+                              ));
+                        } else if (currentCard == Cards.paidCard) {
+                          return Container(
+                              width: MediaQuery.of(context).size.width - 22,
+//height: 242,
+                              decoration: BoxDecoration(
+                                  color:
+                                      Theme.of(context).scaffoldBackgroundColor,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(26)),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.3),
+                                      spreadRadius: 5,
+                                      blurRadius: 67,
+                                      offset: Offset(
+                                          0, 0), // changes position of shadow
+                                    ),
+                                  ]),
+                              child: Column(
+                                children: <Widget>[
+                                  Row(
+                                    children: <Widget>[
+                                      Container(
+                                        width: 200,
+                                        height: 60,
+                                        padding: EdgeInsets.only(
+                                            left: 17.0, top: 20.0),
+                                        child: Text(
+                                          "Payment Succeded",
+                                          textAlign: TextAlign.left,
+                                          style: GoogleFonts.karla(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                      ),
+                                      Spacer(),
+                                      Container(
+                                        height: 60,
+                                        width: 50,
+                                        padding: EdgeInsets.only(right: 8.0),
+                                        child: IconButton(
+                                          icon: const Icon(CupertinoIcons.xmark,
+                                              size: 23),
+                                          onPressed: () {
+                                            currentCard = Cards.searchBar;
+                                            setState(() {});
+                                          },
+                                          disabledColor:
+                                              Color.fromRGBO(83, 131, 236, 1.0),
+                                          color:
+                                              Color.fromRGBO(83, 131, 236, 1.0),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  Container(
+                                      child: Icon(CupertinoIcons.checkmark_seal,
+                                          color:
+                                              Color.fromRGBO(83, 131, 236, 1.0),
+                                          size: 80)),
+                                  Padding(
+                                    padding: EdgeInsets.only(top: 13.0),
+                                  ),
+                                  Container(
+                                    width:
+                                        MediaQuery.of(context).size.width - 58,
+                                    height: 45,
+                                    child: CupertinoButton(
+                                      padding: EdgeInsets.all(0.0),
+                                      child: Text(
+                                        'See Spot',
+                                        style: GoogleFonts.karla(
+                                            fontSize: 17.0,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                      onPressed: () => {
+                                        currentCard = Cards.unlockCard,
+                                        setState(() {})
+                                      },
+                                      disabledColor:
+                                          Color.fromRGBO(83, 131, 236, 1.0),
+                                      color: Color.fromRGBO(83, 131, 236, 1.0),
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(13.0)),
                                     ),
                                   ),
                                   Padding(
@@ -1701,7 +1824,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                                   BorderRadius.vertical(
                                             top: Radius.circular(23),
                                           )),
-                                          // BorderRadius. vertical// RoundedRectangleBorder
+// BorderRadius. vertical// RoundedRectangleBorder
                                           builder: (context) =>
                                               showSearchBar(context, setState))
                                     },
@@ -1713,7 +1836,8 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                     child: Image.asset('assets/Logo.png'),
                                     padding: EdgeInsets.all(0.0),
                                     onPressed: () async => {
-                                      prefs = await SharedPreferences.getInstance(),
+                                          prefs = await SharedPreferences
+                                              .getInstance(),
                                           showModalBottomSheet(
                                               context: context,
                                               isScrollControlled: true,
@@ -1722,10 +1846,10 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                                       BorderRadius.vertical(
                                                 top: Radius.circular(23),
                                               )),
-                                              // BorderRadius. vertical// RoundedRectangleBorder
+// BorderRadius. vertical// RoundedRectangleBorder
                                               builder: (context) =>
-                                                  showSettings(
-                                                      context, setState, prefs)),
+                                                  showSettings(context,
+                                                      setState, prefs)),
                                           NotificationPermissions
                                                   .requestNotificationPermissions(
                                                       iosSettings:
