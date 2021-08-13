@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="18122" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="AgC-eL-Hgc">
+    <device id="watch40"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="18022"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+    </dependencies>
+    <scenes>
+        <!--Roadout-->
+        <scene sceneID="aou-V4-d1y">
+            <objects>
+                <controller title="Roadout" id="AgC-eL-Hgc" customClass="InterfaceController" customModule="Roadout_Watch" customModuleProvider="target">
+                    <items>
+                        <label height="18" alignment="center" text="-" id="Gcw-P4-CjF">
+                            <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </label>
+                        <group width="1" alignment="center" verticalAlignment="center" layout="vertical" id="cAi-if-Jg2">
+                            <items>
+                                <imageView width="51" height="49" alignment="center" verticalAlignment="center" image="lock" catalog="system" id="Y6x-xw-AiK">
+                                    <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </imageView>
+                                <group width="1" alignment="center" verticalAlignment="center" id="IHO-78-GEh">
+                                    <items>
+                                        <label width="79" alignment="center" verticalAlignment="center" text="Time left" textAlignment="center" id="zFn-eh-nX6">
+                                            <fontDescription key="font" type="system" weight="medium" pointSize="17"/>
+                                        </label>
+                                        <label alignment="center" verticalAlignment="center" text="6:23" id="SmV-Sa-h6N">
+                                            <color key="textColor" name="AccentColor"/>
+                                            <fontDescription key="font" type="system" weight="medium" pointSize="18"/>
+                                        </label>
+                                    </items>
+                                </group>
+                            </items>
+                        </group>
+                        <group width="1" alignment="center" verticalAlignment="bottom" layout="vertical" id="08i-d9-02O">
+                            <items>
+                                <label height="15" alignment="center" text="---" id="Wpu-UR-qPH">
+                                    <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </label>
+                                <group width="1" alignment="center" verticalAlignment="center" id="X1c-36-3MU">
+                                    <items>
+                                        <button width="1" height="40" alignment="center" verticalAlignment="bottom" title="Unlock" id="0fo-gc-K8G">
+                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <color key="backgroundColor" name="AccentColor"/>
+                                            <fontDescription key="font" type="system" weight="medium" pointSize="15"/>
+                                            <connections>
+                                                <action selector="unlocked" destination="AgC-eL-Hgc" id="6ui-8I-0U1"/>
+                                            </connections>
+                                        </button>
+                                    </items>
+                                </group>
+                                <label height="6" alignment="center" verticalAlignment="bottom" text="-" id="AyE-rO-Cna">
+                                    <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </label>
+                            </items>
+                        </group>
+                    </items>
+                    <connections>
+                        <outlet property="buttonWrapper" destination="X1c-36-3MU" id="JbT-Z9-WKW"/>
+                        <outlet property="unlockBtn" destination="0fo-gc-K8G" id="TJl-zf-ei0"/>
+                    </connections>
+                </controller>
+            </objects>
+            <point key="canvasLocation" x="-17.62962962962963" y="-21.573604060913702"/>
+        </scene>
+    </scenes>
+    <color key="tintColor" name="AccentColor"/>
+    <resources>
+        <image name="lock" catalog="system" width="128" height="124"/>
+        <namedColor name="AccentColor">
+            <color red="1" green="0.75700002908706665" blue="0.097999997437000275" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>
