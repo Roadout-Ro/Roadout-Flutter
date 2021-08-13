@@ -1,10 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="kotlin.com.codebranch.roadout">
+    package="com.codebranch.roadout">
    <application
         android:label="Roadout"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/appicn">
         <activity
-            android:name=".MainActivity"
+            android:name=".MultiDexApplication">
             android:launchMode="singleTop"
             android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
