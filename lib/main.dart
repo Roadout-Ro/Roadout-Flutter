@@ -4,10 +4,12 @@ import 'package:roadout/theme_provider.dart';
 import 'package:roadout/welcome.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'notification_service.dart';
 import 'homescreen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await initAwesomeNotifications();
   await Firebase.initializeApp();
   runApp(MainApp());
 }

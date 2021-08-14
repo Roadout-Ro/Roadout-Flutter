@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:notification_permissions/notification_permissions.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:roadout/direction_utils.dart';
 import 'package:roadout/search.dart';
@@ -11,6 +10,7 @@ import 'package:roadout/settings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'auth_service.dart';
 import 'menus.dart';
+import 'notification_service.dart';
 
 enum Cards {
   searchBar,
@@ -51,7 +51,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-    permissionStatusFuture = getCheckNotificationPermStatus();
+    requestNotificationPermission();
     WidgetsBinding.instance!.addObserver(this);
     setCustomMarker();
   }
@@ -94,41 +94,6 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
 //sterge aici
     controller.animateCamera(CameraUpdate.newCameraPosition(
         CameraPosition(target: LatLng(46.770439, 23.591423), zoom: 14)));
-  }
-
-  late Future<String?> permissionStatusFuture;
-
-  var nPermGranted = "granted";
-  var nPermDenied = "denied";
-  var nPermUnknown = "unknown";
-  var nPermProvisional = "provisional";
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      setState(() {
-        permissionStatusFuture = getCheckNotificationPermStatus();
-      });
-    }
-  }
-
-  /// Checks the notification permission status
-  Future<String?> getCheckNotificationPermStatus() {
-    return NotificationPermissions.getNotificationPermissionStatus()
-        .then((status) {
-      switch (status) {
-        case PermissionStatus.denied:
-          return nPermDenied;
-        case PermissionStatus.granted:
-          return nPermGranted;
-        case PermissionStatus.unknown:
-          return nPermUnknown;
-        case PermissionStatus.provisional:
-          return nPermProvisional;
-        default:
-          return null;
-      }
-    });
   }
 
   @override
@@ -243,19 +208,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                                 builder: (context) =>
                                                     showSettings(context,
                                                         setState, prefs)),
-                                            NotificationPermissions
-                                                    .requestNotificationPermissions(
-                                                        iosSettings:
-                                                            const NotificationSettingsIos(
-                                                                sound: true,
-                                                                badge: true,
-                                                                alert: true))
-                                                .then((_) {
-                                              setState(() {
-                                                permissionStatusFuture =
-                                                    getCheckNotificationPermStatus();
-                                              });
-                                            })
+
                                           }),
                                   padding: EdgeInsets.only(right: 15.0),
                                 )
@@ -1850,19 +1803,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                               builder: (context) =>
                                                   showSettings(context,
                                                       setState, prefs)),
-                                          NotificationPermissions
-                                                  .requestNotificationPermissions(
-                                                      iosSettings:
-                                                          const NotificationSettingsIos(
-                                                              sound: true,
-                                                              badge: true,
-                                                              alert: true))
-                                              .then((_) {
-                                            setState(() {
-                                              permissionStatusFuture =
-                                                  getCheckNotificationPermStatus();
-                                            });
-                                          })
+
                                         }),
                                 padding: EdgeInsets.only(right: 15.0),
                               )

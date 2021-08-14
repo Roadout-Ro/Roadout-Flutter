@@ -33,7 +33,7 @@ dependencies:
   location: ^4.3.0
   geolocator: ^7.3.0
   location_permissions: ^4.0.0
-  notification_permissions: ^0.5.0
+  awesome_notifications: ^0.0.6+10
   shared_preferences: ^2.0.6
   url_launcher: ^6.0.9
 
@@ -49,6 +49,8 @@ dev_dependencies:
   cloud_firestore: ^2.4.0
   pedantic: ^1.11.0
   build_runner: ^1.10.0
+  awesome_notifications: ^0.0.6+10
+
 
 
 # For information on the generic Dart part of this file, see the
