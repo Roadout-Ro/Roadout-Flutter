@@ -24,3 +24,14 @@ Future<void> requestNotificationPermission() async {
     }
   });
 }
+
+Future<bool> checkNotificationPermission() async {
+  AwesomeNotifications().isNotificationAllowed().then((allowed) {
+    if (!allowed) {
+      return false;
+    } else {
+      return true;
+    }
+  });
+  return false;
+}

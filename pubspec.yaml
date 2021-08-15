@@ -36,6 +36,7 @@ dependencies:
   awesome_notifications: ^0.0.6+10
   shared_preferences: ^2.0.6
   url_launcher: ^6.0.9
+  app_settings: ^4.1.1
 
 
 
@@ -50,6 +51,7 @@ dev_dependencies:
   pedantic: ^1.11.0
   build_runner: ^1.10.0
   awesome_notifications: ^0.0.6+10
+  app_settings: ^4.1.1
 
 
 
@@ -80,6 +82,10 @@ flutter:
      - assets/prizes/Trophy-Dark.png
      - assets/prizes/Cup-Dark.png
      - assets/prizes/Wreath-Dark.png
+     - assets/permissions/LocationLight.png
+     - assets/permissions/LocationDark.png
+     - assets/permissions/NotificationsLight.png
+     - assets/permissions/NotificationsDark.png
 
   fonts:
     - family: sficonsets

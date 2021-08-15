@@ -51,7 +51,6 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-    requestNotificationPermission();
     WidgetsBinding.instance!.addObserver(this);
     setCustomMarker();
   }
@@ -61,16 +60,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
         ImageConfiguration(), 'assets/Marker.png');
   }
 
-  void locatePosition(GoogleMapController controller) async {
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.bestForNavigation);
-    currentPosition = position;
-    latlngPos = LatLng(position.latitude, position.longitude);
-    controller.animateCamera(CameraUpdate.newCameraPosition(
-        CameraPosition(target: latlngPos, zoom: 14)));
-  }
-
-  void _onMapCreated(GoogleMapController controller) {
+  Future<void> _onMapCreated(GoogleMapController controller) async {
     _readUserName();
 
     setState(() {
@@ -86,6 +76,25 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
 
     var brightness = MediaQuery.of(context).platformBrightness;
     bool darkModeOn = brightness == Brightness.dark;
+
+    var themeName = 'Light';
+    if (darkModeOn)
+      themeName = 'Dark';
+    bool neverLaunched = await _readNeverLaunched();
+    if (neverLaunched == true) {
+      showModalBottomSheet(
+          context: context,
+          isScrollControlled: false,
+          shape: RoundedRectangleBorder(
+              borderRadius:
+              BorderRadius.vertical(
+                top: Radius.circular(23),
+              )),
+          // BorderRadius. vertical// RoundedRectangleBorder
+          builder: (context) => showPermissions(context, themeName)
+      );
+    }
+
     if (darkModeOn)
       controller.setMapStyle(MapStyling.darkMapStyle);
     else
@@ -94,6 +103,16 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
 //sterge aici
     controller.animateCamera(CameraUpdate.newCameraPosition(
         CameraPosition(target: LatLng(46.770439, 23.591423), zoom: 14)));
+
+  }
+
+  void locatePosition(GoogleMapController controller) async {
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.bestForNavigation);
+    currentPosition = position;
+    latlngPos = LatLng(position.latitude, position.longitude);
+    controller.animateCamera(CameraUpdate.newCameraPosition(
+        CameraPosition(target: latlngPos, zoom: 14)));
   }
 
   @override
@@ -1889,6 +1908,15 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
     username = value;
     print('Read: $value');
   }
+
+  Future<bool> _readNeverLaunched() async {
+    final prefs = await SharedPreferences.getInstance();
+    final key = 'never_launched';
+    final value = prefs.getBool(key) ?? true;
+    print(value);
+    return value;
+  }
+
 }
 
 class MapStyling {
