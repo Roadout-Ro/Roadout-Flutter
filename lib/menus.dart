@@ -68,6 +68,20 @@ List<Color> permissionColors = [
   Color.fromRGBO(214, 90, 0, 1.0),
 ];
 
+List<String> tutorials = ["The Search Bar", "Roadout Preferences", "Park Indicator"];
+List<String> tutorialImages = ["TheSearchBar", "RoadoutPreferences", "ParkIndicator"];
+List<String> tutorialTexts = ["You can use the search bar to look for specific parking places, you will also get at a glance how many free spots there are at the places that match, just tap it and start typing.", "On the search bar you will also find the preferences button, looks just like this, tap it and you’ll see the preferences. Pretty straight forward, right?", "You will also see park indicators on the map, indicating, you guessed it, where parking locations are. Tap it and you’ll get some details, then you can pick a spot and reserve it!"];
+List<Color> tutorialColors = [
+  Color.fromRGBO(143, 102, 13, 1.0),
+  Color.fromRGBO(103, 72, 5, 1.0),
+  Color.fromRGBO(214, 90, 0, 1.0),
+];
+int currentTutorial = 0;
+List<String> tutorialTopBtns = ["Next", "Next", "Done"];
+List<String> tutorialBottomBtns = ["Dismiss", "Previous", "Previous"];
+List<double> tutorialHeights = [52.0, 80.0, 96.0];
+List<double> tutorialPaddings = [30.0, 15.0, 10.0];
+
 Widget showNotifications(BuildContext context, SharedPreferences preferences) {
   return StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
     return Container(
@@ -1457,7 +1471,6 @@ Widget showPermissions(BuildContext context, String themeName) {
     late Position currentPosition;
     LatLng latlngPos = LatLng(46.7712, 23.6236);
     LocationPermission permission;
-    String settingsURL;
     return Container(
         height: 470,
         decoration: BoxDecoration(
@@ -1579,7 +1592,18 @@ Widget showPermissions(BuildContext context, String themeName) {
                                             padding: EdgeInsets.all(0.0),
                                             child: Text('Yes', style: GoogleFonts.karla(fontSize: 18.0, fontWeight: FontWeight.w600),),
                                             onPressed: () {
-                                                    print('Yee');
+                                              Navigator.pop(context);
+                                              showModalBottomSheet(
+                                                  context: context,
+                                                  isScrollControlled: false,
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                      BorderRadius.vertical(
+                                                        top: Radius.circular(23),
+                                                      )),
+                                                  // BorderRadius. vertical// RoundedRectangleBorder
+                                                  builder: (context) => showTutorial(context)
+                                              );
                                             },
                                             disabledColor: Color.fromRGBO(255, 193, 25, 1.0),
                                             color: Color.fromRGBO(255, 193, 25, 1.0),
@@ -1658,7 +1682,18 @@ Widget showPermissions(BuildContext context, String themeName) {
                                         padding: EdgeInsets.all(0.0),
                                         child: Text('Yes', style: GoogleFonts.karla(fontSize: 18.0, fontWeight: FontWeight.w600),),
                                         onPressed: () {
-                                          print('Yee');
+                                          Navigator.pop(context);
+                                          showModalBottomSheet(
+                                              context: context,
+                                              isScrollControlled: false,
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                  BorderRadius.vertical(
+                                                    top: Radius.circular(23),
+                                                  )),
+                                              // BorderRadius. vertical// RoundedRectangleBorder
+                                              builder: (context) => showTutorial(context)
+                                          );
                                         },
                                         disabledColor: Color.fromRGBO(255, 193, 25, 1.0),
                                         color: Color.fromRGBO(255, 193, 25, 1.0),
@@ -1685,6 +1720,116 @@ Widget showPermissions(BuildContext context, String themeName) {
                       },
                     )
                   }
+                },
+                borderRadius: BorderRadius.all(Radius.circular(13.0)),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 20.0),
+            )
+          ],
+        ));
+  });
+}
+
+Widget showTutorial(BuildContext context) {
+  return StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
+    late Position currentPosition;
+    LatLng latlngPos = LatLng(46.7712, 23.6236);
+    LocationPermission permission;
+    return Container(
+        height: 430,
+        decoration: BoxDecoration(
+          color: Theme.of(context).dialogBackgroundColor,
+          borderRadius: BorderRadius.all(Radius.circular(23)),
+        ),
+        child: Column(
+          children: <Widget>[
+            Padding(padding: EdgeInsets.only(top: 23.0)),
+            Row(
+              children: <Widget>[
+                Container(
+                  width: 200,
+                  padding: EdgeInsets.only(left: 20.0),
+                  child: Text(
+                    "Tutorial",
+                    textAlign: TextAlign.left,
+                    style: GoogleFonts.karla(
+                        fontSize: 22.0, fontWeight: FontWeight.w600),
+                  ),
+                ),
+                Spacer(),
+              ],
+            ),
+            Padding(padding: EdgeInsets.only(top: tutorialPaddings[currentTutorial])),
+            Center(
+              child: Container(
+                  height: tutorialHeights[currentTutorial],
+                  child: Image.asset('assets/tutorial/' +
+                      tutorialImages[currentTutorial] + '.png'),
+                ),
+
+            ),
+            Padding(padding: EdgeInsets.only(top: tutorialPaddings[currentTutorial])),
+            Text(
+              tutorials[currentTutorial],
+              textAlign: TextAlign.center,
+              style: GoogleFonts.karla(
+                  fontSize: 17.0, fontWeight: FontWeight.w600, color: tutorialColors[currentTutorial]),
+            ),
+            Padding(padding: EdgeInsets.only(top: 10.0)),
+            Container(
+              width: MediaQuery.of(context).size.width - 40,
+              child: Text(
+                tutorialTexts[currentTutorial],
+                textAlign: TextAlign.center,
+                style: GoogleFonts.karla(
+                    fontSize: 15.0, fontWeight: FontWeight.w600),
+              ),
+            ),
+            Spacer(),
+            Container(
+              width: MediaQuery.of(context).size.width - 58,
+              height: 45,
+              child: CupertinoButton(
+                padding: EdgeInsets.all(0.0),
+                child: Text(
+                  tutorialTopBtns[currentTutorial],
+                  style: GoogleFonts.karla(
+                      fontSize: 17.0, fontWeight: FontWeight.w600),
+                ),
+                onPressed: () {
+                  if (currentTutorial == 2)
+                    Navigator.pop(context);
+                  else
+                    currentTutorial += 1;
+                    setState(() {});
+                },
+                disabledColor: tutorialColors[currentTutorial],
+                color: tutorialColors[currentTutorial],
+                borderRadius: BorderRadius.all(Radius.circular(13.0)),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 5.0),
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width - 58,
+              height: 45,
+              child: CupertinoButton(
+                padding: EdgeInsets.all(0.0),
+                child: Text(
+                  tutorialBottomBtns[currentTutorial],
+                  style: GoogleFonts.karla(
+                      fontSize: 17.0,
+                      fontWeight: FontWeight.w600,
+                      color: tutorialColors[currentTutorial]),
+                ),
+                onPressed: () => {
+                if (currentTutorial == 0)
+                  Navigator.pop(context)
+                else
+                  currentTutorial -= 1, setState(() {})
                 },
                 borderRadius: BorderRadius.all(Radius.circular(13.0)),
               ),

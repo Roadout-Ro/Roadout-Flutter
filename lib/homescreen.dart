@@ -47,7 +47,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
   late Position currentPosition;
   late Position searchedPosition;
   var geolocator = Geolocator();
-  LatLng latlngPos = LatLng(46.7712, 23.6236);
+  LatLng latlngPos = LatLng(46.770439, 23.591423);
 
   Set<Marker> _markers = {};
   late BitmapDescriptor mapMarker;
@@ -56,7 +56,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-    parkLocation = ParkingLocation(spots, LatLng(46.7712, 23.6236), layout, 'Old Town');
+    parkLocation = ParkingLocation(spots, LatLng(46.770439, 23.591423), layout, 'Old Town');
     spotStates = [];
     for (Spot spot in parkLocation.spots) {
       spotStates.add(spot.spotState);
@@ -94,7 +94,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
     if (darkModeOn)
       themeName = 'Dark';
     bool neverLaunched = await _readNeverLaunched();
-   // if (neverLaunched == true) {
+    if (neverLaunched == true) {
       showModalBottomSheet(
           context: context,
           isScrollControlled: false,
@@ -106,7 +106,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
           // BorderRadius. vertical// RoundedRectangleBorder
           builder: (context) => showPermissions(context, themeName)
       );
-    //}
+    }
 
     if (darkModeOn)
       controller.setMapStyle(MapStyling.darkMapStyle);

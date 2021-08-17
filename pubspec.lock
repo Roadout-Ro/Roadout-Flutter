@@ -127,13 +127,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.1"
-  child_builder:
-    dependency: transitive
-    description:
-      name: child_builder
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0"
   cli_util:
     dependency: transitive
     description:
@@ -338,13 +331,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  form_validation:
-    dependency: transitive
-    description:
-      name: form_validation
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0"
   geolocator:
     dependency: "direct main"
     description:
@@ -464,34 +450,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.1"
-  json_class:
-    dependency: transitive
-    description:
-      name: json_class
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0+1"
-  json_conditional:
-    dependency: transitive
-    description:
-      name: json_conditional
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0+1"
-  json_dynamic_widget:
-    dependency: "direct main"
-    description:
-      name: json_dynamic_widget
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.1.0"
-  json_schema2:
-    dependency: transitive
-    description:
-      name: json_schema2
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0+2"
   json_serializable:
     dependency: "direct main"
     description:
@@ -499,13 +457,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.1.4"
-  json_theme:
-    dependency: transitive
-    description:
-      name: json_theme
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.1.0+2"
   location:
     dependency: "direct main"
     description:
@@ -559,13 +510,6 @@ packages:
     dependency: transitive
     description:
       name: mime
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.0"
-  nested:
-    dependency: transitive
-    description:
-      name: nested
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
@@ -667,13 +611,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.2.3"
-  provider:
-    dependency: transitive
-    description:
-      name: provider
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "5.0.0"
   pub_semver:
     dependency: transitive
     description:
@@ -688,20 +625,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
-  quiver:
-    dependency: transitive
-    description:
-      name: quiver
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.0.1"
-  rest_client:
-    dependency: transitive
-    description:
-      name: rest_client
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.1+2"
   shared_preferences:
     dependency: "direct main"
     description:
@@ -784,13 +707,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.10.0"
-  static_translations:
-    dependency: transitive
-    description:
-      name: static_translations
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.2"
   stream_channel:
     dependency: transitive
     description:
@@ -840,13 +756,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.0"
-  uri:
-    dependency: transitive
-    description:
-      name: uri
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.0"
   url_launcher:
     dependency: "direct main"
     description:
@@ -889,13 +798,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.1"
-  uuid:
-    dependency: transitive
-    description:
-      name: uuid
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.0.4"
   vector_math:
     dependency: transitive
     description:

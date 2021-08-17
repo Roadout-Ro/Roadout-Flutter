@@ -86,6 +86,9 @@ flutter:
      - assets/permissions/LocationDark.png
      - assets/permissions/NotificationsLight.png
      - assets/permissions/NotificationsDark.png
+     - assets/tutorial/TheSearchBar.png
+     - assets/tutorial/ParkIndicator.png
+     - assets/tutorial/RoadoutPreferences.png
 
   fonts:
     - family: sficonsets
