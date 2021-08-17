@@ -207,29 +207,53 @@ ListTile _tile(String title, IconData icon, BuildContext context, StateSetter se
         if (title == "Sign Out") {
           showDialog(
             context: context,
-            builder: (context) {
-              return CupertinoAlertDialog(
-                  title: Text("Sign Out"),
-                  content: Text("Do you really want to sign out?"),
-                  actions: <Widget>[
-                    CupertinoDialogAction(
-                        textStyle:
-                            TextStyle(color: Color.fromRGBO(255, 158, 25, 1.0)),
-                        isDefaultAction: true,
-                        onPressed: () async {
-                          await AuthenticationService(FirebaseAuth.instance)
-                              .signOut(context: context);
-                        },
-                        child: Text("Sign Out")),
-                    CupertinoDialogAction(
-                        textStyle:
-                            TextStyle(color: Color.fromRGBO(146, 82, 24, 1.0)),
-                        isDefaultAction: true,
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: Text("Cancel")),
-                  ]);
+            builder: (BuildContext context) {
+              return AlertDialog(
+                insetPadding: EdgeInsets.all(40),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+                title: Text('Sign Out', style: GoogleFonts.karla(
+                    fontSize: 20.0, fontWeight: FontWeight.w600)),
+                content: Container(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget> [
+                        Text('Do you really want to sign out?', style: GoogleFonts.karla(
+                            fontSize: 17.0, fontWeight: FontWeight.w500)),
+                        Container(
+                            padding: EdgeInsets.only(top: 15.0, left: 5.0, right: 5.0),
+                            width: MediaQuery.of(context).size.width-100,
+                            height: 60,
+                            child: CupertinoButton(
+                              padding: EdgeInsets.all(0.0),
+                              child: Text('Yes', style: GoogleFonts.karla(fontSize: 18.0, fontWeight: FontWeight.w600),),
+                              onPressed: () async {
+                                await AuthenticationService(FirebaseAuth.instance)
+                                    .signOut(context: context);
+                              },
+                              disabledColor: Color.fromRGBO(146, 82, 24, 1.0),
+                              color: Color.fromRGBO(146, 82, 24, 1.0),
+                              borderRadius: BorderRadius.all(Radius.circular(13.0)),
+                            )
+                        ),
+                        Container(
+                            padding: EdgeInsets.only(top: 15.0, left: 5.0, right: 5.0),
+                            width: 250,
+                            height: 40,
+                            child: CupertinoButton(
+                              padding: EdgeInsets.all(0.0),
+                              child: Text('Cancel', style: GoogleFonts.karla(fontSize: 18.0, fontWeight: FontWeight.w600, color: Color.fromRGBO(146, 82, 24, 1.0)),),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              borderRadius: BorderRadius.all(Radius.circular(13.0)),
+                            )
+                        )
+                      ],
+                    )
+                ),
+              );
             },
           );
         } else if (title == "Notifications") {

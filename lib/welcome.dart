@@ -337,21 +337,38 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               if (passwordController.text != verifyPasswordController.text ) {
                 showDialog(
                   context: context,
-                  builder: (context) {
-                    return CupertinoAlertDialog(
-                        title: Text("Sign Up Error"),
-                        content: Text("Passwords do not match!"),
-                        actions: <Widget>[
-                          CupertinoDialogAction(
-                              textStyle: TextStyle(
-                                  color: Color.fromRGBO(146, 82, 24, 1.0)),
-                              isDefaultAction: true,
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: Text("OK")
-                          ),
-                        ]
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      insetPadding: EdgeInsets.all(40),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                      title: Text('Sign Up Error', style: GoogleFonts.karla(
+                          fontSize: 20.0, fontWeight: FontWeight.w600)),
+                      content: Container(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget> [
+                              Text('Passwords do not match!', style: GoogleFonts.karla(
+                                  fontSize: 17.0, fontWeight: FontWeight.w500)),
+                              Container(
+                                  padding: EdgeInsets.only(top: 15.0, left: 5.0, right: 5.0),
+                                  width: MediaQuery.of(context).size.width-100,
+                                  height: 60,
+                                  child: CupertinoButton(
+                                    padding: EdgeInsets.all(0.0),
+                                    child: Text('Ok', style: GoogleFonts.karla(fontSize: 18.0, fontWeight: FontWeight.w600),),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    disabledColor: Color.fromRGBO(220, 170, 57, 1.0),
+                                    color: Color.fromRGBO(220, 170, 57, 1.0),
+                                    borderRadius: BorderRadius.all(Radius.circular(13.0)),
+                                  )
+                              ),
+                            ],
+                          )
+                      ),
                     );
                   },
                 );
@@ -359,21 +376,38 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               else if (!regExpPassword.hasMatch(passwordController.text)) {
                 showDialog(
                   context: context,
-                  builder: (context) {
-                    return CupertinoAlertDialog(
-                        title: Text("Sign Up Error"),
-                        content: Text("Password should be at least 8 characters long, have a capital letter and a number!"),
-                        actions: <Widget>[
-                          CupertinoDialogAction(
-                              textStyle: TextStyle(
-                                  color: Color.fromRGBO(146, 82, 24, 1.0)),
-                              isDefaultAction: true,
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: Text("OK")
-                          ),
-                        ]
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      insetPadding: EdgeInsets.all(40),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                      title: Text('Sign Up Error', style: GoogleFonts.karla(
+                          fontSize: 20.0, fontWeight: FontWeight.w600)),
+                      content: Container(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget> [
+                              Text('Password should be at least 8 characters long, have a capital letter and a number!', style: GoogleFonts.karla(
+                                  fontSize: 17.0, fontWeight: FontWeight.w500)),
+                              Container(
+                                  padding: EdgeInsets.only(top: 15.0, left: 5.0, right: 5.0),
+                                  width: MediaQuery.of(context).size.width-100,
+                                  height: 60,
+                                  child: CupertinoButton(
+                                    padding: EdgeInsets.all(0.0),
+                                    child: Text('Ok', style: GoogleFonts.karla(fontSize: 18.0, fontWeight: FontWeight.w600),),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    disabledColor: Color.fromRGBO(220, 170, 57, 1.0),
+                                    color: Color.fromRGBO(220, 170, 57, 1.0),
+                                    borderRadius: BorderRadius.all(Radius.circular(13.0)),
+                                  )
+                              ),
+                            ],
+                          )
+                      ),
                     );
                   },
                 );
@@ -381,21 +415,38 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               else if (nameController.text == null  || nameController.text.isEmpty){
                 showDialog(
                   context: context,
-                  builder: (context) {
-                    return CupertinoAlertDialog(
-                        title: Text("Sign Up Error"),
-                        content: Text("Please enter your name!"),
-                        actions: <Widget>[
-                          CupertinoDialogAction(
-                              textStyle: TextStyle(
-                                  color: Color.fromRGBO(146, 82, 24, 1.0)),
-                              isDefaultAction: true,
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: Text("Ok")
-                          ),
-                        ]
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      insetPadding: EdgeInsets.all(40),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                      title: Text('Sign Up Error', style: GoogleFonts.karla(
+                          fontSize: 20.0, fontWeight: FontWeight.w600)),
+                      content: Container(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget> [
+                              Text('Please enter your name!', style: GoogleFonts.karla(
+                                  fontSize: 17.0, fontWeight: FontWeight.w500)),
+                              Container(
+                                  padding: EdgeInsets.only(top: 15.0, left: 5.0, right: 5.0),
+                                  width: MediaQuery.of(context).size.width-100,
+                                  height: 60,
+                                  child: CupertinoButton(
+                                    padding: EdgeInsets.all(0.0),
+                                    child: Text('Ok', style: GoogleFonts.karla(fontSize: 18.0, fontWeight: FontWeight.w600),),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    disabledColor: Color.fromRGBO(220, 170, 57, 1.0),
+                                    color: Color.fromRGBO(220, 170, 57, 1.0),
+                                    borderRadius: BorderRadius.all(Radius.circular(13.0)),
+                                  )
+                              ),
+                            ],
+                          )
+                      ),
                     );
                   },
                 );

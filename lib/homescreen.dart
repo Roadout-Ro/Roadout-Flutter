@@ -7,10 +7,11 @@ import 'package:geolocator/geolocator.dart';
 import 'package:roadout/direction_utils.dart';
 import 'package:roadout/search.dart';
 import 'package:roadout/settings.dart';
+import 'package:roadout/spots_&_locations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'auth_service.dart';
+import 'database_service.dart';
 import 'menus.dart';
-import 'notification_service.dart';
 
 enum Cards {
   searchBar,
@@ -32,7 +33,10 @@ int selectedNumber = -1;
 IconData infoIcon = CupertinoIcons.info_circle;
 Color infoColor = Color.fromRGBO(255, 193, 25, 1.0);
 String infoText = "Select a spot to get info about it.";
-List<int> spotStates = [0, 0, 2, 0, 1, 0, 0, 1, 0, 2, 0, 0, 1, 1, 0, 0, 1];
+List<int> spotStates = [];
+late ParkingLocation parkLocation;
+String currentLocationName = '---';
+String currentLocationLayout = '''''';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -48,9 +52,16 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
   Set<Marker> _markers = {};
   late BitmapDescriptor mapMarker;
 
+
   @override
   void initState() {
     super.initState();
+    parkLocation = ParkingLocation(spots, LatLng(46.7712, 23.6236), layout, 'Old Town');
+    spotStates = [];
+    for (Spot spot in parkLocation.spots) {
+      spotStates.add(spot.spotState);
+      print(spot.spotState);
+    }
     WidgetsBinding.instance!.addObserver(this);
     setCustomMarker();
   }
@@ -65,13 +76,15 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
 
     setState(() {
       _markers.add(Marker(
-          markerId: MarkerId('id-1'),
+          markerId: MarkerId(parkLocation.name),
           icon: mapMarker,
           onTap: () {
+            currentLocationName = parkLocation.name;
+            currentLocationLayout = parkLocation.layoutCode;
             currentCard = Cards.resultBar;
             setState(() {});
           },
-          position: LatLng(46.768728, 23.592564)));
+          position: parkLocation.coords));
     });
 
     var brightness = MediaQuery.of(context).platformBrightness;
@@ -81,7 +94,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
     if (darkModeOn)
       themeName = 'Dark';
     bool neverLaunched = await _readNeverLaunched();
-    if (neverLaunched == true) {
+   // if (neverLaunched == true) {
       showModalBottomSheet(
           context: context,
           isScrollControlled: false,
@@ -93,7 +106,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
           // BorderRadius. vertical// RoundedRectangleBorder
           builder: (context) => showPermissions(context, themeName)
       );
-    }
+    //}
 
     if (darkModeOn)
       controller.setMapStyle(MapStyling.darkMapStyle);
@@ -271,7 +284,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                   ),
                                   padding: EdgeInsets.only(left: 5.0),
                                 ),
-                                Text('Old Town',
+                                Text(currentLocationName,
                                     style: GoogleFonts.karla(
                                         fontSize: 18.0,
                                         fontWeight: FontWeight.w600,
@@ -1843,7 +1856,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
   InkWell _spotTile(int nr) {
     Color spotColor = Color.fromRGBO(255, 193, 25, 1.0);
     IconData icon = CupertinoIcons.checkmark;
-    int state = spotStates[nr];
+    int state = spotStates[nr-1];
     if (state == 0) {
       spotColor = Color.fromRGBO(255, 193, 25, 1.0);
       icon = CupertinoIcons.checkmark;

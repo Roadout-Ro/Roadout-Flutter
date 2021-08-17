@@ -1553,9 +1553,59 @@ Widget showPermissions(BuildContext context, String themeName) {
                           latlngPos = LatLng(currentPosition.latitude,
                               currentPosition.longitude),
                           print(latlngPos),
-                          Navigator.pop(context)
+                          _saveNeverLaunched(),
+                          Navigator.pop(context),
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                insetPadding: EdgeInsets.all(40),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                ),
+                                title: Text('Tutorial', style: GoogleFonts.karla(
+                                    fontSize: 20.0, fontWeight: FontWeight.w600)),
+                                content: Container(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget> [
+                                      Text('Would you like a quick tutorial of the app?', style: GoogleFonts.karla(
+                                          fontSize: 17.0, fontWeight: FontWeight.w500)),
+                                      Container(
+                                          padding: EdgeInsets.only(top: 15.0, left: 5.0, right: 5.0),
+                                          width: MediaQuery.of(context).size.width-100,
+                                          height: 60,
+                                          child: CupertinoButton(
+                                            padding: EdgeInsets.all(0.0),
+                                            child: Text('Yes', style: GoogleFonts.karla(fontSize: 18.0, fontWeight: FontWeight.w600),),
+                                            onPressed: () {
+                                                    print('Yee');
+                                            },
+                                            disabledColor: Color.fromRGBO(255, 193, 25, 1.0),
+                                            color: Color.fromRGBO(255, 193, 25, 1.0),
+                                            borderRadius: BorderRadius.all(Radius.circular(13.0)),
+                                          )
+                                      ),
+                                      Container(
+                                          padding: EdgeInsets.only(top: 15.0, left: 5.0, right: 5.0),
+                                          width: 250,
+                                          height: 40,
+                                          child: CupertinoButton(
+                                            padding: EdgeInsets.all(0.0),
+                                            child: Text('No Thanks', style: GoogleFonts.karla(fontSize: 18.0, fontWeight: FontWeight.w600, color: Color.fromRGBO(255, 193, 25, 1.0)),),
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            borderRadius: BorderRadius.all(Radius.circular(13.0)),
+                                          )
+                                      )
+                                    ],
+                                  )
+                                ),
+                              );
+                            },
+                          )
                         },
-                      _saveNeverLaunched()
                     }
                 },
                 disabledColor: permissionColors[currentPermission],
@@ -1581,8 +1631,60 @@ Widget showPermissions(BuildContext context, String themeName) {
                 onPressed: () => {
                   if (currentPermission == 0)
                     {currentPermission += 1, setState(() {})}
-                  else
-                    {_saveNeverLaunched(), Navigator.pop(context)}
+                  else {
+                      _saveNeverLaunched(),
+                      Navigator.pop(context),
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          insetPadding: EdgeInsets.all(40),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                          title: Text('Tutorial', style: GoogleFonts.karla(
+                              fontSize: 20.0, fontWeight: FontWeight.w600)),
+                          content: Container(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget> [
+                                  Text('Would you like a quick tutorial of the app?', style: GoogleFonts.karla(
+                                      fontSize: 17.0, fontWeight: FontWeight.w500)),
+                                  Container(
+                                      padding: EdgeInsets.only(top: 15.0, left: 5.0, right: 5.0),
+                                      width: MediaQuery.of(context).size.width-100,
+                                      height: 60,
+                                      child: CupertinoButton(
+                                        padding: EdgeInsets.all(0.0),
+                                        child: Text('Yes', style: GoogleFonts.karla(fontSize: 18.0, fontWeight: FontWeight.w600),),
+                                        onPressed: () {
+                                          print('Yee');
+                                        },
+                                        disabledColor: Color.fromRGBO(255, 193, 25, 1.0),
+                                        color: Color.fromRGBO(255, 193, 25, 1.0),
+                                        borderRadius: BorderRadius.all(Radius.circular(13.0)),
+                                      )
+                                  ),
+                                  Container(
+                                      padding: EdgeInsets.only(top: 15.0, left: 5.0, right: 5.0),
+                                      width: 250,
+                                      height: 40,
+                                      child: CupertinoButton(
+                                        padding: EdgeInsets.all(0.0),
+                                        child: Text('No Thanks', style: GoogleFonts.karla(fontSize: 18.0, fontWeight: FontWeight.w600, color: Color.fromRGBO(255, 193, 25, 1.0)),),
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        borderRadius: BorderRadius.all(Radius.circular(13.0)),
+                                      )
+                                  )
+                                ],
+                              )
+                          ),
+                        );
+                      },
+                    )
+                  }
                 },
                 borderRadius: BorderRadius.all(Radius.circular(13.0)),
               ),
