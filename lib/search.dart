@@ -120,7 +120,6 @@ ListTile _tile2(int spots, String location, String km, int colorR, int colorG,
             )),
         onTap: () {
           currentLocationName = parkLocation.name;
-          currentLocationLayout = parkLocation.layoutCode;
           currentCard = Cards.resultBar;
           setState(() {});
           Navigator.pop(context);

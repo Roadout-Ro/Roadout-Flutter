@@ -11,6 +11,7 @@ import 'package:roadout/spots_&_locations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'auth_service.dart';
 import 'database_service.dart';
+import 'layouts.dart';
 import 'menus.dart';
 
 enum Cards {
@@ -56,7 +57,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-    parkLocation = ParkingLocation(spots, LatLng(46.770439, 23.591423), layout, 'Old Town');
+    parkLocation = ParkingLocation(spots, LatLng(46.770439, 23.591423), 'Old Town');
     spotStates = [];
     for (Spot spot in parkLocation.spots) {
       spotStates.add(spot.spotState);
@@ -80,7 +81,6 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
           icon: mapMarker,
           onTap: () {
             currentLocationName = parkLocation.name;
-            currentLocationLayout = parkLocation.layoutCode;
             currentCard = Cards.resultBar;
             setState(() {});
           },
@@ -1512,97 +1512,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                       )
                                     ],
                                   ),
-                                  Container(
-                                      alignment: Alignment.center,
-                                      child: Column(
-                                        children: <Widget>[
-                                          Row(
-                                            children: [
-                                              Padding(
-                                                  padding: EdgeInsets.only(
-                                                      left: (MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .width -
-                                                              308) /
-                                                          2)),
-                                              _spotTile(1),
-                                              Padding(
-                                                  padding: EdgeInsets.only(
-                                                      left: 2.0)),
-                                              _spotTile(2),
-                                              Padding(
-                                                  padding: EdgeInsets.only(
-                                                      left: 2.0)),
-                                              _spotTile(3),
-                                              Padding(
-                                                  padding: EdgeInsets.only(
-                                                      left: 2.0)),
-                                              _spotTile(4),
-                                              Padding(
-                                                  padding: EdgeInsets.only(
-                                                      left: 2.0)),
-                                              _spotTile(5),
-                                              Padding(
-                                                  padding: EdgeInsets.only(
-                                                      left: 2.0)),
-                                              _spotTile(6),
-                                              Padding(
-                                                  padding: EdgeInsets.only(
-                                                      left: 2.0)),
-                                              _spotTile(7),
-                                              Padding(
-                                                  padding: EdgeInsets.only(
-                                                      left: 2.0)),
-                                              _spotTile(8),
-                                            ],
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.only(top: 41),
-                                          ),
-                                          Row(
-                                            children: [
-                                              Padding(
-                                                  padding: EdgeInsets.only(
-                                                      left: (MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .width -
-                                                              308) /
-                                                          2)),
-                                              _spotTile(9),
-                                              Padding(
-                                                  padding: EdgeInsets.only(
-                                                      left: 2.0)),
-                                              _spotTile(10),
-                                              Padding(
-                                                  padding: EdgeInsets.only(
-                                                      left: 2.0)),
-                                              _spotTile(11),
-                                              Padding(
-                                                  padding: EdgeInsets.only(
-                                                      left: 2.0)),
-                                              _spotTile(12),
-                                              Padding(
-                                                  padding: EdgeInsets.only(
-                                                      left: 2.0)),
-                                              _spotTile(13),
-                                              Padding(
-                                                  padding: EdgeInsets.only(
-                                                      left: 2.0)),
-                                              _spotTile(14),
-                                              Padding(
-                                                  padding: EdgeInsets.only(
-                                                      left: 2.0)),
-                                              _spotTile(15),
-                                              Padding(
-                                                  padding: EdgeInsets.only(
-                                                      left: 2.0)),
-                                              _spotTile(16),
-                                            ],
-                                          ),
-                                        ],
-                                      )),
+                                  SmartLayout(context, setState, currentLocationName),
                                   Padding(
                                     padding: EdgeInsets.only(top: 10.0),
                                   ),
@@ -1853,7 +1763,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
     );
   }
 
-  InkWell _spotTile(int nr) {
+  /*InkWell _spotTile(int nr) {
     Color spotColor = Color.fromRGBO(255, 193, 25, 1.0);
     IconData icon = CupertinoIcons.checkmark;
     int state = spotStates[nr-1];
@@ -1912,7 +1822,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
     );
 
     return spot;
-  }
+  } */
 
   _readUserName() async {
     final prefs = await SharedPreferences.getInstance();

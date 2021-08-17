@@ -49,9 +49,3 @@ List<Spot> spots = [
   Spot(15, 1),
   Spot(16, 0)
 ];
-
-String layout = '''
-{
-
-}
-''';

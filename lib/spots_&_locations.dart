@@ -15,10 +15,9 @@ class ParkingLocation {
   LatLng coords = LatLng(46.768728, 23.592564);
   int nrSpots = 0;
   int nrFreeSpots = 0;
-  String layoutCode = '''''';
   String name = "";
 
-  ParkingLocation(List<Spot> spots, LatLng coords, String layoutCode, String name) {
+  ParkingLocation(List<Spot> spots, LatLng coords, String name) {
     this.spots = spots;
     this.coords = coords;
     this.nrSpots = spots.length;
@@ -28,7 +27,6 @@ class ParkingLocation {
         this.nrFreeSpots += 1;
     }
     print(this.nrFreeSpots);
-    this.layoutCode = layoutCode;
     this.name = name;
   }
 
