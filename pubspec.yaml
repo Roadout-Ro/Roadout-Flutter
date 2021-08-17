@@ -37,7 +37,6 @@ dependencies:
   shared_preferences: ^2.0.6
   url_launcher: ^6.0.9
   app_settings: ^4.1.1
-  json_dynamic_widget: ^2.1.0
 
 
 
