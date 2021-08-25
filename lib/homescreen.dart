@@ -57,7 +57,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-    parkLocation = ParkingLocation(spots, LatLng(46.770439, 23.591423), 'Old Town');
+    parkLocation = parkingLocations[0];
     spotStates = [];
     for (Spot spot in parkLocation.spots) {
       spotStates.add(spot.spotState);
@@ -76,16 +76,19 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
     _readUserName();
 
     setState(() {
-      _markers.add(Marker(
-          markerId: MarkerId(parkLocation.name),
-          icon: mapMarker,
-          onTap: () {
-            currentLocationName = parkLocation.name;
-            currentCard = Cards.resultBar;
-            setState(() {});
-          },
-          position: parkLocation.coords));
+      for (ParkingLocation parkLocation in parkingLocations) {
+        _markers.add(Marker(
+            markerId: MarkerId(parkLocation.name),
+            icon: mapMarker,
+            onTap: () {
+              currentLocationName = parkLocation.name;
+              currentCard = Cards.resultBar;
+              setState(() {});
+            },
+            position: parkLocation.coords));
+      }
     });
+    username = await DatabaseService().getUserData();
 
     var brightness = MediaQuery.of(context).platformBrightness;
     bool darkModeOn = brightness == Brightness.dark;
@@ -1762,67 +1765,6 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
       ),
     );
   }
-
-  /*InkWell _spotTile(int nr) {
-    Color spotColor = Color.fromRGBO(255, 193, 25, 1.0);
-    IconData icon = CupertinoIcons.checkmark;
-    int state = spotStates[nr-1];
-    if (state == 0) {
-      spotColor = Color.fromRGBO(255, 193, 25, 1.0);
-      icon = CupertinoIcons.checkmark;
-    } else if (state == 1) {
-      spotColor = Color.fromRGBO(149, 46, 0, 1.0);
-      icon = CupertinoIcons.xmark;
-    } else {
-      spotColor = Color.fromRGBO(143, 102, 13, 1.0);
-      icon = CupertinoIcons.hammer;
-    }
-    Color bgColor = Theme.of(context).scaffoldBackgroundColor;
-    Color iconColor = spotColor;
-
-    if (selectedNumber == nr) {
-      iconColor = Theme.of(context).scaffoldBackgroundColor;
-      bgColor = spotColor;
-    }
-
-    InkWell spot = InkWell(
-      child: Container(
-        height: 48,
-        width: 34,
-        decoration: BoxDecoration(
-          color: bgColor,
-          borderRadius: BorderRadius.all(Radius.circular(6)),
-          border: Border.all(
-            color: spotColor, //
-            width: 2.0,
-          ),
-        ),
-        child: Icon(
-          icon,
-          color: iconColor,
-        ),
-      ),
-      onTap: () {
-        if (state == 0) {
-          infoText = " Selected spot is free, you can continue";
-          infoIcon = CupertinoIcons.checkmark;
-          infoColor = Color.fromRGBO(255, 193, 25, 1.0);
-        } else if (state == 1) {
-          infoText = " Selected spot is taken by a vehicle";
-          infoIcon = CupertinoIcons.xmark;
-          infoColor = Color.fromRGBO(149, 46, 0, 1.0);
-        } else {
-          infoText = " Selected spot is under maintenance";
-          infoIcon = CupertinoIcons.hammer;
-          infoColor = Color.fromRGBO(143, 102, 13, 1.0);
-        }
-        selectedNumber = nr;
-        setState(() {});
-      },
-    );
-
-    return spot;
-  } */
 
   _readUserName() async {
     final prefs = await SharedPreferences.getInstance();

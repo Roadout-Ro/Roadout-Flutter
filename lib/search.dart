@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:roadout/homescreen.dart';
+import 'package:roadout/spots_&_locations.dart';
 
 Widget showSearchBar(BuildContext context, StateSetter setState) => Container(
     width: 390,
@@ -119,7 +120,15 @@ ListTile _tile2(int spots, String location, String km, int colorR, int colorG,
               ],
             )),
         onTap: () {
-          currentLocationName = parkLocation.name;
+          if (spots == 5) {
+            currentLocationName = parkingLocations[0].name;
+          } else if (spots == 3) {
+            currentLocationName = parkingLocations[1].name;
+          } else if (spots == 11) {
+            currentLocationName = parkingLocations[2].name;
+          } else {
+            currentLocationName = parkingLocations[3].name;
+          }
           currentCard = Cards.resultBar;
           setState(() {});
           Navigator.pop(context);
