@@ -155,7 +155,19 @@ Widget showSettings(BuildContext context, StateSetter setState, SharedPreference
                       CupertinoIcons.hammer,
                       size: 27,
                     ),
-                    onPressed: null,
+                    onPressed: () {
+                      Navigator.pop(context);
+                      showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(23),
+                              )), // BorderRadius. vertical// RoundedRectangleBorder
+                          builder: (context) {
+                            return showEditAccount(context, preferences);
+                          });
+                    },
                     disabledColor: Color.fromRGBO(229, 167, 0, 1.0),
                     color: Color.fromRGBO(229, 167, 0, 1.0),
                   ))
