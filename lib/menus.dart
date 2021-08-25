@@ -2076,39 +2076,76 @@ Widget showEditPassword(BuildContext context, SharedPreferences preferences, Sta
                     showDialog(
                       context: context,
                       builder: (context) {
-                        return CupertinoAlertDialog(
-                            title: Text("Sign Up Error"),
-                            content: Text(
-                                "Password should be at least 8 characters long, have a capital letter and a number!"),
-                            actions: <Widget>[
-                              CupertinoDialogAction(
-                                  textStyle: TextStyle(
-                                      color: Color.fromRGBO(146, 82, 24, 1.0)),
-                                  isDefaultAction: true,
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: Text("OK")),
-                            ]);
+                        return AlertDialog(
+                          insetPadding: EdgeInsets.all(40),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                          title: Text('Failure', style: GoogleFonts.karla(
+                              fontSize: 20.0, fontWeight: FontWeight.w600)),
+                          content: Container(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget> [
+                                  Text('Password should be at least 8 characters long, have a capital letter and a number!', style: GoogleFonts.karla(
+                                      fontSize: 17.0, fontWeight: FontWeight.w500)),
+                                  Container(
+                                      padding: EdgeInsets.only(top: 15.0, left: 5.0, right: 5.0),
+                                      width: MediaQuery.of(context).size.width-100,
+                                      height: 60,
+                                      child: CupertinoButton(
+                                        padding: EdgeInsets.all(0.0),
+                                        child: Text('Ok', style: GoogleFonts.karla(fontSize: 18.0, fontWeight: FontWeight.w600),),
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        disabledColor: Color.fromRGBO(149, 46, 0, 1.0),
+                                        color: Color.fromRGBO(149, 46, 0, 1.0),
+                                        borderRadius: BorderRadius.all(Radius.circular(13.0)),
+                                      )
+                                  ),
+                                ],
+                              )
+                          ),
+                        );
                       },
                     );
                   } else if (newPsw.text != confPsw.text) {
                     showDialog(
                       context: context,
                       builder: (context) {
-                        return CupertinoAlertDialog(
-                            title: Text("Sign Up Error"),
-                            content: Text("Passwords do not match!"),
-                            actions: <Widget>[
-                              CupertinoDialogAction(
-                                  textStyle: TextStyle(
-                                      color: Color.fromRGBO(146, 82, 24, 1.0)),
-                                  isDefaultAction: true,
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: Text("OK")),
-                            ]);
+                        return AlertDialog(
+                          insetPadding: EdgeInsets.all(40),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                          title: Text('Failure', style: GoogleFonts.karla(
+                              fontSize: 20.0, fontWeight: FontWeight.w600)),
+                          content: Container(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget> [
+                                  Text('Passwords do not match!', style: GoogleFonts.karla(
+                                      fontSize: 17.0, fontWeight: FontWeight.w500)),
+                                  Container(
+                                      padding: EdgeInsets.only(top: 15.0, left: 5.0, right: 5.0),
+                                      width: MediaQuery.of(context).size.width-100,
+                                      height: 60,
+                                      child: CupertinoButton(
+                                        padding: EdgeInsets.all(0.0),
+                                        child: Text('Ok', style: GoogleFonts.karla(fontSize: 18.0, fontWeight: FontWeight.w600),),
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        disabledColor: Color.fromRGBO(149, 46, 0, 1.0),
+                                        color: Color.fromRGBO(149, 46, 0, 1.0),
+                                        borderRadius: BorderRadius.all(Radius.circular(13.0)),
+                                      )
+                                  ),
+                                ],
+                              )
+                          ),
+                        );
                       },
                     );
                   } else {
@@ -2279,39 +2316,76 @@ Widget decideEditStuff(BuildContext context, StateSetter setState) {
                   showDialog(
                     context: context,
                     builder: (context) {
-                      return CupertinoAlertDialog(
-                          title: Text("Sign Up Error"),
-                          content: Text(
-                              "Password should be at least 8 characters long, have a capital letter and a number!"),
-                          actions: <Widget>[
-                            CupertinoDialogAction(
-                                textStyle: TextStyle(
-                                    color: Color.fromRGBO(146, 82, 24, 1.0)),
-                                isDefaultAction: true,
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Text("OK")),
-                          ]);
+                      return AlertDialog(
+                        insetPadding: EdgeInsets.all(40),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        title: Text('Failure', style: GoogleFonts.karla(
+                            fontSize: 20.0, fontWeight: FontWeight.w600)),
+                        content: Container(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget> [
+                                Text('Password should be at least 8 characters long, have a capital letter and a number!', style: GoogleFonts.karla(
+                                    fontSize: 17.0, fontWeight: FontWeight.w500)),
+                                Container(
+                                    padding: EdgeInsets.only(top: 15.0, left: 5.0, right: 5.0),
+                                    width: MediaQuery.of(context).size.width-100,
+                                    height: 60,
+                                    child: CupertinoButton(
+                                      padding: EdgeInsets.all(0.0),
+                                      child: Text('Ok', style: GoogleFonts.karla(fontSize: 18.0, fontWeight: FontWeight.w600),),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      disabledColor: Color.fromRGBO(149, 46, 0, 1.0),
+                                      color: Color.fromRGBO(149, 46, 0, 1.0),
+                                      borderRadius: BorderRadius.all(Radius.circular(13.0)),
+                                    )
+                                ),
+                              ],
+                            )
+                        ),
+                      );
                     },
                   );
                 } else if (newPsw.text != confPsw.text) {
                   showDialog(
                     context: context,
                     builder: (context) {
-                      return CupertinoAlertDialog(
-                          title: Text("Sign Up Error"),
-                          content: Text("Passwords do not match!"),
-                          actions: <Widget>[
-                            CupertinoDialogAction(
-                                textStyle: TextStyle(
-                                    color: Color.fromRGBO(146, 82, 24, 1.0)),
-                                isDefaultAction: true,
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Text("OK")),
-                          ]);
+                      return AlertDialog(
+                        insetPadding: EdgeInsets.all(40),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        title: Text('Failure', style: GoogleFonts.karla(
+                            fontSize: 20.0, fontWeight: FontWeight.w600)),
+                        content: Container(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget> [
+                                Text('Passwords do not match!', style: GoogleFonts.karla(
+                                    fontSize: 17.0, fontWeight: FontWeight.w500)),
+                                Container(
+                                    padding: EdgeInsets.only(top: 15.0, left: 5.0, right: 5.0),
+                                    width: MediaQuery.of(context).size.width-100,
+                                    height: 60,
+                                    child: CupertinoButton(
+                                      padding: EdgeInsets.all(0.0),
+                                      child: Text('Ok', style: GoogleFonts.karla(fontSize: 18.0, fontWeight: FontWeight.w600),),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      disabledColor: Color.fromRGBO(149, 46, 0, 1.0),
+                                      color: Color.fromRGBO(149, 46, 0, 1.0),
+                                      borderRadius: BorderRadius.all(Radius.circular(13.0)),
+                                    )
+                                ),
+                              ],
+                            )
+                        ),
+                      );
                     },
                   );
                 } else {
@@ -2450,20 +2524,38 @@ Widget decideEditStuff(BuildContext context, StateSetter setState) {
                   showDialog(
                     context: context,
                     builder: (context) {
-                      return CupertinoAlertDialog(
-                          title: Text("Edit Error"),
-                          content: Text("Please enter your new name!"),
-                          actions: <Widget>[
-                            CupertinoDialogAction(
-                                textStyle: TextStyle(
-                                    color: Color.fromRGBO(
-                                        146, 82, 24, 1.0)),
-                                isDefaultAction: true,
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Text("Ok")),
-                          ]);
+                      return AlertDialog(
+                        insetPadding: EdgeInsets.all(40),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        title: Text('Failure', style: GoogleFonts.karla(
+                            fontSize: 20.0, fontWeight: FontWeight.w600)),
+                        content: Container(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget> [
+                                Text('Please enter your new name!', style: GoogleFonts.karla(
+                                    fontSize: 17.0, fontWeight: FontWeight.w500)),
+                                Container(
+                                    padding: EdgeInsets.only(top: 15.0, left: 5.0, right: 5.0),
+                                    width: MediaQuery.of(context).size.width-100,
+                                    height: 60,
+                                    child: CupertinoButton(
+                                      padding: EdgeInsets.all(0.0),
+                                      child: Text('Ok', style: GoogleFonts.karla(fontSize: 18.0, fontWeight: FontWeight.w600),),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      disabledColor: Color.fromRGBO(255, 158, 25, 1.0),
+                                      color: Color.fromRGBO(255, 158, 25, 1.0),
+                                      borderRadius: BorderRadius.all(Radius.circular(13.0)),
+                                    )
+                                ),
+                              ],
+                            )
+                        ),
+                      );
                     },
                   );
                 } else {
@@ -2474,20 +2566,38 @@ Widget decideEditStuff(BuildContext context, StateSetter setState) {
                   showDialog(
                     context: context,
                     builder: (context) {
-                      return CupertinoAlertDialog(
-                          title: Text(
-                              "Your name was successfully changed!"),
-                          actions: <Widget>[
-                            CupertinoDialogAction(
-                                textStyle: TextStyle(
-                                    color: Color.fromRGBO(
-                                        146, 82, 24, 1.0)),
-                                isDefaultAction: true,
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Text("Ok")),
-                          ]);
+                      return AlertDialog(
+                        insetPadding: EdgeInsets.all(40),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        title: Text('Success', style: GoogleFonts.karla(
+                            fontSize: 20.0, fontWeight: FontWeight.w600)),
+                        content: Container(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget> [
+                                Text('Your name was successfully changed!', style: GoogleFonts.karla(
+                                    fontSize: 17.0, fontWeight: FontWeight.w500)),
+                                Container(
+                                    padding: EdgeInsets.only(top: 15.0, left: 5.0, right: 5.0),
+                                    width: MediaQuery.of(context).size.width-100,
+                                    height: 60,
+                                    child: CupertinoButton(
+                                      padding: EdgeInsets.all(0.0),
+                                      child: Text('Ok', style: GoogleFonts.karla(fontSize: 18.0, fontWeight: FontWeight.w600),),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      disabledColor: Color.fromRGBO(255, 158, 25, 1.0),
+                                      color: Color.fromRGBO(255, 158, 25, 1.0),
+                                      borderRadius: BorderRadius.all(Radius.circular(13.0)),
+                                    )
+                                ),
+                              ],
+                            )
+                        ),
+                      );
                     },
                   );
                 }

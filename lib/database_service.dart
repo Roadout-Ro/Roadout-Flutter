@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:roadout/auth_service.dart';
 import 'package:roadout/spots_&_locations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -40,18 +41,38 @@ class DatabaseService {
       showDialog(
         context: context,
         builder: (context) {
-          return CupertinoAlertDialog(
-              title: Text("Your password was successfully changed!"),
-              actions: <Widget>[
-                CupertinoDialogAction(
-                    textStyle: TextStyle(
-                        color: Color.fromRGBO(146, 82, 24, 1.0)),
-                    isDefaultAction: true,
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text("Ok")),
-              ]);
+          return AlertDialog(
+            insetPadding: EdgeInsets.all(40),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+            title: Text('Success', style: GoogleFonts.karla(
+                fontSize: 20.0, fontWeight: FontWeight.w600)),
+            content: Container(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget> [
+                    Text('Your password was successfully changed!', style: GoogleFonts.karla(
+                        fontSize: 17.0, fontWeight: FontWeight.w500)),
+                    Container(
+                        padding: EdgeInsets.only(top: 15.0, left: 5.0, right: 5.0),
+                        width: MediaQuery.of(context).size.width-100,
+                        height: 60,
+                        child: CupertinoButton(
+                          padding: EdgeInsets.all(0.0),
+                          child: Text('Ok', style: GoogleFonts.karla(fontSize: 18.0, fontWeight: FontWeight.w600),),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          disabledColor: Color.fromRGBO(220, 170, 57, 1.0),
+                          color: Color.fromRGBO(220, 170, 57, 1.0),
+                          borderRadius: BorderRadius.all(Radius.circular(13.0)),
+                        )
+                    ),
+                  ],
+                )
+            ),
+          );
         },
       );
     } catch (e){
@@ -59,20 +80,38 @@ class DatabaseService {
       showDialog(
         context: context,
         builder: (context) {
-          return CupertinoAlertDialog(
-              title: Text("Old Password Error"),
-              content: Text(
-                  "You entered the wrong old password"),
-              actions: <Widget>[
-                CupertinoDialogAction(
-                    textStyle: TextStyle(
-                        color: Color.fromRGBO(146, 82, 24, 1.0)),
-                    isDefaultAction: true,
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text("Try Again")),
-              ]);
+          return AlertDialog(
+            insetPadding: EdgeInsets.all(40),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+            title: Text('Failure', style: GoogleFonts.karla(
+                fontSize: 20.0, fontWeight: FontWeight.w600)),
+            content: Container(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget> [
+                    Text('You entered the wrong old password', style: GoogleFonts.karla(
+                        fontSize: 17.0, fontWeight: FontWeight.w500)),
+                    Container(
+                        padding: EdgeInsets.only(top: 15.0, left: 5.0, right: 5.0),
+                        width: MediaQuery.of(context).size.width-100,
+                        height: 60,
+                        child: CupertinoButton(
+                          padding: EdgeInsets.all(0.0),
+                          child: Text('Try Again', style: GoogleFonts.karla(fontSize: 18.0, fontWeight: FontWeight.w600),),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          disabledColor: Color.fromRGBO(220, 170, 57, 1.0),
+                          color: Color.fromRGBO(220, 170, 57, 1.0),
+                          borderRadius: BorderRadius.all(Radius.circular(13.0)),
+                        )
+                    ),
+                  ],
+                )
+            ),
+          );
         },
       );
     }
