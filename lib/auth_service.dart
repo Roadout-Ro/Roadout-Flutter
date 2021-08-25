@@ -188,6 +188,8 @@ class AuthenticationService {
 
 }
 
+
+
 Future<void> userSetup({required String name}) async {
   CollectionReference users = FirebaseFirestore.instance.collection('Users');
   FirebaseAuth auth = FirebaseAuth.instance;

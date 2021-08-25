@@ -3,6 +3,10 @@
    <application
         android:label="roadout"
         android:icon="@mipmap/ic_launcher">
+
+       <meta-data android:name="com.google.android.geo.API_KEY"
+                  android:value="AIzaSyBpWznBIHpL3WpngPmN4ovSP21vcYUNu8I"/>
+
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
