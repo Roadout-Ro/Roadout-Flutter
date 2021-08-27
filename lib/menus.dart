@@ -363,6 +363,7 @@ Widget showPayment(BuildContext context) => Container(
               ]),
           padding: EdgeInsets.only(left: 13.0),
         ),
+        Spacer(),
         Container(
           width: MediaQuery.of(context).size.width - 58,
           height: 45,
@@ -388,7 +389,8 @@ Widget showPayment(BuildContext context) => Container(
             color: Color.fromRGBO(255, 193, 25, 1.0),
             borderRadius: BorderRadius.all(Radius.circular(13.0)),
           ),
-        )
+        ),
+        Padding(padding: EdgeInsets.only(bottom: 30.0))
       ],
     ));
 
@@ -1651,7 +1653,7 @@ Widget showPermissions(BuildContext context, String themeName) {
             ),
             Container(
               width: MediaQuery.of(context).size.width - 58,
-              height: 45,
+              height: 33,
               child: CupertinoButton(
                 padding: EdgeInsets.all(0.0),
                 child: Text(
@@ -1894,283 +1896,6 @@ Widget showEditAccount(BuildContext context, SharedPreferences preferences) {
   });
 }
 
-Widget showEditPassword(BuildContext context, SharedPreferences preferences, StateSetter setState) =>
-    Container(
-      height: 360,
-      width: 390,
-      child: Column(
-        children: <Widget>[
-          Padding(padding: EdgeInsets.only(top: 10)),
-          Row(
-            children: <Widget>[
-              Container(
-                width: 200,
-                padding: EdgeInsets.only(left: 20.0),
-                child: Text(
-                  "Edit Account",
-                  textAlign: TextAlign.left,
-                  style: GoogleFonts.karla(
-                      fontSize: 20.0, fontWeight: FontWeight.w600),
-                ),
-              ),
-              Spacer(),
-              Container(
-                width: 50,
-                padding: EdgeInsets.only(right: 8.0),
-                child: IconButton(
-                  icon: const Icon(CupertinoIcons.xmark, size: 23),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  disabledColor: Color.fromRGBO(255, 193, 25, 1.0),
-                  color: Color.fromRGBO(255, 193, 25, 1.0),
-                ),
-              )
-            ],
-          ),
-          Row(
-            children: <Widget>[
-              Container(width: (MediaQuery.of(context).size.width-313)/2),
-              Container(
-                  height: 40,
-                  width: 149,
-                  child: CupertinoButton(
-                    padding: EdgeInsets.all(0.0),
-                    child: Text(
-                        'Change Name',
-                        style: GoogleFonts.karla(
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.w600,
-                          color: Color.fromRGBO(220, 170, 57, 1.0),
-                        )),
-                    onPressed: () => {
-                      Navigator.pop(context),
-                      showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.vertical(
-                                top: Radius.circular(23),
-                              )), // BorderRadius. vertical// RoundedRectangleBorder
-                          builder: (context) {
-                            return showEditAccount(context, preferences);
-                          })
-                    },
-                  )
-              ),
-              Container(width: 15.0),
-              Container(
-                  height: 40,
-                  width: 149,
-                  child: CupertinoButton(
-                    padding: EdgeInsets.all(0.0),
-                    child: Text(
-                        'Change Password',
-                        style: GoogleFonts.karla(
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.w600,
-                        )),
-                    onPressed: () => {
-                    },
-                    borderRadius: BorderRadius.all(Radius.circular(13.0)),
-                    color: Color.fromRGBO(220, 170, 57, 1.0),
-                    disabledColor: Color.fromRGBO(220, 170, 57, 1.0),
-
-                  )
-              )
-            ],
-          ),
-          Column(children: <Widget>[
-            Container(
-                height: 60,
-                padding:
-                EdgeInsets.only(left: 24, right: 24, bottom: 10, top: 10),
-                child: TextFormField(
-                  controller: oldPsw,
-                  cursorColor: Color.fromRGBO(214, 109, 0, 1.0),
-                  obscureText: true,
-                  autocorrect: false,
-                  keyboardAppearance: MediaQuery.of(context).platformBrightness,
-                  decoration: InputDecoration(
-                      labelText: 'Old Password',
-                      labelStyle: TextStyle(
-                          color: Color.fromRGBO(214, 109, 0, 1.0),
-                          fontWeight: FontWeight.w600),
-                      filled: true,
-                      fillColor: Color.fromRGBO(214, 109, 0, 0.44),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                            width: 3, color: Color.fromRGBO(214, 109, 0, 0.0)),
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                            width: 3, color: Color.fromRGBO(214, 109, 0, 0.0)),
-                        borderRadius: BorderRadius.circular(12),
-                      )),
-                )),
-            Container(
-                height: 50,
-                padding: EdgeInsets.only(left: 24, right: 24, bottom: 10),
-                child: TextFormField(
-                  controller: newPsw,
-                  cursorColor: Color.fromRGBO(143, 102, 13, 1.0),
-                  obscureText: true,
-                  autocorrect: false,
-                  keyboardAppearance: MediaQuery.of(context).platformBrightness,
-                  decoration: InputDecoration(
-                      labelText: 'New Password',
-                      labelStyle: TextStyle(
-                          color: Color.fromRGBO(143, 102, 13, 1.0),
-                          fontWeight: FontWeight.w600),
-                      filled: true,
-                      fillColor: Color.fromRGBO(143, 102, 13, 0.44),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                            width: 3, color: Color.fromRGBO(143, 102, 13, 0.0)),
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                            width: 3, color: Color.fromRGBO(143, 102, 13, 0.0)),
-                        borderRadius: BorderRadius.circular(12),
-                      )),
-                )),
-            Container(
-                height: 50,
-                padding: EdgeInsets.only(left: 24, right: 24, bottom: 10),
-                child: TextFormField(
-                  controller: confPsw,
-                  cursorColor: Color.fromRGBO(220, 170, 57, 1.0),
-                  obscureText: true,
-                  autocorrect: false,
-                  keyboardAppearance: MediaQuery.of(context).platformBrightness,
-                  decoration: InputDecoration(
-                      labelText: 'Confirm Password',
-                      labelStyle: TextStyle(
-                          color: Color.fromRGBO(220, 170, 57, 1.0),
-                          fontWeight: FontWeight.w600),
-                      filled: true,
-                      fillColor: Color.fromRGBO(220, 170, 57, 0.44),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                            width: 3, color: Color.fromRGBO(220, 170, 57, 0.0)),
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                            width: 3, color: Color.fromRGBO(220, 170, 57, 0.0)),
-                        borderRadius: BorderRadius.circular(12),
-                      )),
-                )),
-            Container(
-              height: 60,
-              width: MediaQuery.of(context).size.width-58,
-              padding: EdgeInsets.only(top: 15),
-              child: CupertinoButton(
-                onPressed: () {
-                  const patternPassword =
-                      r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$';
-                  final regExpPassword = RegExp(patternPassword);
-                  if (!regExpPassword.hasMatch(newPsw.text)) {
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          insetPadding: EdgeInsets.all(40),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0),
-                          ),
-                          title: Text('Failure', style: GoogleFonts.karla(
-                              fontSize: 20.0, fontWeight: FontWeight.w600)),
-                          content: Container(
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: <Widget> [
-                                  Text('Password should be at least 8 characters long, have a capital letter and a number!', style: GoogleFonts.karla(
-                                      fontSize: 17.0, fontWeight: FontWeight.w500)),
-                                  Container(
-                                      padding: EdgeInsets.only(top: 15.0, left: 5.0, right: 5.0),
-                                      width: MediaQuery.of(context).size.width-100,
-                                      height: 60,
-                                      child: CupertinoButton(
-                                        padding: EdgeInsets.all(0.0),
-                                        child: Text('Ok', style: GoogleFonts.karla(fontSize: 18.0, fontWeight: FontWeight.w600),),
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
-                                        disabledColor: Color.fromRGBO(149, 46, 0, 1.0),
-                                        color: Color.fromRGBO(149, 46, 0, 1.0),
-                                        borderRadius: BorderRadius.all(Radius.circular(13.0)),
-                                      )
-                                  ),
-                                ],
-                              )
-                          ),
-                        );
-                      },
-                    );
-                  } else if (newPsw.text != confPsw.text) {
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          insetPadding: EdgeInsets.all(40),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0),
-                          ),
-                          title: Text('Failure', style: GoogleFonts.karla(
-                              fontSize: 20.0, fontWeight: FontWeight.w600)),
-                          content: Container(
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: <Widget> [
-                                  Text('Passwords do not match!', style: GoogleFonts.karla(
-                                      fontSize: 17.0, fontWeight: FontWeight.w500)),
-                                  Container(
-                                      padding: EdgeInsets.only(top: 15.0, left: 5.0, right: 5.0),
-                                      width: MediaQuery.of(context).size.width-100,
-                                      height: 60,
-                                      child: CupertinoButton(
-                                        padding: EdgeInsets.all(0.0),
-                                        child: Text('Ok', style: GoogleFonts.karla(fontSize: 18.0, fontWeight: FontWeight.w600),),
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
-                                        disabledColor: Color.fromRGBO(149, 46, 0, 1.0),
-                                        color: Color.fromRGBO(149, 46, 0, 1.0),
-                                        borderRadius: BorderRadius.all(Radius.circular(13.0)),
-                                      )
-                                  ),
-                                ],
-                              )
-                          ),
-                        );
-                      },
-                    );
-                  } else {
-                    DatabaseService().updateUserPsw(newPsw.text,oldPsw.text,context);
-                    print("bine");
-                    oldPsw.text = "";
-                    newPsw.text = "";
-                    confPsw.text = "";
-                  }
-                },
-                child: Text(
-                  "Done",
-                  style: GoogleFonts.karla(
-                      fontSize: 17.0, fontWeight: FontWeight.w600),
-                ),
-                padding: EdgeInsets.all(0.0),
-                disabledColor: Color.fromRGBO(220, 170, 57, 1.0),
-                borderRadius: BorderRadius.all(Radius.circular(13.0)),
-                color: Color.fromRGBO(220, 170, 57, 1.0),
-              ),
-            )
-          ])
-        ],
-      ),
-    );
 
 Widget decideEditStuff(BuildContext context, StateSetter setState) {
   if (editHeight == 360) {

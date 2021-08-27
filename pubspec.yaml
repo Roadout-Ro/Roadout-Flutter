@@ -89,6 +89,7 @@ flutter:
      - assets/tutorial/TheSearchBar.png
      - assets/tutorial/ParkIndicator.png
      - assets/tutorial/RoadoutPreferences.png
+     - assets/SectionMap.png
 
   fonts:
     - family: sficonsets

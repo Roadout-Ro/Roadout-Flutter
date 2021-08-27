@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'database_service.dart';
 
@@ -40,3 +41,12 @@ List<ParkingLocation> parkingLocations = [
   ParkingLocation(spots, LatLng(46.773384, 23.578821), 'Cetatuia'),
   ParkingLocation(spots, LatLng(46.757431, 23.592311), 'Zorilor')
 ];
+
+List<Widget> generateSections(List<String> sections) {
+  List<Widget> children = [];
+  String sec;
+  for (sec in sections) {
+    children.add(Text(sec));
+  }
+  return children;
+}

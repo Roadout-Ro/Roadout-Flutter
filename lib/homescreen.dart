@@ -23,6 +23,7 @@ enum Cards {
   unlockedCard,
   delayCard,
   payDelayCard,
+  sectionCard,
   pickCard,
   paidCard
 }
@@ -38,6 +39,10 @@ List<int> spotStates = [];
 late ParkingLocation parkLocation;
 String currentLocationName = '---';
 String currentLocationLayout = '''''';
+
+String selectedSection = 'A';
+
+List<String> sections = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
 
 class MainScreen extends StatefulWidget {
   @override
@@ -326,7 +331,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                   child: CupertinoButton(
                                       padding: EdgeInsets.all(0.0),
                                       onPressed: () {
-                                        currentCard = Cards.pickCard;
+                                        currentCard = Cards.sectionCard;
                                         setState(() {});
                                       },
                                       child: Text("Pick",
@@ -385,7 +390,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                       padding: EdgeInsets.only(
                                           right: 8.0, top: 10.0),
                                       child: IconButton(
-                                        icon: const Icon(CupertinoIcons.xmark,
+                                        icon: const Icon(CupertinoIcons.arrow_left,
                                             size: 23),
                                         onPressed: () {
                                           currentCard = Cards.pickCard;
@@ -406,13 +411,13 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                         Padding(
                                             padding:
                                                 EdgeInsets.only(left: 20.0)),
-                                        Text('Address: ',
+                                        Text('Coordonates: ',
                                             style: GoogleFonts.karla(
                                                 fontSize: 15.0,
                                                 fontWeight: FontWeight.w500,
                                                 color: Theme.of(context)
                                                     .primaryColor)),
-                                        Text('----------',
+                                        Text(parkLocation.coords.latitude.toStringAsFixed(3) + ', ' + parkLocation.coords.longitude.toStringAsFixed(3),
                                             style: GoogleFonts.karla(
                                                 fontSize: 15.0,
                                                 fontWeight: FontWeight.w500,
@@ -644,7 +649,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                       padding: EdgeInsets.only(
                                           right: 8.0, top: 10.0),
                                       child: IconButton(
-                                        icon: const Icon(CupertinoIcons.xmark,
+                                        icon: const Icon(CupertinoIcons.arrow_left,
                                             size: 23),
                                         onPressed: () {
                                           currentCard = Cards.spotCard;
@@ -1149,7 +1154,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                         width: 50,
                                         padding: EdgeInsets.only(right: 8.0),
                                         child: IconButton(
-                                          icon: const Icon(CupertinoIcons.xmark,
+                                          icon: const Icon(CupertinoIcons.arrow_left,
                                               size: 23),
                                           onPressed: () {
                                             currentCard = Cards.unlockCard;
@@ -1356,7 +1361,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                         width: 50,
                                         padding: EdgeInsets.only(right: 8.0),
                                         child: IconButton(
-                                          icon: const Icon(CupertinoIcons.xmark,
+                                          icon: const Icon(CupertinoIcons.arrow_left,
                                               size: 23),
                                           onPressed: () {
                                             currentCard = Cards.delayCard;
@@ -1501,10 +1506,10 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                         width: 50,
                                         padding: EdgeInsets.only(right: 8.0),
                                         child: IconButton(
-                                          icon: const Icon(CupertinoIcons.xmark,
+                                          icon: const Icon(CupertinoIcons.arrow_left,
                                               size: 23),
                                           onPressed: () {
-                                            currentCard = Cards.resultBar;
+                                            currentCard = Cards.sectionCard;
                                             setState(() {});
                                           },
                                           disabledColor:
@@ -1581,6 +1586,159 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                   ),
                                   Padding(
                                       padding: EdgeInsets.only(bottom: 15.0)),
+                                ],
+                              ));
+                        } else if (currentCard == Cards.sectionCard) {
+                          return Container(
+                              width: MediaQuery.of(context).size.width - 22,
+                              decoration: BoxDecoration(
+                                  color:
+                                  Theme.of(context).scaffoldBackgroundColor,
+                                  borderRadius:
+                                  BorderRadius.all(Radius.circular(26)),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.3),
+                                      spreadRadius: 5,
+                                      blurRadius: 67,
+                                      offset: Offset(
+                                          0, 0), // changes position of shadow
+                                    ),
+                                  ]),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  Row(
+                                    children: <Widget>[
+                                      Container(
+                                        width: 130,
+                                        height: 60,
+                                        padding: EdgeInsets.only(
+                                            left: 17.0, top: 20.0),
+                                        child: Text(
+                                          "Pick Section",
+                                          textAlign: TextAlign.left,
+                                          style: GoogleFonts.karla(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                      ),
+                                      Spacer(),
+                                      Container(
+                                        height: 60,
+                                        width: 50,
+                                        padding: EdgeInsets.only(right: 8.0),
+                                        child: IconButton(
+                                          icon: const Icon(CupertinoIcons.arrow_left,
+                                              size: 23),
+                                          onPressed: () {
+                                            currentCard = Cards.resultBar;
+                                            setState(() {});
+                                          },
+                                          disabledColor:
+                                          Color.fromRGBO(220, 170, 57, 1.0),
+                                          color:
+                                          Color.fromRGBO(220, 170, 57, 1.0),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  Padding(padding: EdgeInsets.only(top: 10.0)),
+                                  Container(
+                                    width: MediaQuery.of(context).size.width - 36,
+                                    child: Image.asset('assets/SectionMap.png'),
+                                  ),
+                                  Padding(
+                                      padding: EdgeInsets.only(top: 8.0)),
+                                  Row(
+                                    children: <Widget>[
+                                      Padding(
+                                          padding: EdgeInsets.only(
+                                              left: 20.0, top: 25.0)),
+                                      Text('Section',
+                                          style: GoogleFonts.karla(
+                                              fontSize: 18.0,
+                                              fontWeight: FontWeight.w600,
+                                              color: Theme.of(context)
+                                                  .primaryColor)),
+                                      Spacer(),
+                                      PopupMenuButton(
+                                          color: Color.fromRGBO(
+                                              220, 170, 57, 1.0),
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(23.0))),
+                                          child: Container(
+                                            padding: EdgeInsets.only(
+                                                right: 15.0, top: 3.0),
+                                            width: 102.0,
+                                            height: 40.0,
+                                            child: CupertinoButton(
+                                              padding: EdgeInsets.all(0.0),
+                                              child: Text(
+                                                selectedSection,
+                                                style: GoogleFonts.karla(
+                                                    fontSize: 22.0,
+                                                    fontWeight:
+                                                    FontWeight.w600,
+                                                    color: Color.fromRGBO(
+                                                        220, 170, 57, 1.0)),
+                                              ),
+                                              onPressed: null,
+                                              disabledColor: Color.fromRGBO(
+                                                  128, 128, 129, 0.3),
+                                              color: Color.fromRGBO(
+                                                  128, 128, 129, 0.25),
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(13.0)),
+                                            ),
+                                          ),
+                                          itemBuilder: (context) => [
+                                            PopupMenuItem(
+                                              child: Container(
+                                                  width: 80.0,
+                                                  height: 70.0,
+                                                  child: CupertinoPicker(
+                                                    onSelectedItemChanged:
+                                                        (value) {
+                                                      setState(() {
+                                                        selectedSection = sections[value];
+                                                      });
+                                                    },
+                                                    itemExtent: 32.0,
+                                                    children: generateSections(sections),
+                                                  )),
+                                            ),
+                                          ]),
+                                    ],
+                                  ),
+                                  Padding(
+                                      padding: EdgeInsets.only(top: 8.0)),
+                                  Container(
+                                    width:
+                                    MediaQuery.of(context).size.width - 58,
+                                    height: 45,
+                                    child: CupertinoButton(
+                                      padding: EdgeInsets.all(0.0),
+                                      child: Text(
+                                        'Pick from section $selectedSection',
+                                        style: GoogleFonts.karla(
+                                            fontSize: 17.0,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                      onPressed: () => {
+                                        currentCard = Cards.pickCard,
+                                        setState(() {})
+                                      },
+                                      disabledColor:
+                                      Color.fromRGBO(220, 170, 57, 1.0),
+                                      color: Color.fromRGBO(220, 170, 57, 1.0),
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(13.0)),
+                                    ),
+                                  ),
+                                  Padding(
+                                      padding: EdgeInsets.only(bottom: 17.0)),
                                 ],
                               ));
                         } else if (currentCard == Cards.paidCard) {
