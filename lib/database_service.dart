@@ -128,21 +128,132 @@ _saveUserName(String name) async {
   print('Saved $value');
 }
 
-List<Spot> spots = [
-  Spot(1, 0),
-  Spot(2, 2),
-  Spot(3, 0),
-  Spot(4, 1),
-  Spot(5, 0),
-  Spot(6, 0),
-  Spot(7, 1),
-  Spot(8, 0),
-  Spot(9, 2),
-  Spot(10, 0),
-  Spot(11, 0),
-  Spot(12, 1),
-  Spot(13, 0),
-  Spot(14, 0),
-  Spot(15, 1),
-  Spot(16, 0)
+List<ParkingSpot> sectionASpots = [
+  ParkingSpot(1, 0),
+  ParkingSpot(2, 2),
+  ParkingSpot(3, 0),
+  ParkingSpot(4, 1),
+  ParkingSpot(5, 0),
+  ParkingSpot(6, 0),
+  ParkingSpot(7, 1),
+  ParkingSpot(8, 0),
+  ParkingSpot(9, 2),
+];
+
+List<ParkingSpot> sectionBSpots = [
+  ParkingSpot(1, 0),
+  ParkingSpot(2, 2),
+  ParkingSpot(3, 0),
+  ParkingSpot(4, 1),
+  ParkingSpot(5, 0),
+  ParkingSpot(6, 0),
+  ParkingSpot(7, 1),
+  ParkingSpot(8, 0),
+  ParkingSpot(9, 2),
+  ParkingSpot(10, 0),
+  ParkingSpot(11, 0),
+  ParkingSpot(12, 1),
+  ParkingSpot(13, 0),
+  ParkingSpot(14, 0),
+  ParkingSpot(15, 1),
+  ParkingSpot(16, 0)
+];
+
+List<ParkingSpot> sectionCSpots = [
+  ParkingSpot(1, 0),
+  ParkingSpot(2, 2),
+  ParkingSpot(3, 0),
+  ParkingSpot(4, 1),
+  ParkingSpot(5, 0),
+  ParkingSpot(6, 0),
+  ParkingSpot(7, 1),
+  ParkingSpot(8, 0),
+  ParkingSpot(9, 2),
+  ParkingSpot(10, 0),
+  ParkingSpot(11, 0),
+  ParkingSpot(12, 1),
+  ParkingSpot(13, 0),
+  ParkingSpot(14, 0),
+  ParkingSpot(15, 1),
+  ParkingSpot(16, 0),
+  ParkingSpot(17, 1),
+  ParkingSpot(18, 0)
+];
+
+List<ParkingSpot> sectionDSpots = [
+  ParkingSpot(1, 0),
+  ParkingSpot(2, 2),
+  ParkingSpot(3, 0),
+  ParkingSpot(4, 1),
+  ParkingSpot(5, 0),
+  ParkingSpot(6, 0),
+  ParkingSpot(7, 1),
+  ParkingSpot(8, 0),
+  ParkingSpot(9, 2),
+  ParkingSpot(10, 0),
+  ParkingSpot(11, 0),
+  ParkingSpot(12, 1),
+  ParkingSpot(13, 0),
+  ParkingSpot(14, 0)
+];
+
+List<ParkingSpot> sectionESpots = [
+  ParkingSpot(1, 0),
+  ParkingSpot(2, 2),
+  ParkingSpot(3, 0),
+  ParkingSpot(4, 1),
+  ParkingSpot(5, 0),
+  ParkingSpot(6, 0),
+  ParkingSpot(7, 1),
+  ParkingSpot(8, 0),
+  ParkingSpot(9, 2),
+  ParkingSpot(10, 0),
+  ParkingSpot(11, 0),
+  ParkingSpot(12, 1),
+  ParkingSpot(13, 0),
+  ParkingSpot(14, 0),
+  ParkingSpot(15, 1),
+  ParkingSpot(16, 0),
+  ParkingSpot(17, 0),
+  ParkingSpot(18, 0),
+  ParkingSpot(19, 1),
+  ParkingSpot(20, 0)
+];
+
+List<ParkingSpot> sectionFSpots = [
+  ParkingSpot(1, 0),
+  ParkingSpot(2, 2),
+  ParkingSpot(3, 0),
+  ParkingSpot(4, 1),
+  ParkingSpot(5, 0),
+  ParkingSpot(6, 0),
+  ParkingSpot(7, 1),
+  ParkingSpot(8, 0),
+  ParkingSpot(9, 2),
+  ParkingSpot(10, 0)
+];
+
+List<ParkingSpot> sectionGSpots = [
+  ParkingSpot(1, 0),
+  ParkingSpot(2, 2),
+  ParkingSpot(3, 0),
+  ParkingSpot(4, 1),
+  ParkingSpot(5, 0),
+  ParkingSpot(6, 0),
+  ParkingSpot(7, 1),
+  ParkingSpot(8, 0),
+  ParkingSpot(9, 2),
+  ParkingSpot(10, 0),
+  ParkingSpot(11, 0),
+  ParkingSpot(12, 1)
+];
+
+List<ParkingSection> locationSections = [
+  ParkingSection([4, 5], sectionASpots, 'A'),
+  ParkingSection([8, 8], sectionBSpots, 'B'),
+  ParkingSection([6, 6, 6], sectionCSpots, 'C'),
+  ParkingSection([7, 7], sectionDSpots, 'D'),
+  ParkingSection([10, 10], sectionESpots, 'E'),
+  ParkingSection([5, 5], sectionFSpots, 'F'),
+  ParkingSection([6, 6], sectionGSpots, 'G')
 ];

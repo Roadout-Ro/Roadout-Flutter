@@ -1,201 +1,26 @@
+import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:roadout/spots_&_locations.dart';
 import 'homescreen.dart';
 
-
-Widget SmartLayout(BuildContext context, StateSetter setState, String parkName) {
-
-  if (parkName == 'Old Town') {
-    return Container(
-        alignment: Alignment.center,
-        child: Column(
-          children: <Widget>[
-            Row(
-              children: [
-                Padding(
-                    padding: EdgeInsets.only(
-                        left: (MediaQuery.of(
-                            context)
-                            .size
-                            .width -
-                            308) /
-                            2)),
-                _spotTile(1, setState, context),
-                Padding(
-                    padding: EdgeInsets.only(
-                        left: 2.0)),
-                _spotTile(2, setState, context),
-                Padding(
-                    padding: EdgeInsets.only(
-                        left: 2.0)),
-                _spotTile(3, setState, context),
-                Padding(
-                    padding: EdgeInsets.only(
-                        left: 2.0)),
-                _spotTile(4, setState, context),
-                Padding(
-                    padding: EdgeInsets.only(
-                        left: 2.0)),
-                _spotTile(5, setState, context),
-                Padding(
-                    padding: EdgeInsets.only(
-                        left: 2.0)),
-                _spotTile(6, setState, context),
-                Padding(
-                    padding: EdgeInsets.only(
-                        left: 2.0)),
-                _spotTile(7, setState, context),
-                Padding(
-                    padding: EdgeInsets.only(
-                        left: 2.0)),
-                _spotTile(8, setState, context),
-              ],
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 41),
-            ),
-            Row(
-              children: [
-                Padding(
-                    padding: EdgeInsets.only(
-                        left: (MediaQuery.of(
-                            context)
-                            .size
-                            .width -
-                            308) /
-                            2)),
-                _spotTile(9, setState, context),
-                Padding(
-                    padding: EdgeInsets.only(
-                        left: 2.0)),
-                _spotTile(10, setState, context),
-                Padding(
-                    padding: EdgeInsets.only(
-                        left: 2.0)),
-                _spotTile(11, setState, context),
-                Padding(
-                    padding: EdgeInsets.only(
-                        left: 2.0)),
-                _spotTile(12, setState, context),
-                Padding(
-                    padding: EdgeInsets.only(
-                        left: 2.0)),
-                _spotTile(13, setState, context),
-                Padding(
-                    padding: EdgeInsets.only(
-                        left: 2.0)),
-                _spotTile(14, setState, context),
-                Padding(
-                    padding: EdgeInsets.only(
-                        left: 2.0)),
-                _spotTile(15, setState, context),
-                Padding(
-                    padding: EdgeInsets.only(
-                        left: 2.0)),
-                _spotTile(16, setState, context),
-              ],
-            ),
-          ],
-        ));
-  }
-
+Widget SmartLayout(BuildContext context, StateSetter setState, ParkingSection currentSection) {
   return Container(
       alignment: Alignment.center,
-      child: Column(
-        children: <Widget>[
-          Row(
-            children: [
-              Padding(
-                  padding: EdgeInsets.only(
-                      left: (MediaQuery.of(
-                          context)
-                          .size
-                          .width -
-                          308) /
-                          2)),
-              _spotTile(1, setState, context),
-              Padding(
-                  padding: EdgeInsets.only(
-                      left: 2.0)),
-              _spotTile(2, setState, context),
-              Padding(
-                  padding: EdgeInsets.only(
-                      left: 2.0)),
-              _spotTile(3, setState, context),
-              Padding(
-                  padding: EdgeInsets.only(
-                      left: 2.0)),
-              _spotTile(4, setState, context),
-              Padding(
-                  padding: EdgeInsets.only(
-                      left: 2.0)),
-              _spotTile(5, setState, context),
-              Padding(
-                  padding: EdgeInsets.only(
-                      left: 2.0)),
-              _spotTile(6, setState, context),
-              Padding(
-                  padding: EdgeInsets.only(
-                      left: 2.0)),
-              _spotTile(7, setState, context),
-              Padding(
-                  padding: EdgeInsets.only(
-                      left: 2.0)),
-              _spotTile(8, setState, context),
-            ],
-          ),
-          Padding(
-            padding: EdgeInsets.only(top: 41),
-          ),
-          Row(
-            children: [
-              Padding(
-                  padding: EdgeInsets.only(
-                      left: (MediaQuery.of(
-                          context)
-                          .size
-                          .width -
-                          308) /
-                          2)),
-              _spotTile(9, setState, context),
-              Padding(
-                  padding: EdgeInsets.only(
-                      left: 2.0)),
-              _spotTile(10, setState, context),
-              Padding(
-                  padding: EdgeInsets.only(
-                      left: 2.0)),
-              _spotTile(11, setState, context),
-              Padding(
-                  padding: EdgeInsets.only(
-                      left: 2.0)),
-              _spotTile(12, setState, context),
-              Padding(
-                  padding: EdgeInsets.only(
-                      left: 2.0)),
-              _spotTile(13, setState, context),
-              Padding(
-                  padding: EdgeInsets.only(
-                      left: 2.0)),
-              _spotTile(14, setState, context),
-              Padding(
-                  padding: EdgeInsets.only(
-                      left: 2.0)),
-              _spotTile(15, setState, context),
-              Padding(
-                  padding: EdgeInsets.only(
-                      left: 2.0)),
-              _spotTile(16, setState, context),
-            ],
-          ),
-        ],
+      child: Row(
+        children: <Widget> [
+          MakePadding(currentSection.sectionRows, context),
+          Column(
+            children: MakeRows(currentSection.sectionRows, currentSection.sectionSpots, setState, context),
+          )
+        ]
       ));
 }
 
-InkWell _spotTile(int nr, StateSetter setState, BuildContext context) {
+InkWell _spotTile(ParkingSpot parkSpot, StateSetter setState, BuildContext context) {
   Color spotColor = Color.fromRGBO(255, 193, 25, 1.0);
   IconData icon = CupertinoIcons.checkmark;
-  int state = spotStates[nr-1];
+  int state = parkSpot.spotState;
   if (state == 0) {
     spotColor = Color.fromRGBO(255, 193, 25, 1.0);
     icon = CupertinoIcons.checkmark;
@@ -209,7 +34,7 @@ InkWell _spotTile(int nr, StateSetter setState, BuildContext context) {
   Color bgColor = Theme.of(context).scaffoldBackgroundColor;
   Color iconColor = spotColor;
 
-  if (selectedNumber == nr) {
+  if (selectedNumber == parkSpot.spotNr) {
     iconColor = Theme.of(context).scaffoldBackgroundColor;
     bgColor = spotColor;
   }
@@ -245,10 +70,52 @@ InkWell _spotTile(int nr, StateSetter setState, BuildContext context) {
         infoIcon = CupertinoIcons.hammer;
         infoColor = Color.fromRGBO(143, 102, 13, 1.0);
       }
-      selectedNumber = nr;
+      selectedNumber = parkSpot.spotNr;
+      print(selectedNumber);
       setState(() {});
     },
   );
 
   return spot;
+}
+
+List<Widget> MakeRows(List<int> rowsCnt, List<ParkingSpot> sectionSpots, StateSetter setState, BuildContext context) {
+  List<Widget> rows = [];
+  List<ParkingSpot> dividingSpots = sectionSpots;
+  int spotBookmark = 0;
+
+  for (int row in rowsCnt) {
+    List<ParkingSpot> rowSpots = [];
+    for (var i = 1; i <= row; i += 1) {
+      rowSpots.add(dividingSpots[spotBookmark]);
+      spotBookmark += 1;
+    }
+    rows.add(Row(children: MakeSpots(row, rowSpots, setState, context)));
+    rows.add(Padding(padding: EdgeInsets.only(bottom: 10.0)));
+  }
+
+
+  return rows;
+}
+
+List<Widget> MakeSpots(int rowLength, List<ParkingSpot> rowSpots, StateSetter setState, BuildContext context) {
+  List<Widget> children = [];
+  for (var i = 0; i < rowLength; i += 1) {
+    children.add(_spotTile(rowSpots[i], setState, context));
+    children.add(Padding(padding: EdgeInsets.only(left: 2.0)));
+  }
+  return children;
+}
+
+Widget MakePadding(List<int> rowsCnt, BuildContext context) {
+  int maxNr = rowsCnt.reduce(max);
+  int maxWidth = maxNr*36 - 2;
+
+  return Padding(padding: EdgeInsets.only(left: (MediaQuery.of(context).size.width-maxWidth-22)/2));
+}
+
+double getHeightFromSection(ParkingSection sec) {
+  double h = 175.0;
+  h += sec.sectionRows.length*58;
+  return h;
 }
