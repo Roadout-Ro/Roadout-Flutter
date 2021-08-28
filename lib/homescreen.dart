@@ -1957,9 +1957,9 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                             setState(() {});
                                           },
                                           disabledColor:
-                                              Color.fromRGBO(83, 131, 236, 1.0),
+                                              Color.fromRGBO(138, 126, 114, 1.0),
                                           color:
-                                              Color.fromRGBO(83, 131, 236, 1.0),
+                                              Color.fromRGBO(138, 126, 114, 1.0),
                                         ),
                                       )
                                     ],
@@ -1967,7 +1967,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                   Container(
                                       child: Icon(CupertinoIcons.checkmark_seal,
                                           color:
-                                              Color.fromRGBO(83, 131, 236, 1.0),
+                                              Color.fromRGBO(138, 126, 114, 1.0),
                                           size: 80)),
                                   Padding(
                                     padding: EdgeInsets.only(top: 13.0),
@@ -1989,8 +1989,8 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                         setState(() {})
                                       },
                                       disabledColor:
-                                          Color.fromRGBO(83, 131, 236, 1.0),
-                                      color: Color.fromRGBO(83, 131, 236, 1.0),
+                                          Color.fromRGBO(138, 126, 114, 1.0),
+                                      color: Color.fromRGBO(138, 126, 114, 1.0),
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(13.0)),
                                     ),
