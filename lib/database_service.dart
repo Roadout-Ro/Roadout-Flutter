@@ -33,7 +33,7 @@ class DatabaseService {
     });
   }
 
-  Future updateUserPsw(String newPsw, String oldPsw, BuildContext context) async{
+  Future updateUserPsw(String newPsw, String oldPsw, BuildContext context) async {
     try{
       AuthCredential credential = EmailAuthProvider.credential(email:currentUser!.email.toString(), password: oldPsw);
       await FirebaseAuth.instance.currentUser!.reauthenticateWithCredential(credential);
@@ -115,6 +115,12 @@ class DatabaseService {
         },
       );
     }
+  }
+
+  final CollectionReference userCollection = FirebaseFirestore.instance.collection('Users');
+
+  Future deleteUser() {
+    return userCollection.doc(uid).delete();
   }
 
 }

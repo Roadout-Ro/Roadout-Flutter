@@ -9,6 +9,7 @@ static final lightRoadout = ThemeData(
     accentColor: Color.fromRGBO(102, 102, 102, 1.0),
     cardColor: Color.fromRGBO(252, 251, 232, 1.0),
     dialogBackgroundColor: Colors.white,
+    indicatorColor: Color.fromRGBO(102, 102, 102, 1.0),
 );
 
 static final darkRoadout = ThemeData(
@@ -18,5 +19,6 @@ static final darkRoadout = ThemeData(
     accentColor: Color.fromRGBO(146, 145, 145, 1.0),
     cardColor: Color.fromRGBO(28, 27, 9, 1.0),
     dialogBackgroundColor: Color.fromRGBO(17, 17, 17, 1.0),
+    indicatorColor: Color.fromRGBO(146, 145, 145, 1.0),
 );
 }

@@ -144,12 +144,13 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
             GoogleMap(
               onMapCreated: _onMapCreated,
               markers: _markers,
+              mapToolbarEnabled: false,
               initialCameraPosition:
                   CameraPosition(target: latlngPos, zoom: 14),
               myLocationButtonEnabled: false,
               myLocationEnabled: true,
               zoomGesturesEnabled: true,
-              zoomControlsEnabled: true,
+              zoomControlsEnabled: false,
             ),
             Column(
               children: <Widget>[
@@ -905,7 +906,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                           );
                         } else if (currentCard == Cards.unlockCard) {
                           return Container(
-                            height: 260,
+                            height: 270,
                             width: MediaQuery.of(context).size.width - 22,
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
@@ -965,27 +966,31 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                   child: Text(
                                     'Your spot is locked now so it stays free for you, when you approach the spot unlock it from here, after the timer is over the spot will unlock by itself',
                                     style: GoogleFonts.karla(
-                                        fontSize: 14.0,
-                                        fontWeight: FontWeight.w500,
-                                        color: Theme.of(context).accentColor),
+                                      fontSize: 14.0,
+                                      fontWeight: FontWeight.w500,
+                                      color: Theme.of(context).indicatorColor,
+                                    ),
                                     textAlign: TextAlign.center,
                                   ),
                                   padding:
                                       EdgeInsets.only(left: 10.0, right: 10.0),
                                 ),
-                                Padding(padding: EdgeInsets.only(top: 20.0)),
-                                Row(
-                                  children: <Widget>[
-                                    Padding(
-                                        padding: EdgeInsets.only(
+                                Padding(
+                                  padding: EdgeInsets.only(top: 10.0),
+                                ),
+                                Row(children: <Widget>[
+                                  Padding(
+                                    padding: EdgeInsets.only(
                                             left: (MediaQuery.of(context)
-                                                        .size
-                                                        .width -
-                                                    289) /
-                                                2)),
+                                                    .size
+                                                    .width -
+                                                260)) /
+                                        2,
+                                  ),
+                                  Column(children: <Widget>[
                                     Container(
-                                      width: 134,
-                                      height: 84,
+                                      width: 80,
+                                      height: 80,
                                       child: CupertinoButton(
                                         padding: EdgeInsets.all(0.0),
                                         child: Icon(
@@ -1002,51 +1007,202 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                             Color.fromRGBO(149, 46, 0, 1.0),
                                         color: Color.fromRGBO(149, 46, 0, 1.0),
                                         borderRadius: BorderRadius.all(
-                                            Radius.circular(27.0)),
+                                            Radius.circular(40.0)),
                                       ),
                                     ),
-                                    Padding(
-                                        padding: EdgeInsets.only(right: 30.0)),
-                                    Column(
-                                      children: <Widget>[
-                                        Text(
-                                          'Time left',
-                                          style: GoogleFonts.karla(
-                                              fontSize: 20.0,
-                                              fontWeight: FontWeight.w600,
-                                              color: Theme.of(context)
-                                                  .primaryColor),
-                                        ),
-                                        Text(
-                                          '6:23',
-                                          style: GoogleFonts.karla(
-                                              fontSize: 20.0,
-                                              fontWeight: FontWeight.w600,
-                                              color: Color.fromRGBO(
-                                                  149, 46, 0, 1.0)),
-                                        )
-                                      ],
-                                    )
-                                  ],
-                                ),
-                                Padding(padding: EdgeInsets.only(top: 5.0)),
-                                Container(
-                                  child: CupertinoButton(
-                                    child: Text(
-                                      "Won't get there on time?",
-                                      style: GoogleFonts.karla(
-                                          fontSize: 16.0,
-                                          fontWeight: FontWeight.w600,
+                                    Row(children: <Widget>[
+                                      Container(
+                                        width: 60,
+                                        height: 60,
+                                        child: CupertinoButton(
+                                          padding: EdgeInsets.all(0.0),
+                                          child: Icon(
+                                            CupertinoIcons.xmark,
+                                            color: Theme.of(context)
+                                                .scaffoldBackgroundColor,
+                                            size: 33,
+                                          ),
+                                          onPressed: () => {
+                                            showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return AlertDialog(
+                                                    insetPadding:
+                                                        EdgeInsets.all(40),
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20.0),
+                                                    ),
+                                                    title: Text('Cancel Reservation',
+                                                        style:
+                                                            GoogleFonts.karla(
+                                                                fontSize: 20.0,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600)),
+                                                    content: Container(
+                                                        child: Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      children: <Widget>[
+                                                        Text('Are you sure you want to cancel? You will only be refunded the remaining time',
+                                                            style: GoogleFonts.karla(
+                                                                fontSize: 17.0,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500)),
+                                                        Container(
+                                                            padding:
+                                                                EdgeInsets.only(
+                                                                    top: 15.0,
+                                                                    left: 5.0,
+                                                                    right: 5.0),
+                                                            width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width -
+                                                                100,
+                                                            height: 60,
+                                                            child:
+                                                                CupertinoButton(
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .all(0.0),
+                                                              child: Text(
+                                                                'Yes',
+                                                                style: GoogleFonts.karla(
+                                                                    fontSize:
+                                                                        18.0,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600),
+                                                              ),
+                                                              onPressed: () {
+                                                                Navigator.pop(
+                                                                    context);
+                                                                currentCard = Cards.searchBar;
+                                                                setState(() {});
+                                                              },
+                                                              disabledColor:
+                                                                  Color
+                                                                      .fromRGBO(
+                                                                          149,
+                                                                      46,
+                                                                      0,
+                                                                      1.0),
+                                                              color: Color
+                                                                  .fromRGBO(
+                                                                      149,
+                                                                  46,
+                                                                  0,
+                                                                  1.0),
+                                                              borderRadius: BorderRadius
+                                                                  .all(Radius
+                                                                      .circular(
+                                                                          13.0)),
+                                                            )),
+                                                        Container(
+                                                            padding:
+                                                                EdgeInsets.only(
+                                                                    top: 15.0,
+                                                                    left: 5.0,
+                                                                    right: 5.0),
+                                                            width: 250,
+                                                            height: 40,
+                                                            child:
+                                                                CupertinoButton(
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .all(0.0),
+                                                              child: Text(
+                                                                'Cancel',
+                                                                style: GoogleFonts.karla(
+                                                                    fontSize:
+                                                                        18.0,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                    color: Color
+                                                                        .fromRGBO(
+                                                                            149,
+                                                                        46,
+                                                                        0,
+                                                                        1.0)),
+                                                              ),
+                                                              onPressed: () {
+                                                                Navigator.pop(
+                                                                    context);
+                                                              },
+                                                              borderRadius: BorderRadius
+                                                                  .all(Radius
+                                                                      .circular(
+                                                                          13.0)),
+                                                            ))
+                                                      ],
+                                                    )),
+                                                  );
+                                                })
+                                          },
+                                          disabledColor:
+                                              Color.fromRGBO(149, 46, 0, 1.0),
                                           color:
-                                              Color.fromRGBO(149, 46, 0, 1.0)),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    onPressed: () {
-                                      currentCard = Cards.delayCard;
-                                      setState(() {});
-                                    },
-                                  ),
-                                )
+                                              Color.fromRGBO(149, 46, 0, 1.0),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(40.0)),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(left: 8.0),
+                                      ),
+                                      Container(
+                                        width: 70,
+                                        height: 70,
+                                        child: CupertinoButton(
+                                          padding: EdgeInsets.all(0.0),
+                                          child: Icon(
+                                            CupertinoIcons.ticket,
+                                            color: Theme.of(context)
+                                                .scaffoldBackgroundColor,
+                                            size: 40,
+                                          ),
+                                          onPressed: () => {
+                                            currentCard = Cards.delayCard,
+                                            setState(() {})
+                                          },
+                                          disabledColor:
+                                              Color.fromRGBO(149, 46, 0, 1.0),
+                                          color:
+                                              Color.fromRGBO(149, 46, 0, 1.0),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(40.0)),
+                                        ),
+                                      )
+                                    ])
+                                  ]),
+                                  Column(
+                                    children: <Widget>[
+                                      Text(
+                                        'Time left',
+                                        style: GoogleFonts.karla(
+                                            fontSize: 20.0,
+                                            fontWeight: FontWeight.w600,
+                                            color:
+                                                Theme.of(context).primaryColor),
+                                      ),
+                                      Text(
+                                        '6:23',
+                                        style: GoogleFonts.karla(
+                                            fontSize: 20.0,
+                                            fontWeight: FontWeight.w600,
+                                            color: Color.fromRGBO(
+                                                149, 46, 0, 1.0)),
+                                      )
+                                    ],
+                                  )
+                                ])
                               ],
                             ),
                           );
@@ -1255,7 +1411,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                     height: 45,
                                     alignment: Alignment.center,
                                     child: Text(
-                                      "You can delay your reservation by up to 20 minutes if caught in traffic, first 5 minutes are free, then you are extra charged for every minute.",
+                                      "You can delay your reservation by up to 20 minutes if caught in traffic, you can set here an estimate of your delay and you will be extra charged for keeping the spot reserved for more minutes.",
                                       style: GoogleFonts.karla(
                                           fontSize: 13,
                                           fontWeight: FontWeight.w500,
@@ -1686,7 +1842,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                                 fontSize: 13,
                                                 fontWeight: FontWeight.w600,
                                                 color: Theme.of(context)
-                                                    .accentColor),
+                                                    .indicatorColor),
                                           )
                                         ],
                                       )),
@@ -1956,18 +2112,18 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                             currentCard = Cards.searchBar;
                                             setState(() {});
                                           },
-                                          disabledColor:
-                                              Color.fromRGBO(138, 126, 114, 1.0),
-                                          color:
-                                              Color.fromRGBO(138, 126, 114, 1.0),
+                                          disabledColor: Color.fromRGBO(
+                                              138, 126, 114, 1.0),
+                                          color: Color.fromRGBO(
+                                              138, 126, 114, 1.0),
                                         ),
                                       )
                                     ],
                                   ),
                                   Container(
                                       child: Icon(CupertinoIcons.checkmark_seal,
-                                          color:
-                                              Color.fromRGBO(138, 126, 114, 1.0),
+                                          color: Color.fromRGBO(
+                                              138, 126, 114, 1.0),
                                           size: 80)),
                                   Padding(
                                     padding: EdgeInsets.only(top: 13.0),
@@ -2584,3 +2740,77 @@ class MapStyling {
 ]
   ''';
 }
+//Padding(padding: EdgeInsets.only(top: 20.0)),
+//                                 Row(
+//                                   children: <Widget>[
+//                                     Padding(
+//                                         padding: EdgeInsets.only(
+//                                             left: (MediaQuery.of(context)
+//                                                         .size
+//                                                         .width -
+//                                                     289) /
+//                                                 2)),
+//                                     Container(
+//                                       width: 134,
+//                                       height: 84,
+//                                       child: CupertinoButton(
+//                                         padding: EdgeInsets.all(0.0),
+//                                         child: Icon(
+//                                           CupertinoIcons.lock,
+//                                           color: Theme.of(context)
+//                                               .scaffoldBackgroundColor,
+//                                           size: 47,
+//                                         ),
+//                                         onPressed: () => {
+//                                           currentCard = Cards.unlockedCard,
+//                                           setState(() {})
+//                                         },
+//                                         disabledColor:
+//                                             Color.fromRGBO(149, 46, 0, 1.0),
+//                                         color: Color.fromRGBO(149, 46, 0, 1.0),
+//                                         borderRadius: BorderRadius.all(
+//                                             Radius.circular(27.0)),
+//                                       ),
+//                                     ),
+//                                     Padding(
+//                                         padding: EdgeInsets.only(right: 30.0)),
+//                                     Column(
+//                                       children: <Widget>[
+//                                         Text(
+//                                           'Time left',
+//                                           style: GoogleFonts.karla(
+//                                               fontSize: 20.0,
+//                                               fontWeight: FontWeight.w600,
+//                                               color: Theme.of(context)
+//                                                   .primaryColor),
+//                                         ),
+//                                         Text(
+//                                           '6:23',
+//                                           style: GoogleFonts.karla(
+//                                               fontSize: 20.0,
+//                                               fontWeight: FontWeight.w600,
+//                                               color: Color.fromRGBO(
+//                                                   149, 46, 0, 1.0)),
+//                                         )
+//                                       ],
+//                                     )
+//                                   ],
+//                                 ),
+//                                 Padding(padding: EdgeInsets.only(top: 5.0)),
+//                                 Container(
+//                                   child: CupertinoButton(
+//                                     child: Text(
+//                                       "Won't get there on time?",
+//                                       style: GoogleFonts.karla(
+//                                           fontSize: 16.0,
+//                                           fontWeight: FontWeight.w600,
+//                                           color:
+//                                               Color.fromRGBO(149, 46, 0, 1.0)),
+//                                       textAlign: TextAlign.center,
+//                                     ),
+//                                     onPressed: () {
+//                                       currentCard = Cards.delayCard;
+//                                       setState(() {});
+//                                     },
+//                                   ),
+//                                 )

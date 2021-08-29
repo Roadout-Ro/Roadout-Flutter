@@ -5,8 +5,10 @@ import 'package:roadout/auth_service.dart';
 import 'package:roadout/utilites.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+final GlobalKey<ScaffoldState> welcomeKey = GlobalKey<ScaffoldState>();
 
 class WelcomeScreen extends StatefulWidget {
+
   WelcomeScreen();
   WelcomeScreen.forDesignTime();
   @override
@@ -23,10 +25,22 @@ TextEditingController signInPasswordController = TextEditingController();
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
 
+  @override
+  void initState() {
+    super.initState();
+    print('YayyaysydsywdINIT');
+  }
+
+  @override
+  void didUpdateWidget(oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    print('Yayyaysydsywd');
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: welcomeKey,
       body: SafeArea(
         child: Column(
           children: <Widget>[
@@ -172,7 +186,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             style: GoogleFonts.karla(
                 fontSize: 15.0,
                 fontWeight: FontWeight.w500,
-                color: Theme.of(context).accentColor)),
+                color: Theme.of(context).indicatorColor)),
         leading: Icon(
           icon,
           color: Color.fromRGBO(colorR, colorG, colorB, 1.0),
@@ -412,7 +426,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   },
                 );
               }
-              else if (nameController.text == null  || nameController.text.isEmpty){
+              else if (nameController.text == ''  || nameController.text.isEmpty){
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:roadout/settings.dart';
+import 'package:roadout/welcome.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
@@ -10,6 +11,7 @@ import 'package:app_settings/app_settings.dart';
 import 'auth_service.dart';
 import 'notification_service.dart';
 import 'database_service.dart';
+import 'package:flutter/scheduler.dart';
 
 TextEditingController cvvController = TextEditingController();
 TextEditingController expiryController = TextEditingController();
@@ -19,6 +21,9 @@ TextEditingController changeName = TextEditingController();
 TextEditingController oldPsw = TextEditingController();
 TextEditingController newPsw = TextEditingController();
 TextEditingController confPsw = TextEditingController();
+
+TextEditingController deleteEmailController = TextEditingController();
+TextEditingController deletePasswordController = TextEditingController();
 
 
 bool getReservationStatusNot(SharedPreferences prefs) {
@@ -89,7 +94,8 @@ List<String> tutorialBottomBtns = ["Dismiss", "Previous", "Previous"];
 List<double> tutorialHeights = [52.0, 80.0, 96.0];
 List<double> tutorialPaddings = [30.0, 15.0, 10.0];
 
-double editHeight = 295;
+double editHeight = 320;
+String userDeleted = '';
 
 Widget showNotifications(BuildContext context, SharedPreferences preferences) {
   return StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
@@ -394,8 +400,7 @@ Widget showPayment(BuildContext context) => Container(
       ],
     ));
 
-ListTile _cardTile(String number, Gradient gradient, Color numberColor) =>
-    ListTile(
+ListTile _cardTile(String number, Gradient gradient, Color numberColor) => ListTile(
         title: Transform(
             transform: Matrix4.translationValues(-10, 0.0, 0.0),
             child: Row(
@@ -1854,11 +1859,14 @@ Widget showTutorial(BuildContext context) {
 }
 
 Widget showEditAccount(BuildContext context, SharedPreferences preferences) {
-
   return StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
    return Container(
       height: editHeight,
       width: 390,
+       decoration: BoxDecoration(
+         color: Theme.of(context).dialogBackgroundColor,
+         borderRadius: BorderRadius.all(Radius.circular(23)),
+       ),
       child: Column(
         children: <Widget>[
           Padding(padding: EdgeInsets.only(top: 10)),
@@ -1898,7 +1906,7 @@ Widget showEditAccount(BuildContext context, SharedPreferences preferences) {
 
 
 Widget decideEditStuff(BuildContext context, StateSetter setState) {
-  if (editHeight == 360) {
+  if (editHeight == 384) {
     return Column(
       children: [
         Row(
@@ -1917,7 +1925,7 @@ Widget decideEditStuff(BuildContext context, StateSetter setState) {
                         color: Color.fromRGBO(220, 170, 57, 1.0),
                       )),
                   onPressed: () => {
-                    editHeight = 280,
+                    editHeight = 320,
                     setState(() {})
                   },
                 )
@@ -2131,6 +2139,222 @@ Widget decideEditStuff(BuildContext context, StateSetter setState) {
               borderRadius: BorderRadius.all(Radius.circular(13.0)),
               color: Color.fromRGBO(220, 170, 57, 1.0),
             ),
+          ),
+          Container(
+            height: 50,
+            width: MediaQuery.of(context).size.width - 58,
+            child: CupertinoButton(
+              onPressed: ()  {
+                showDialog(
+                    context: context,
+                    builder:
+                        (BuildContext context) {
+                      return AlertDialog(
+                        insetPadding:
+                        EdgeInsets.all(40),
+                        shape:
+                        RoundedRectangleBorder(
+                          borderRadius:
+                          BorderRadius.circular(
+                              20.0),
+                        ),
+                        title: Text('Delete Account',
+                            style:
+                            GoogleFonts.karla(
+                                fontSize: 20.0,
+                                fontWeight:
+                                FontWeight
+                                    .w600)),
+                        content: Container(
+                            child: Column(
+                              mainAxisSize:
+                              MainAxisSize.min,
+                              children: <Widget>[
+                                Text('This is NOT reversible! Are you sure you want to delete you account? You will lose all the data saved on this account',
+                                    style: GoogleFonts.karla(
+                                        fontSize: 17.0,
+                                        fontWeight:
+                                        FontWeight
+                                            .w500)),
+                                Container(
+                                    padding:
+                                    EdgeInsets.only(top: 15.0, left: 5.0, right: 5.0),
+                                    width: MediaQuery.of(context).size.width - 100,
+                                    height: 60,
+                                    child:
+                                    CupertinoButton(
+                                      padding: EdgeInsets.all(0.0),
+                                      child: Text('Yes', style: GoogleFonts.karla(fontSize: 18.0, fontWeight: FontWeight.w600),),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                        showDialog(
+                                            context: context,
+                                            builder:
+                                                (BuildContext context) {
+                                              return AlertDialog(
+                                                insetPadding:
+                                                EdgeInsets.all(40),
+                                                shape:
+                                                RoundedRectangleBorder(
+                                                  borderRadius:
+                                                  BorderRadius.circular(
+                                                      20.0),
+                                                ),
+                                                title: Text('Are you sure?',
+                                                    style:
+                                                    GoogleFonts.karla(
+                                                        fontSize: 20.0,
+                                                        fontWeight:
+                                                        FontWeight
+                                                            .w600)),
+                                                content: Container(
+                                                    child: Column(
+                                                      mainAxisSize:
+                                                      MainAxisSize.min,
+                                                      children: <Widget>[
+                                                        Text('Please enter your email and password',
+                                                            style: GoogleFonts.karla(fontSize: 17.0, fontWeight: FontWeight.w500)),
+                                                        Padding(padding: EdgeInsets.only(top: 10.0),),
+                                                        Column(
+                                                          children: <Widget>[
+                                                            Container(
+                                                                height: 45,
+                                                                width: 280,
+                                                                padding: EdgeInsets.only(bottom: 10),
+                                                                child: TextFormField(
+                                                                  controller: deleteEmailController,
+                                                                  cursorColor: Color.fromRGBO(149, 46, 0, 1.0),
+                                                                  autocorrect: false,
+                                                                  keyboardAppearance: MediaQuery.of(context).platformBrightness,
+                                                                  decoration: InputDecoration(
+                                                                      labelText: 'Email',
+                                                                      labelStyle: TextStyle(
+                                                                          color: Color.fromRGBO(149, 46, 0, 1.0),
+                                                                          fontWeight: FontWeight.w600),
+                                                                      filled: true,
+                                                                      fillColor: Color.fromRGBO(149, 46, 0, 0.22),
+                                                                      enabledBorder: OutlineInputBorder(
+                                                                        borderSide: BorderSide(
+                                                                            width: 3,
+                                                                            color: Color.fromRGBO(255, 193, 25, 0.0)),
+                                                                        borderRadius: BorderRadius.circular(15),
+                                                                      ),
+                                                                      focusedBorder: OutlineInputBorder(
+                                                                        borderSide: BorderSide(
+                                                                            width: 3,
+                                                                            color: Color.fromRGBO(255, 193, 25, 0.0)),
+                                                                        borderRadius: BorderRadius.circular(12),
+                                                                      )),
+                                                                )),
+                                                            Container(
+                                                                height: 40,
+                                                                width: 280,
+                                                                padding: EdgeInsets.only(bottom: 5),
+                                                                child: TextFormField(
+                                                                  controller: deletePasswordController,
+                                                                  cursorColor: Color.fromRGBO(149, 46, 0, 1.0),
+                                                                  obscureText: true,
+                                                                  autocorrect: false,
+                                                                  keyboardAppearance: MediaQuery.of(context).platformBrightness,
+                                                                  decoration: InputDecoration(
+                                                                      labelText: 'Password',
+                                                                      labelStyle: TextStyle(
+                                                                          color: Color.fromRGBO(149, 46, 0, 1.0),
+                                                                          fontWeight: FontWeight.w600),
+                                                                      filled: true,
+                                                                      fillColor: Color.fromRGBO(149, 46, 0, 0.22),
+                                                                      enabledBorder: OutlineInputBorder(
+                                                                        borderSide: BorderSide(
+                                                                            width: 3,
+                                                                            color: Color.fromRGBO(143, 102, 13, 0.0)),
+                                                                        borderRadius: BorderRadius.circular(15),
+                                                                      ),
+                                                                      focusedBorder: OutlineInputBorder(
+                                                                        borderSide: BorderSide(
+                                                                            width: 3,
+                                                                            color: Color.fromRGBO(143, 102, 13, 0.0)),
+                                                                        borderRadius: BorderRadius.circular(12),
+                                                                      )),
+                                                                ))
+                                                          ],
+                                                        ),
+                                                        Container(
+                                                            padding:
+                                                            EdgeInsets.only(top: 5.0, left: 5.0, right: 5.0),
+                                                            width: MediaQuery.of(context).size.width - 100,
+                                                            height: 50,
+                                                            child:
+                                                            CupertinoButton(
+                                                              padding: EdgeInsets.all(0.0),
+                                                              child: Text('Delete Account', style: GoogleFonts.karla(fontSize: 18.0, fontWeight: FontWeight.w600),),
+                                                              onPressed: () async {
+                                                                Navigator.pop(context);
+                                                                Navigator.of(context).push(_createRouteAfterSignOut(context));
+                                                                userDeleted = await deleteUser(deleteEmailController.text, deletePasswordController.text, context);
+                                                              },
+                                                              disabledColor:
+                                                              Color.fromRGBO(149, 46, 0, 1.0),
+                                                              color: Color.fromRGBO(149, 46, 0, 1.0),
+                                                              borderRadius: BorderRadius.all(Radius.circular(13.0)),
+                                                            )),
+                                                        Container(
+                                                            padding:
+                                                            EdgeInsets.only(
+                                                                top: 15.0,
+                                                                left: 5.0,
+                                                                right: 5.0),
+                                                            width: 250,
+                                                            height: 40,
+                                                            child: CupertinoButton(
+                                                              padding: EdgeInsets.all(0.0),
+                                                              child: Text('Cancel', style: GoogleFonts.karla(fontSize: 18.0, fontWeight: FontWeight.w600,
+                                                                  color: Color.fromRGBO(149, 46, 0, 1.0)),
+                                                              ),
+                                                              onPressed: () {
+                                                                Navigator.pop(context);
+                                                              },
+                                                              borderRadius: BorderRadius.all(Radius.circular(13.0)),
+                                                            ))
+                                                      ],
+                                                    )),
+                                              );
+                                            });
+                                      },
+                                      disabledColor:
+                                      Color.fromRGBO(149, 46, 0, 1.0),
+                                      color: Color.fromRGBO(149, 46, 0, 1.0),
+                                      borderRadius: BorderRadius.all(Radius.circular(13.0)),
+                                    )),
+                                Container(
+                                    padding:
+                                    EdgeInsets.only(
+                                        top: 15.0,
+                                        left: 5.0,
+                                        right: 5.0),
+                                    width: 250,
+                                    height: 40,
+                                    child: CupertinoButton(
+                                      padding: EdgeInsets.all(0.0),
+                                      child: Text('Cancel', style: GoogleFonts.karla(fontSize: 18.0, fontWeight: FontWeight.w600,
+                                            color: Color.fromRGBO(149, 46, 0, 1.0)),
+                                      ),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      borderRadius: BorderRadius.all(Radius.circular(13.0)),
+                                    ))
+                              ],
+                            )),
+                      );
+                    });
+              },
+              child: Text(
+                "Delete Account",
+                style: GoogleFonts.karla(
+                  fontSize: 17.0, fontWeight: FontWeight.w600, color: Color.fromRGBO(149, 46, 0, 1.0),),
+              ),
+              padding: EdgeInsets.all(0.0),
+            ),
           )
         ])
       ],
@@ -2174,7 +2398,7 @@ Widget decideEditStuff(BuildContext context, StateSetter setState) {
                         color: Color.fromRGBO(220, 170, 57, 1.0)
                     )),
                 onPressed: () => {
-                  editHeight = 360,
+                  editHeight = 384,
                   setState(() {})
                 },
 
@@ -2239,10 +2463,10 @@ Widget decideEditStuff(BuildContext context, StateSetter setState) {
                       borderRadius: BorderRadius.circular(12),
                     )),
               )),
+          Padding(padding: EdgeInsets.only(top: 15),),
           Container(
-            height: 60,
+            height: 45,
             width: MediaQuery.of(context).size.width - 58,
-            padding: EdgeInsets.only(top: 15),
             child: CupertinoButton(
               onPressed: () async {
                 if (changeName.text == null || changeName.text.isEmpty) {
@@ -2337,6 +2561,223 @@ Widget decideEditStuff(BuildContext context, StateSetter setState) {
               borderRadius: BorderRadius.all(Radius.circular(13.0)),
               color: Color.fromRGBO(220, 170, 57, 1.0),
             ),
+          ),
+          Container(
+            height: 50,
+            width: MediaQuery.of(context).size.width - 58,
+            child: CupertinoButton(
+              onPressed: ()  {
+                showDialog(
+                    context: context,
+                    builder:
+                        (BuildContext context) {
+                      return AlertDialog(
+                        insetPadding:
+                        EdgeInsets.all(40),
+                        shape:
+                        RoundedRectangleBorder(
+                          borderRadius:
+                          BorderRadius.circular(
+                              20.0),
+                        ),
+                        title: Text('Delete Account',
+                            style:
+                            GoogleFonts.karla(
+                                fontSize: 20.0,
+                                fontWeight:
+                                FontWeight
+                                    .w600)),
+                        content: Container(
+                            child: Column(
+                              mainAxisSize:
+                              MainAxisSize.min,
+                              children: <Widget>[
+                                Text('This is NOT reversible! Are you sure you want to delete you account? You will lose all the data saved on this account',
+                                    style: GoogleFonts.karla(
+                                        fontSize: 17.0,
+                                        fontWeight:
+                                        FontWeight
+                                            .w500)),
+                                Container(
+                                    padding:
+                                    EdgeInsets.only(top: 15.0, left: 5.0, right: 5.0),
+                                    width: MediaQuery.of(context).size.width - 100,
+                                    height: 60,
+                                    child:
+                                    CupertinoButton(
+                                      padding: EdgeInsets.all(0.0),
+                                      child: Text('Yes', style: GoogleFonts.karla(fontSize: 18.0, fontWeight: FontWeight.w600),),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                        showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return AlertDialog(
+                                                insetPadding:
+                                                EdgeInsets.all(40),
+                                                shape:
+                                                RoundedRectangleBorder(
+                                                  borderRadius:
+                                                  BorderRadius.circular(
+                                                      20.0),
+                                                ),
+                                                title: Text('Are you sure?',
+                                                    style:
+                                                    GoogleFonts.karla(
+                                                        fontSize: 20.0,
+                                                        fontWeight:
+                                                        FontWeight
+                                                            .w600)),
+                                                content: Container(
+                                                    child: Column(
+                                                      mainAxisSize:
+                                                      MainAxisSize.min,
+                                                      children: <Widget>[
+                                                        Text('Please enter your email and password',
+                                                            style: GoogleFonts.karla(fontSize: 17.0, fontWeight: FontWeight.w500)),
+                                                        Padding(padding: EdgeInsets.only(top: 10.0),),
+                                                        Column(
+                                                          children: <Widget>[
+                                                            Container(
+                                                                height: 45,
+                                                                width: 280,
+                                                                padding: EdgeInsets.only(bottom: 10),
+                                                                child: TextFormField(
+                                                                  controller: deleteEmailController,
+                                                                  cursorColor: Color.fromRGBO(149, 46, 0, 1.0),
+                                                                  autocorrect: false,
+                                                                  keyboardAppearance: MediaQuery.of(context).platformBrightness,
+                                                                  decoration: InputDecoration(
+                                                                      labelText: 'Email',
+                                                                      labelStyle: TextStyle(
+                                                                          color: Color.fromRGBO(149, 46, 0, 1.0),
+                                                                          fontWeight: FontWeight.w600),
+                                                                      filled: true,
+                                                                      fillColor: Color.fromRGBO(149, 46, 0, 0.22),
+                                                                      enabledBorder: OutlineInputBorder(
+                                                                        borderSide: BorderSide(
+                                                                            width: 3,
+                                                                            color: Color.fromRGBO(255, 193, 25, 0.0)),
+                                                                        borderRadius: BorderRadius.circular(15),
+                                                                      ),
+                                                                      focusedBorder: OutlineInputBorder(
+                                                                        borderSide: BorderSide(
+                                                                            width: 3,
+                                                                            color: Color.fromRGBO(255, 193, 25, 0.0)),
+                                                                        borderRadius: BorderRadius.circular(12),
+                                                                      )),
+                                                                )),
+                                                            Container(
+                                                                height: 40,
+                                                                width: 280,
+                                                                padding: EdgeInsets.only(bottom: 5),
+                                                                child: TextFormField(
+                                                                  controller: deletePasswordController,
+                                                                  cursorColor: Color.fromRGBO(149, 46, 0, 1.0),
+                                                                  obscureText: true,
+                                                                  autocorrect: false,
+                                                                  keyboardAppearance: MediaQuery.of(context).platformBrightness,
+                                                                  decoration: InputDecoration(
+                                                                      labelText: 'Password',
+                                                                      labelStyle: TextStyle(
+                                                                          color: Color.fromRGBO(149, 46, 0, 1.0),
+                                                                          fontWeight: FontWeight.w600),
+                                                                      filled: true,
+                                                                      fillColor: Color.fromRGBO(149, 46, 0, 0.22),
+                                                                      enabledBorder: OutlineInputBorder(
+                                                                        borderSide: BorderSide(
+                                                                            width: 3,
+                                                                            color: Color.fromRGBO(143, 102, 13, 0.0)),
+                                                                        borderRadius: BorderRadius.circular(15),
+                                                                      ),
+                                                                      focusedBorder: OutlineInputBorder(
+                                                                        borderSide: BorderSide(
+                                                                            width: 3,
+                                                                            color: Color.fromRGBO(143, 102, 13, 0.0)),
+                                                                        borderRadius: BorderRadius.circular(12),
+                                                                      )),
+                                                                ))
+                                                          ],
+                                                        ),
+                                                        Container(
+                                                            padding:
+                                                            EdgeInsets.only(top: 5.0, left: 5.0, right: 5.0),
+                                                            width: MediaQuery.of(context).size.width - 100,
+                                                            height: 50,
+                                                            child:
+                                                            CupertinoButton(
+                                                              padding: EdgeInsets.all(0.0),
+                                                              child: Text('Delete Account', style: GoogleFonts.karla(fontSize: 18.0, fontWeight: FontWeight.w600),),
+                                                              onPressed: () async {
+                                                                Navigator.pop(context);
+                                                                Navigator.of(context).push(_createRouteAfterSignOut(context));
+                                                                userDeleted = await deleteUser(deleteEmailController.text, deletePasswordController.text, context);
+                                                              },
+                                                              disabledColor:
+                                                              Color.fromRGBO(149, 46, 0, 1.0),
+                                                              color: Color.fromRGBO(149, 46, 0, 1.0),
+                                                              borderRadius: BorderRadius.all(Radius.circular(13.0)),
+                                                            )),
+                                                        Container(
+                                                            padding:
+                                                            EdgeInsets.only(
+                                                                top: 15.0,
+                                                                left: 5.0,
+                                                                right: 5.0),
+                                                            width: 250,
+                                                            height: 40,
+                                                            child: CupertinoButton(
+                                                              padding: EdgeInsets.all(0.0),
+                                                              child: Text('Cancel', style: GoogleFonts.karla(fontSize: 18.0, fontWeight: FontWeight.w600,
+                                                                  color: Color.fromRGBO(149, 46, 0, 1.0)),
+                                                              ),
+                                                              onPressed: () {
+                                                                Navigator.pop(context);
+                                                              },
+                                                              borderRadius: BorderRadius.all(Radius.circular(13.0)),
+                                                            ))
+                                                      ],
+                                                    )),
+                                              );
+                                            });
+                                        //Navigator.of(context).push(_createRouteAfterSignOut());
+                                        //await deleteUser(email, password);
+                                      },
+                                      disabledColor:
+                                      Color.fromRGBO(149, 46, 0, 1.0),
+                                      color: Color.fromRGBO(149, 46, 0, 1.0),
+                                      borderRadius: BorderRadius.all(Radius.circular(13.0)),
+                                    )),
+                                Container(
+                                    padding:
+                                    EdgeInsets.only(
+                                        top: 15.0,
+                                        left: 5.0,
+                                        right: 5.0),
+                                    width: 250,
+                                    height: 40,
+                                    child: CupertinoButton(
+                                      padding: EdgeInsets.all(0.0),
+                                      child: Text('Cancel', style: GoogleFonts.karla(fontSize: 18.0, fontWeight: FontWeight.w600,
+                                          color: Color.fromRGBO(149, 46, 0, 1.0)),
+                                      ),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      borderRadius: BorderRadius.all(Radius.circular(13.0)),
+                                    ))
+                              ],
+                            )),
+                      );
+                    });
+              },
+              child: Text(
+                "Delete Account",
+                style: GoogleFonts.karla(
+                    fontSize: 17.0, fontWeight: FontWeight.w600, color: Color.fromRGBO(149, 46, 0, 1.0),),
+              ),
+              padding: EdgeInsets.all(0.0),
+            ),
           )
         ],
       )
@@ -2356,4 +2797,24 @@ _saveNeverLaunched() async {
   final prefs = await SharedPreferences.getInstance();
   final key = 'never_launched';
   prefs.setBool(key, false);
+}
+
+
+Route _createRouteAfterSignOut(BuildContext currentContext) {
+  return PageRouteBuilder(
+    pageBuilder: (currentContext, animation, secondaryAnimation) => WelcomeScreen(),
+    transitionsBuilder: (currentContext, animation, secondaryAnimation, child) {
+      var begin = Offset(0.0, 1.0);
+      var end = Offset.zero;
+      var curve = Curves.ease;
+
+      var tween = Tween(begin: begin, end: end).chain(
+          CurveTween(curve: curve));
+
+      return SlideTransition(
+        position: animation.drive(tween),
+        child: child,
+      );
+    },
+  );
 }

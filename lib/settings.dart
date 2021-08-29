@@ -126,9 +126,9 @@ Widget showSettings(BuildContext context, StateSetter setState, SharedPreference
                 child: CupertinoButton(
                     padding: EdgeInsets.symmetric(vertical: 0, horizontal: 5),
                     onPressed: () {
-                      print(username[1]);
+                      print(username[0]);
                     },
-                    child: Text(username[1],
+                    child: Text(username.replaceAll(' ', '')[0],
                         style: GoogleFonts.karla(
                             fontSize: 18.0,
                             fontWeight: FontWeight.w600,

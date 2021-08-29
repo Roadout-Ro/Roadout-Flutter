@@ -202,6 +202,61 @@ Future<void> userSetup({required String name}) async {
   return;
 }
 
+final FirebaseAuth _auth = FirebaseAuth.instance;
+
+Future deleteUser(String email, String password, BuildContext context) async {
+  try {
+    User user = await _auth.currentUser!;
+    AuthCredential credentials = EmailAuthProvider.credential(email: email, password: password);
+    print(user);
+    UserCredential result = await user.reauthenticateWithCredential(credentials);
+    await DatabaseService().deleteUser(); // called from database class
+    await result.user!.delete();
+    print('Success');
+    return 'Success';
+  } on FirebaseAuthException catch (e) {
+    print(e.message!);
+    showDialog(
+      context: welcomeKey.currentContext!,
+      builder: (context) {
+        return AlertDialog(
+          insetPadding: EdgeInsets.all(40),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          title: Text('Failure', style: GoogleFonts.karla(
+              fontSize: 20.0, fontWeight: FontWeight.w600)),
+          content: Container(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget> [
+                  Text("There was an error. Sign in and try again.", style: GoogleFonts.karla(
+                      fontSize: 17.0, fontWeight: FontWeight.w500)),
+                  Container(
+                      padding: EdgeInsets.only(top: 15.0, left: 5.0, right: 5.0),
+                      width: MediaQuery.of(context).size.width-100,
+                      height: 60,
+                      child: CupertinoButton(
+                        padding: EdgeInsets.all(0.0),
+                        child: Text('Ok', style: GoogleFonts.karla(fontSize: 18.0, fontWeight: FontWeight.w600),),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        disabledColor: Color.fromRGBO(214, 109, 0, 1.0),
+                        color: Color.fromRGBO(214, 109, 07, 1.0),
+                        borderRadius: BorderRadius.all(Radius.circular(13.0)),
+                      )
+                  ),
+                ],
+              )
+          ),
+        );
+      },
+    );
+    return e.message!;
+  }
+}
+
 Route _createRoute() {
   return PageRouteBuilder(
     pageBuilder: (context, animation, secondaryAnimation) => MainScreen(),
