@@ -45,9 +45,49 @@ Widget showSettings(BuildContext context, StateSetter setState, SharedPreference
                     ],
                   ),
                   onPressed: () {
-                    currentCard = Cards.unlockCard;
-                    setState(() {});
-                    Navigator.pop(context);
+                    if (activeReservation == true) {
+                      currentCard = Cards.unlockCard;
+                      setState(() {});
+                      Navigator.pop(context);
+                    } else {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            insetPadding: EdgeInsets.all(40),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                            title: Text('No Active Reservation!', style: GoogleFonts.karla(
+                                fontSize: 20.0, fontWeight: FontWeight.w600)),
+                            content: Container(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget> [
+                                    Text('You do not have an active reservation at this moment!', style: GoogleFonts.karla(
+                                        fontSize: 17.0, fontWeight: FontWeight.w500)),
+                                    Container(
+                                        padding: EdgeInsets.only(top: 15.0, left: 5.0, right: 5.0),
+                                        width: MediaQuery.of(context).size.width-100,
+                                        height: 60,
+                                        child: CupertinoButton(
+                                          padding: EdgeInsets.all(0.0),
+                                          child: Text('Ok', style: GoogleFonts.karla(fontSize: 18.0, fontWeight: FontWeight.w600),),
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          disabledColor: Color.fromRGBO(149, 46, 0, 1.0),
+                                          color: Color.fromRGBO(149, 46, 0, 1.0),
+                                          borderRadius: BorderRadius.all(Radius.circular(13.0)),
+                                        )
+                                    ),
+                                  ],
+                                )
+                            ),
+                          );
+                        },
+                      );
+                    }
                   },
                   disabledColor: Color.fromRGBO(255, 193, 25, 0.4),
                   color: Color.fromRGBO(255, 193, 25, 0.4),

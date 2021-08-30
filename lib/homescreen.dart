@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -44,6 +46,8 @@ int selectedNumber = -1;
 
 List<String> sectionLetters = [];
 
+bool activeReservation = false;
+
 class MainScreen extends StatefulWidget {
   @override
   _MainScreen createState() => _MainScreen();
@@ -58,6 +62,9 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
   Set<Marker> _markers = {};
   late BitmapDescriptor mapMarker;
 
+  Duration duration = Duration();
+  Timer? timer;
+
   @override
   void initState() {
     super.initState();
@@ -68,6 +75,35 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
     }
     WidgetsBinding.instance!.addObserver(this);
     setCustomMarker();
+  }
+
+  void reset() {
+    setState(() {
+      duration = Duration(minutes: selectedMinutes);
+    });
+  }
+
+  void resetDelay(int minutes) {
+    setState(() {
+      duration = duration + Duration(minutes: minutes);
+    });
+  }
+
+  void changeTime() {
+    final getSeconds = 1;
+    setState(() {
+      final seconds = duration.inSeconds - getSeconds;
+      if (seconds < 0) {
+        timer?.cancel();
+        print('finish');
+      } else {
+        duration = Duration(seconds: seconds);
+      }
+    });
+  }
+
+  void startTimer() {
+    timer = Timer.periodic(Duration(seconds: 1), (_) => changeTime());
   }
 
   void setCustomMarker() async {
@@ -842,7 +878,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                     borderRadius: BorderRadius.all(Radius.circular(13.0)),
                                   ),
                                 ), */ //APPLE PAY/GOOGLE PAY button
-//Padding(padding: EdgeInsets.only(top: 8.0),),
+                                //Padding(padding: EdgeInsets.only(top: 8.0),),
                                 Container(
                                   width: MediaQuery.of(context).size.width - 58,
                                   height: 45,
@@ -856,7 +892,11 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                     ),
                                     onPressed: () => {
                                       currentCard = Cards.paidCard,
-                                      setState(() {})
+                                      setState(() {
+                                        activeReservation = true;
+                                      }),
+                                      startTimer(),
+                                      reset()
                                     },
                                     disabledColor:
                                         Color.fromRGBO(214, 109, 0, 1.0),
@@ -905,6 +945,14 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                             ),
                           );
                         } else if (currentCard == Cards.unlockCard) {
+
+                          String twoDigits(int n) =>
+                              n.toString().padLeft(2, '0');
+                          final minutes =
+                          twoDigits(duration.inMinutes.remainder(60));
+                          final seconds =
+                          twoDigits(duration.inSeconds.remainder(60));
+
                           return Container(
                             height: 270,
                             width: MediaQuery.of(context).size.width - 22,
@@ -1084,7 +1132,10 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                                                 Navigator.pop(
                                                                     context);
                                                                 currentCard = Cards.searchBar;
-                                                                setState(() {});
+                                                                setState(() {
+                                                                  activeReservation = false;
+                                                                  timer!.cancel();
+                                                                });
                                                               },
                                                               disabledColor:
                                                                   Color
@@ -1193,7 +1244,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                                 Theme.of(context).primaryColor),
                                       ),
                                       Text(
-                                        '6:23',
+                                        '$minutes:$seconds',
                                         style: GoogleFonts.karla(
                                             fontSize: 20.0,
                                             fontWeight: FontWeight.w600,
@@ -1678,7 +1729,8 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                       ),
                                       onPressed: () => {
                                         currentCard = Cards.paidCard,
-                                        setState(() {})
+                                        setState(() {}),
+                                        resetDelay(progress.toInt())
                                       },
                                       disabledColor:
                                           Color.fromRGBO(214, 109, 0, 1.0),
