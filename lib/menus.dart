@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:roadout/settings.dart';
 import 'package:roadout/welcome.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,7 +12,6 @@ import 'package:app_settings/app_settings.dart';
 import 'auth_service.dart';
 import 'notification_service.dart';
 import 'database_service.dart';
-import 'package:flutter/scheduler.dart';
 
 TextEditingController cvvController = TextEditingController();
 TextEditingController expiryController = TextEditingController();
@@ -25,6 +25,7 @@ TextEditingController confPsw = TextEditingController();
 TextEditingController deleteEmailController = TextEditingController();
 TextEditingController deletePasswordController = TextEditingController();
 
+TextEditingController notificationLabelController = TextEditingController();
 
 bool getReservationStatusNot(SharedPreferences prefs) {
   final key = 'reservationStatusNot';
@@ -32,8 +33,8 @@ bool getReservationStatusNot(SharedPreferences prefs) {
   return value;
 }
 
-bool getPromoUpdatesNot(SharedPreferences prefs) {
-  final key = 'promoUpdatesNot';
+bool getRemindersNot(SharedPreferences prefs) {
+  final key = 'remindersNot';
   final value = prefs.getBool(key) ?? true;
   return value;
 }
@@ -96,6 +97,9 @@ List<double> tutorialPaddings = [30.0, 15.0, 10.0];
 
 double editHeight = 320;
 String userDeleted = '';
+
+DateTime reminderDate = DateTime.now().add(Duration(minutes: 15 - DateTime.now().minute % 15));
+String formattedDate = DateFormat('MMM dd, hh:mm').format(reminderDate);
 
 Widget showNotifications(BuildContext context, SharedPreferences preferences) {
   return StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
@@ -201,7 +205,7 @@ Widget showNotifications(BuildContext context, SharedPreferences preferences) {
             Row(
               children: <Widget>[
                 Container(
-                  width: 250,
+                  width: 219,
                   height: 50,
 //padding: EdgeInsets.only(left: 10),
                   child: Column(
@@ -210,14 +214,14 @@ Widget showNotifications(BuildContext context, SharedPreferences preferences) {
 //padding: EdgeInsets.only(left: 21),
                           padding: EdgeInsets.only(right: 104),
                           child: Text(
-                            "Promo Updates",
+                            "Reminders",
                             style: GoogleFonts.karla(
                                 fontSize: 15, fontWeight: FontWeight.w500),
                           )),
                       Container(
                           padding: EdgeInsets.only(left: 20),
                           child: Text(
-                            "Get notifications when free spots or discounts are available",
+                            "Get reminders you set to make reservations",
                             style: GoogleFonts.karla(
                                 fontSize: 13,
                                 fontWeight: FontWeight.w500,
@@ -232,10 +236,10 @@ Widget showNotifications(BuildContext context, SharedPreferences preferences) {
                   height: 55,
                   padding: EdgeInsets.only(right: 30),
                   child: CupertinoSwitch(
-                    value: getPromoUpdatesNot(preferences),
+                    value: getRemindersNot(preferences),
                     onChanged: (bool value) async {
                       final prefs = await SharedPreferences.getInstance();
-                      final key = 'promoUpdatesNot';
+                      final key = 'remindersNot';
                       prefs.setBool(key, value);
                       print('Saved $value');
                       setState(() {});
@@ -1494,6 +1498,7 @@ Widget showPermissions(BuildContext context, String themeName) {
           borderRadius: BorderRadius.all(Radius.circular(23)),
         ),
         child: Column(
+          //mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Padding(padding: EdgeInsets.only(top: 23.0)),
             Row(
@@ -1611,7 +1616,7 @@ Widget showPermissions(BuildContext context, String themeName) {
                                               Navigator.pop(context);
                                               showModalBottomSheet(
                                                   context: context,
-                                                  isScrollControlled: false,
+                                                  isScrollControlled: true,
                                                   shape: RoundedRectangleBorder(
                                                       borderRadius:
                                                       BorderRadius.vertical(
@@ -1701,7 +1706,7 @@ Widget showPermissions(BuildContext context, String themeName) {
                                           Navigator.pop(context);
                                           showModalBottomSheet(
                                               context: context,
-                                              isScrollControlled: false,
+                                              isScrollControlled: true,
                                               shape: RoundedRectangleBorder(
                                                   borderRadius:
                                                   BorderRadius.vertical(
@@ -1903,8 +1908,6 @@ Widget showEditAccount(BuildContext context, SharedPreferences preferences) {
     );
   });
 }
-
-
 Widget decideEditStuff(BuildContext context, StateSetter setState) {
   if (editHeight == 384) {
     return Column(
@@ -2784,6 +2787,174 @@ Widget decideEditStuff(BuildContext context, StateSetter setState) {
     ],
   );
 }
+
+Widget showReminders(BuildContext context) {
+  return StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
+    return Container(
+        height: 284,
+        decoration: BoxDecoration(
+          color: Theme.of(context).dialogBackgroundColor,
+          borderRadius: BorderRadius.all(Radius.circular(23)),
+        ),
+        child: Column(
+          children: <Widget>[
+            Padding(padding: EdgeInsets.only(top: 10.0)),
+            Row(
+              children: <Widget>[
+                Container(
+                  width: 200,
+                  padding: EdgeInsets.only(left: 20.0),
+                  child: Text(
+                    "Reminders",
+                    textAlign: TextAlign.left,
+                    style: GoogleFonts.karla(
+                        fontSize: 20.0, fontWeight: FontWeight.w600),
+                  ),
+                ),
+                Spacer(),
+                Container(
+                  width: 50,
+                  padding: EdgeInsets.only(right: 8.0),
+                  child: IconButton(
+                    icon: const Icon(CupertinoIcons.xmark, size: 23),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    disabledColor: Color.fromRGBO(255, 193, 25, 1.0),
+                    color: Color.fromRGBO(255, 193, 25, 1.0),
+                  ),
+                )
+              ],
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width-50,
+              height: 50,
+              alignment: Alignment.center,
+              child: Text(
+                "You can set notifications here if you want to be reminded to make a reservation at a certain hour on a certain day",
+                style: GoogleFonts.karla(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                    color: Color.fromRGBO(
+                        161, 161, 161, 1.0)),
+              ),
+            ),
+            PopupMenuButton(
+                color: Color.fromRGBO(
+                    220, 170, 57, 1.0),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+                        Radius.circular(23.0))),
+                child: Container(
+                  padding: EdgeInsets.only(
+                      right: 15.0, top: 3.0),
+                  width: 143.0,
+                  height: 37.0,
+                  child: CupertinoButton(
+                    padding: EdgeInsets.all(0.0),
+                    child: Text(
+                      formattedDate,
+                      style: GoogleFonts.karla(
+                          fontSize: 16.0,
+                          fontWeight:
+                          FontWeight.w600,
+                          color: Color.fromRGBO(
+                              220, 170, 57, 1.0)),
+                    ),
+                    onPressed: null,
+                    disabledColor: Color.fromRGBO(
+                        128, 128, 129, 0.3),
+                    color: Color.fromRGBO(
+                        128, 128, 129, 0.3),
+                    borderRadius: BorderRadius.all(
+                        Radius.circular(8.0)),
+                  ),
+                ),
+                itemBuilder: (context) => [
+                  PopupMenuItem(
+                    child: Container(
+                        width: 300.0,
+                        height: 120.0,
+                        child: CupertinoTheme(
+                            data: CupertinoThemeData(
+                              textTheme: CupertinoTextThemeData(
+                                dateTimePickerTextStyle: TextStyle(
+                                  fontSize: 17,
+                                ),
+                              ),
+                            ),
+                            child:
+                            CupertinoDatePicker(
+                              minimumDate: DateTime.now().add(Duration(minutes: 15 - DateTime.now().minute % 15)),
+                              minuteInterval: 15,
+                              initialDateTime: DateTime.now().add(Duration(minutes: 15 - DateTime.now().minute % 15)),
+                              onDateTimeChanged: (DateTime value) {
+                              reminderDate = value;
+                              formattedDate = DateFormat('MMM dd, hh:mm').format(reminderDate);
+                              setState(() {});
+                            },))),
+                  ),
+                ]),
+            Padding(
+              padding: EdgeInsets.only(top: 10.0),
+            ),
+            Container(
+                height: 50,
+                padding: EdgeInsets.only(left: 24, right: 24, bottom: 10),
+                child: TextFormField(
+                  controller: notificationLabelController,
+                  cursorColor: Color.fromRGBO(136, 126, 115, 1.0),
+                  obscureText: false,
+                  autocorrect: false,
+                  keyboardAppearance: MediaQuery.of(context).platformBrightness,
+                  decoration: InputDecoration(
+                      labelText: 'Notification Label',
+                      labelStyle: TextStyle(
+                          color: Color.fromRGBO(136, 126, 115, 1.0),
+                          fontWeight: FontWeight.w600),
+                      filled: true,
+                      fillColor: Color.fromRGBO(136, 126, 115, 0.44),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            width: 3,
+                            color: Color.fromRGBO(255, 193, 25, 0.0)),
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            width: 3,
+                            color: Color.fromRGBO(255, 193, 25, 0.0)),
+                        borderRadius: BorderRadius.circular(15),
+                      )),
+                )),
+            Container(
+              width: MediaQuery.of(context).size.width - 58,
+              height: 45,
+              child: CupertinoButton(
+                padding: EdgeInsets.all(0.0),
+                child: Text(
+                  "Set Reminder",
+                  style: GoogleFonts.karla(
+                      fontSize: 17.0,
+                      fontWeight: FontWeight.w600,)
+                ),
+                onPressed: () => {
+                  createReminderNotification(notificationLabelController.text, reminderDate),
+                  Navigator.pop(context)
+                },
+                borderRadius: BorderRadius.all(Radius.circular(13.0)),
+                disabledColor: Color.fromRGBO(255, 193, 25, 1.0),
+                color: Color.fromRGBO(255, 193, 25, 1.0),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 20.0),
+            )
+          ],
+        ));
+  });
+}
+
 
 _savePrefferedMapsApp(String app) async {
   final prefs = await SharedPreferences.getInstance();

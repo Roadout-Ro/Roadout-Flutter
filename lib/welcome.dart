@@ -28,13 +28,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   void initState() {
     super.initState();
-    print('YayyaysydsywdINIT');
-  }
-
-  @override
-  void didUpdateWidget(oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    print('Yayyaysydsywd');
   }
 
   @override

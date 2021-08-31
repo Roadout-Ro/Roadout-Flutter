@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:roadout/spots_&_locations.dart';
 import 'homescreen.dart';
 
+bool isScrollable = false;
+
 Widget SmartLayout(BuildContext context, StateSetter setState, ParkingSection currentSection) {
   return Container(
       alignment: Alignment.center,
@@ -90,7 +92,19 @@ List<Widget> MakeRows(List<int> rowsCnt, List<ParkingSpot> sectionSpots, StateSe
       rowSpots.add(dividingSpots[spotBookmark]);
       spotBookmark += 1;
     }
-    rows.add(Row(children: MakeSpots(row, rowSpots, setState, context)));
+    if (isScrollable == true) {
+      rows.add(Container(
+        width: MediaQuery.of(context).size.width-50,
+        height: 48,
+        child: ListView(
+            scrollDirection: Axis.horizontal,
+            children: MakeSpots(row, rowSpots, setState, context),
+            shrinkWrap: true
+        )
+      ));
+    } else {
+      rows.add(Row(children: MakeSpots(row, rowSpots, setState, context)));
+    }
     rows.add(Padding(padding: EdgeInsets.only(bottom: 10.0)));
   }
 
@@ -110,6 +124,13 @@ List<Widget> MakeSpots(int rowLength, List<ParkingSpot> rowSpots, StateSetter se
 Widget MakePadding(List<int> rowsCnt, BuildContext context) {
   int maxNr = rowsCnt.reduce(max);
   int maxWidth = maxNr*36 - 2;
+
+  if ((MediaQuery.of(context).size.width-maxWidth-22)/2 < 11) {
+    isScrollable = true;
+    return Padding(padding: EdgeInsets.only(left: 15.0));
+  } else {
+    isScrollable = false;
+  }
 
   return Padding(padding: EdgeInsets.only(left: (MediaQuery.of(context).size.width-maxWidth-22)/2));
 }

@@ -236,6 +236,7 @@ Widget showSettings(BuildContext context, StateSetter setState, SharedPreference
                 _tile("Payment Methods", CupertinoIcons.creditcard, context, setState, preferences),
                 _tile("Default Directions App", CupertinoIcons.arrow_branch,
                     context, setState, preferences),
+                _tile("Reminders", CupertinoIcons.clock, context, setState, preferences),
                 _tile("Invite Friends", CupertinoIcons.envelope_open, context, setState, preferences),
                 _tile("About Roadout", CupertinoIcons.app, context, setState, preferences),
                 _tile("Privacy Policy & Terms of Use",
@@ -368,7 +369,16 @@ ListTile _tile(String title, IconData icon, BuildContext context, StateSetter se
                   borderRadius: BorderRadius.vertical(
                     top: Radius.circular(23),
                   )), builder: (context) => showInviteFriends(context));
-        }else
+        } else if (title == "Reminders") {
+          Navigator.pop(context);
+          showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(23),
+                  )), builder: (context) => showReminders(context));
+        } else
           print(FirebaseAuth.instance.currentUser?.uid);
       },
     );

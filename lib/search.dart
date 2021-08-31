@@ -33,7 +33,7 @@ Widget showSearchBar(BuildContext context, StateSetter setState) => Container(
                 children: <Widget>[
                   Container(
                       padding: EdgeInsets.only(left: 15),
-                      width: 300,
+                      width: 295,
                       child: TextField(
                         autofocus: true,
                         enableSuggestions: false,

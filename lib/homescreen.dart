@@ -143,7 +143,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
     if (neverLaunched == true) {
       showModalBottomSheet(
           context: context,
-          isScrollControlled: false,
+          isScrollControlled: true,
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(
             top: Radius.circular(23),
@@ -1857,11 +1857,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                       )
                                     ],
                                   ),
-                                  SmartLayout(
-                                      context,
-                                      setState,
-                                      currentParkLocation
-                                          .sections[selectedSectionNr]),
+                                  SmartLayout(context,setState,currentParkLocation.sections[selectedSectionNr]),
                                   Padding(
                                     padding: EdgeInsets.only(top: 10.0),
                                   ),
