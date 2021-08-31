@@ -61,27 +61,44 @@ int createUniqueId() {
   return DateTime.now( ).millisecondsSinceEpoch.remainder(10);
 }
 
-Future<void> create5MinNotification(String reason) async {
+Future<void> create5MinNotification(int durationMin, int durationSec) async {
   await AwesomeNotifications().cancel(55);
   await AwesomeNotifications().createNotification(
       content: NotificationContent(
           id: 55,
           channelKey: 'roadout.reservation_channel',
-          title: 'Reservation Reminder',
-          body: 'You wanted to make a reservation for $reason'),
-      schedule: NotificationCalendar.fromDate(date: DateTime.now().add(Duration(minutes: 5)))
+          title: '5 Minutes Left',
+          body: "You have 5 more minutes left from your reservation, you can delay it if you think you won't make it on time"),
+      schedule: NotificationCalendar.fromDate(date: DateTime.now().add(Duration(minutes: durationMin, seconds: durationSec)))
   );
 }
 
-Future<void> create1MinNotification(String reason) async {
+Future<void> create1MinNotification(int durationMin, int durationSec) async {
   await AwesomeNotifications().cancel(11);
   await AwesomeNotifications().createNotification(
       content: NotificationContent(
           id: 11,
           channelKey: 'roadout.reservation_channel',
-          title: 'Reservation Reminder',
-          body: 'You wanted to make a reservation for $reason'),
-      schedule: NotificationCalendar.fromDate(date: DateTime.now().add(Duration(minutes: 1)))
+          title: '1 Minute Left',
+          body: "You have 1 more minute left from your reservation, you can delay it if you think you won't make it on time"),
+      schedule: NotificationCalendar.fromDate(date: DateTime.now().add(Duration(minutes: durationMin, seconds: durationSec)))
   );
 }
 
+Future<void> createReservationNotification(int durationMin, int durationSec) async {
+  await AwesomeNotifications().cancel(00);
+  await AwesomeNotifications().createNotification(
+      content: NotificationContent(
+          id: 00,
+          channelKey: 'roadout.reservation_channel',
+          title: 'Reservation Done',
+          body: 'We hope you enjoyed using Roadout'),
+      schedule: NotificationCalendar.fromDate(date: DateTime.now().add(Duration(minutes: durationMin, seconds: durationSec)))
+  );
+}
+
+Future<void> cancelReservationNotification() async {
+  await AwesomeNotifications().cancel(00);
+  await AwesomeNotifications().cancel(11);
+  await AwesomeNotifications().cancel(55);
+}

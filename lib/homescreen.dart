@@ -7,6 +7,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:roadout/direction_utils.dart';
+import 'package:roadout/notification_service.dart';
 import 'package:roadout/search.dart';
 import 'package:roadout/settings.dart';
 import 'package:roadout/spots_&_locations.dart';
@@ -652,12 +653,12 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                               fontSize: 17.0,
                                               fontWeight: FontWeight.w600),
                                         ),
-                                        onPressed: () => {
+                                        onPressed: selectedMinutes >= 1 ? () => {
                                           currentCard = Cards.paySpotCard,
                                           setState(() {})
-                                        },
+                                        } : null,
                                         disabledColor:
-                                            Color.fromRGBO(220, 170, 57, 1.0),
+                                            Color.fromRGBO(220, 170, 57, 0.5),
                                         color:
                                             Color.fromRGBO(220, 170, 57, 1.0),
                                         borderRadius: BorderRadius.all(
@@ -859,7 +860,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                   ],
                                 ),
                                 Spacer(),
-/*Container(
+                                /*Container(
                                   width: MediaQuery.of(context).size.width - 58,
                                   height: 45,
                                   child: CupertinoButton(
@@ -896,6 +897,11 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                         activeReservation = true;
                                       }),
                                       startTimer(),
+                                      if (selectedMinutes > 5) {
+                                        create5MinNotification(selectedMinutes-5, 0)
+                                      },
+                                      create1MinNotification(selectedMinutes-1, 0),
+                                      createReservationNotification(selectedMinutes, 0),
                                       reset()
                                     },
                                     disabledColor:
@@ -1136,6 +1142,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                                                   activeReservation = false;
                                                                   timer!.cancel();
                                                                 });
+                                                                cancelReservationNotification();
                                                               },
                                                               disabledColor:
                                                                   Color
@@ -1730,7 +1737,12 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                       onPressed: () => {
                                         currentCard = Cards.paidCard,
                                         setState(() {}),
-                                        resetDelay(progress.toInt())
+                                        resetDelay(progress.toInt()),
+                                        if (duration.inMinutes > 5) {
+                                          create5MinNotification(duration.inMinutes-5, duration.inSeconds-duration.inMinutes*60)
+                                        },
+                                        create1MinNotification(duration.inMinutes-1, duration.inSeconds-duration.inMinutes*60),
+                                        createReservationNotification(duration.inMinutes, duration.inSeconds-duration.inMinutes*60),
                                       },
                                       disabledColor:
                                           Color.fromRGBO(214, 109, 0, 1.0),
