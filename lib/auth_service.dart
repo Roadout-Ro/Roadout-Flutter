@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:roadout/welcome.dart';
 import 'package:roadout/homescreen.dart';
+import 'package:roadout/verifyEmail.dart';
 
 import 'database_service.dart';
 
@@ -139,7 +140,7 @@ class AuthenticationService {
       await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
       userSetup(name: name);
       if(FirebaseAuth.instance.currentUser?.uid != null) {
-        Navigator.of(context).push(_createRoute());
+        Navigator.of(context).push(_routeVerifyEmail());
       }
       username = await DatabaseService().getUserData();
       return "Signed up";
@@ -260,6 +261,25 @@ Future deleteUser(String email, String password, BuildContext context) async {
 Route _createRoute() {
   return PageRouteBuilder(
     pageBuilder: (context, animation, secondaryAnimation) => MainScreen(),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      var begin = Offset(0.0, 1.0);
+      var end = Offset.zero;
+      var curve = Curves.ease;
+
+      var tween = Tween(begin: begin, end: end).chain(
+          CurveTween(curve: curve));
+
+      return SlideTransition(
+        position: animation.drive(tween),
+        child: child,
+      );
+    },
+  );
+}
+
+Route _routeVerifyEmail() {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => VerifyEmail(),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       var begin = Offset(0.0, 1.0);
       var end = Offset.zero;
