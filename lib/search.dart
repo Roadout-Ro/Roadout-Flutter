@@ -59,16 +59,29 @@ Widget showSearchBar(BuildContext context, StateSetter setState) => Container(
             ),
             padding: EdgeInsets.only(top: 17),
           ),
-          ListView(
-            primary: false,
-            scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-            children: [
-              _tile2(5, "Location Name 1", "10 km", 255, 193, 25, context, setState),
-              _tile2(3, "Location Name 2", "11 km", 255, 158, 25, context, setState),
-              _tile2(11, "Location Name 3", " 14 km", 143, 102, 13, context, setState),
-              _tile2(7, "Location Name 4", "18 km", 103, 72, 5, context, setState)
-            ],
+          ConstrainedBox(
+              constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height/2-80,
+              ),
+              child: ListView(
+                primary: false,
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                children: [
+                  _tile2(5, "Location Name 1", "10 km", 255, 193, 25, context, setState),
+                  _tile2(3, "Location Name 2", "11 km", 255, 158, 25, context, setState),
+                  _tile2(5, "Location Name 1", "10 km", 255, 193, 25, context, setState),
+                  _tile2(3, "Location Name 2", "11 km", 255, 158, 25, context, setState),
+                  _tile2(5, "Location Name 1", "10 km", 255, 193, 25, context, setState),
+                  _tile2(3, "Location Name 2", "11 km", 255, 158, 25, context, setState),
+                  _tile2(5, "Location Name 1", "10 km", 255, 193, 25, context, setState),
+                  _tile2(3, "Location Name 2", "11 km", 255, 158, 25, context, setState),
+                  _tile2(5, "Location Name 1", "10 km", 255, 193, 25, context, setState),
+                  _tile2(3, "Location Name 2", "11 km", 255, 158, 25, context, setState),
+                  _tile2(5, "Location Name 1", "10 km", 255, 193, 25, context, setState),
+                  _tile2(3, "Location Name 2", "11 km", 255, 158, 25, context, setState),
+                ],
+              )
           )
         ]));
 
