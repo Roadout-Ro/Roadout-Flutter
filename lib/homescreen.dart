@@ -49,6 +49,8 @@ List<String> sectionLetters = [];
 
 bool activeReservation = false;
 
+String sectionAsset = 'assets/SectionMap1.png';
+
 class MainScreen extends StatefulWidget {
   @override
   _MainScreen createState() => _MainScreen();
@@ -58,7 +60,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
   late Position currentPosition;
   late Position searchedPosition;
   var geolocator = Geolocator();
-  LatLng latlngPos = LatLng(46.770439, 23.591423);
+  LatLng latlngPos = LatLng(46.774547, 23.603745);
 
   Set<Marker> _markers = {};
   late BitmapDescriptor mapMarker;
@@ -122,6 +124,13 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
             icon: mapMarker,
             onTap: () {
               currentParkLocation = parkLocation;
+              if (currentParkLocation.name == 'Marasti') {
+                sectionAsset = 'assets/SectionMap1.png';
+              } else if (currentParkLocation.name == 'Mihai Viteazu') {
+                sectionAsset = 'assets/SectionMap2.png';
+              } else {
+                sectionAsset = 'assets/SectionMap3.png';
+              }
               sectionLetters = [];
               for (ParkingSection sec in currentParkLocation.sections) {
                 sectionLetters.add(sec.sectionLetter);
@@ -160,7 +169,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
 //locatePosition(controller);
 //sterge aici
     controller.animateCamera(CameraUpdate.newCameraPosition(
-        CameraPosition(target: LatLng(46.770439, 23.591423), zoom: 14)));
+        CameraPosition(target: LatLng(46.774547, 23.60374), zoom: 14)));
   }
 
   void locatePosition(GoogleMapController controller) async {
@@ -366,6 +375,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                   child: CupertinoButton(
                                       padding: EdgeInsets.all(0.0),
                                       onPressed: () {
+                                        selectedSection = 'A';
                                         currentCard = Cards.sectionCard;
                                         setState(() {});
                                       },
@@ -2019,7 +2029,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                   Container(
                                     width:
                                         MediaQuery.of(context).size.width - 36,
-                                    child: Image.asset('assets/SectionMap.png'),
+                                    child: Image.asset(sectionAsset),
                                   ),
                                   Padding(padding: EdgeInsets.only(top: 8.0)),
                                   Row(

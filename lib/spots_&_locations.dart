@@ -57,9 +57,9 @@ class ParkingLocation {
 }
 
 List<ParkingLocation> parkingLocations = [
-  ParkingLocation(LatLng(46.770439, 23.591423), 'Old Town', locationSections),
-  ParkingLocation(LatLng(46.773384, 23.578821), 'Cetatuia', locationSections),
-  ParkingLocation(LatLng(46.757431, 23.592311), 'Zorilor', locationSections)
+  ParkingLocation(LatLng(46.782075, 23.613858), 'Marasti', locationSections1),
+  ParkingLocation(LatLng(46.77425, 23.59108), 'Mihai Viteazu', locationSections2),
+  ParkingLocation(LatLng(46.774547, 23.603745), '21 Decembrie', locationSections3)
 ];
 
 List<Widget> generateSections(List<ParkingSection> sections) {
