@@ -11,7 +11,8 @@ Future<void> initAwesomeNotifications() async {
         enableLights: true,
         playSound: true,
         ledColor: CupertinoColors.activeOrange,
-        importance: NotificationImportance.High
+        importance: NotificationImportance.High,
+        soundSource: 'assets/horn-sound.mp3'
     ),
     NotificationChannel(
         channelKey: 'roadout.reminders_channel',
@@ -21,7 +22,8 @@ Future<void> initAwesomeNotifications() async {
         enableLights: true,
         playSound: true,
         ledColor: CupertinoColors.systemYellow,
-        importance: NotificationImportance.High
+        importance: NotificationImportance.High,
+        soundSource: 'assets/horn-sound.mp3'
     )
   ],
   );

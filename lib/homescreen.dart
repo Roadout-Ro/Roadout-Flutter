@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -40,6 +39,7 @@ String infoText = "Select a spot to get info about it.";
 late ParkingLocation currentParkLocation;
 String currentLocationName = '---';
 String currentLocationLayout = '''''';
+Color currentLocationColor = Color.fromRGBO(0, 0, 0, 1.0);
 
 String selectedSection = 'A';
 int selectedSectionNr = 0;
@@ -51,6 +51,8 @@ bool activeReservation = false;
 
 String sectionAsset = 'assets/SectionMap1.png';
 
+LatLng latlngPos = LatLng(46.774547, 23.603745);
+
 class MainScreen extends StatefulWidget {
   @override
   _MainScreen createState() => _MainScreen();
@@ -60,7 +62,6 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
   late Position currentPosition;
   late Position searchedPosition;
   var geolocator = Geolocator();
-  LatLng latlngPos = LatLng(46.774547, 23.603745);
 
   Set<Marker> _markers = {};
   late BitmapDescriptor mapMarker;
@@ -136,6 +137,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                 sectionLetters.add(sec.sectionLetter);
               }
               currentLocationName = parkLocation.name;
+              currentLocationColor = (searchColors..shuffle()).first;
               currentCard = Cards.resultBar;
               setState(() {});
             },
@@ -166,10 +168,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
       controller.setMapStyle(MapStyling.darkMapStyle);
     else
       controller.setMapStyle(MapStyling.lightMapStyle);
-//locatePosition(controller);
-//sterge aici
-    controller.animateCamera(CameraUpdate.newCameraPosition(
-        CameraPosition(target: LatLng(46.774547, 23.60374), zoom: 14)));
+    locatePosition(controller);
   }
 
   void locatePosition(GoogleMapController controller) async {
@@ -259,6 +258,8 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                                 174, 174, 174, 1.0)),
                                       ),
                                       onPressed: () => {
+                                        tiles = [],
+                                        results = [],
                                         showModalBottomSheet(
                                             context: context,
                                             isScrollControlled: true,
@@ -326,7 +327,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                   child: CupertinoButton(
                                     child: Icon(
                                       CupertinoIcons.chevron_back,
-                                      color: Color.fromRGBO(255, 193, 25, 1.0),
+                                      color: currentLocationColor,
                                     ),
                                     padding: EdgeInsets.all(0.0),
                                     onPressed: () {
@@ -341,7 +342,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                         fontSize: 18.0,
                                         fontWeight: FontWeight.w600,
                                         color:
-                                            Color.fromRGBO(255, 193, 25, 1.0))),
+                                        currentLocationColor)),
                                 Padding(
                                   padding: EdgeInsets.only(left: 15.0),
                                 ),
@@ -350,7 +351,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                   children: <Widget>[
                                     Container(
                                       height: 30,
-                                      child: Text('9',
+                                      child: Text(currentParkLocation.nrFreeSpots.toString(),
                                           style: GoogleFonts.karla(
                                               fontSize: 25.0,
                                               fontWeight: FontWeight.w500)),
@@ -383,7 +384,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                           style: GoogleFonts.karla(
                                               fontSize: 15.0,
                                               fontWeight: FontWeight.w600)),
-                                      color: Color.fromRGBO(220, 170, 57, 1.0),
+                                      color: currentLocationColor,
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(13.0))),
                                 ),
@@ -2266,6 +2267,8 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                               174, 174, 174, 1.0)),
                                     ),
                                     onPressed: () => {
+                                      tiles = [],
+                                      results = [],
                                       showModalBottomSheet(
                                           context: context,
                                           isScrollControlled: true,
