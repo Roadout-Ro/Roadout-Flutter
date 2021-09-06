@@ -2,31 +2,34 @@ import 'package:flutter/cupertino.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 
 Future<void> initAwesomeNotifications() async {
-  AwesomeNotifications().initialize(null, [
-    NotificationChannel(
-        channelKey: 'roadout.reservation_channel',
-        channelName: 'Roadout Reservation Notifications',
-        channelDescription: 'Get notifications about your reservations status',
-        enableVibration: true,
-        enableLights: true,
-        playSound: true,
-        ledColor: CupertinoColors.activeOrange,
-        importance: NotificationImportance.High,
-        soundSource: 'assets/horn-sound.mp3'
-    ),
-    NotificationChannel(
-        channelKey: 'roadout.reminders_channel',
-        channelName: 'Roadout Reminder Notifications',
-        channelDescription: 'Get reminder notifications that you set',
-        enableVibration: true,
-        enableLights: true,
-        playSound: true,
-        ledColor: CupertinoColors.systemYellow,
-        importance: NotificationImportance.High,
-        soundSource: 'assets/horn-sound.mp3'
-    )
-  ],
-  );
+    AwesomeNotifications().initialize('resource://drawable/notificationicon', [
+      NotificationChannel(
+          channelKey: 'roadout.reservation_channel',
+          channelName: 'Roadout Reservation Notifications',
+          channelDescription: 'Get notifications about your reservations status',
+          enableVibration: true,
+          enableLights: true,
+          playSound: true,
+          ledColor: Color.fromRGBO(214, 109, 0, 1.0),
+          importance: NotificationImportance.High,
+          defaultColor: Color.fromRGBO(214, 109, 0, 1.0),
+          soundSource: 'resource://raw/hornsound'
+      ),
+      NotificationChannel(
+          channelKey: 'roadout.reminders_channel',
+          channelName: 'Roadout Reminder Notifications',
+          channelDescription: 'Get reminder notifications that you set',
+          enableVibration: true,
+          enableLights: true,
+          playSound: true,
+          ledColor: Color.fromRGBO(255, 193, 25, 1.0),
+          importance: NotificationImportance.High,
+          defaultColor: Color.fromRGBO(255, 193, 25, 1.0),
+          soundSource: 'resource://raw/hornsound'
+      )
+    ],
+    );
+
 }
 
 Future<void> requestNotificationPermission() async {

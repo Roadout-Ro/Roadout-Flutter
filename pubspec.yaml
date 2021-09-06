@@ -93,7 +93,6 @@ flutter:
      - assets/SectionMap1.png
      - assets/SectionMap2.png
      - assets/SectionMap3.png
-     - assets/horn-sound.mp3
 
 
   fonts:
