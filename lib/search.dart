@@ -76,7 +76,7 @@ Widget showSearchBar(BuildContext context, StateSetter setHomeState) {
                 padding: EdgeInsets.only(top: 17),
               ),
               Padding(
-                  padding: EdgeInsets.only(top: 10)
+                  padding: EdgeInsets.only(top: 20)
               ),
               ConstrainedBox(
                   constraints: BoxConstraints(

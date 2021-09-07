@@ -12,6 +12,7 @@ import 'package:app_settings/app_settings.dart';
 import 'auth_service.dart';
 import 'notification_service.dart';
 import 'database_service.dart';
+import 'dart:io';
 
 TextEditingController cvvController = TextEditingController();
 TextEditingController expiryController = TextEditingController();
@@ -443,6 +444,16 @@ ListTile _cardTile(String number, Gradient gradient, Color numberColor) => ListT
 
 Widget showDirectionsApp(BuildContext context) {
   return StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
+    List<Widget> apps = [
+      _appTile("Apple Maps", 'assets/apple-maps.png', 0.0, context,
+          setState),
+      _appTile("Google Maps", 'assets/google-maps.png', 0.0,
+          context, setState),
+      _appTile("Waze", 'assets/waze.png', 0.0, context, setState)
+    ];
+    if (Platform.isAndroid) {
+      apps.removeAt(0);
+    }
     return Container(
         height: 300,
         decoration: BoxDecoration(
@@ -489,13 +500,7 @@ Widget showDirectionsApp(BuildContext context) {
                 primary: false,
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
-                children: [
-                  _appTile("Apple Maps", 'assets/apple-maps.png', 0.0, context,
-                      setState),
-                  _appTile("Google Maps", 'assets/google-maps.png', 0.0,
-                      context, setState),
-                  _appTile("Waze", 'assets/waze.png', 0.0, context, setState)
-                ])
+                children: apps)
           ],
         ));
   });

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:io';
 
 String selectedMapsApp = '';
 
@@ -390,7 +391,10 @@ ListTile _tile(String title, IconData icon, BuildContext context, StateSetter se
 _readPrefferedMapsApp() async {
   final prefs = await SharedPreferences.getInstance();
   final key = 'directions_app_pref';
-  final value = prefs.getString(key) ?? 'Apple Maps';
+  var value = prefs.getString(key) ?? 'Google Maps';
+  if (Platform.isIOS) {
+     value = prefs.getString(key) ?? 'Apple Maps';
+  }
   selectedMapsApp = value;
   print('Read: $value');
 }

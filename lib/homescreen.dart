@@ -64,7 +64,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
   late Position currentPosition;
-  late Position searchedPosition;
+  late LatLng searchedPosition;
   var geolocator = Geolocator();
 
   Set<Marker> _markers = {};
@@ -564,11 +564,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                                       227, 167, 27, 1.0)),
                                             ),
                                             onPressed: () async => {
-                                              searchedPosition = await Geolocator
-                                                  .getCurrentPosition(
-                                                      desiredAccuracy:
-                                                          LocationAccuracy
-                                                              .bestForNavigation),
+                                              searchedPosition = currentParkLocation.coords,
                                               if (selectedMapsApp ==
                                                   'Google Maps')
                                                 {
@@ -850,11 +846,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                                   214, 109, 0, 1.0)),
                                         ),
                                         onPressed: () async => {
-                                          searchedPosition = await Geolocator
-                                              .getCurrentPosition(
-                                                  desiredAccuracy:
-                                                      LocationAccuracy
-                                                          .bestForNavigation),
+                                          searchedPosition = currentParkLocation.coords,
                                           if (selectedMapsApp == 'Google Maps')
                                             {
                                               MapUtils.openMapInGoogleMaps(
@@ -1510,7 +1502,27 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                               color: Color.fromRGBO(
                                                   143, 102, 13, 1.0)),
                                         ),
-                                        onPressed: null,
+                                        onPressed: () async => {
+                                          searchedPosition = currentParkLocation.coords,
+                                          if (selectedMapsApp == 'Google Maps')
+                                          {
+                                          MapUtils.openMapInGoogleMaps(
+                                          searchedPosition.latitude,
+                                          searchedPosition.longitude)
+                                          }
+                                          else if (selectedMapsApp == 'Waze')
+                                          {
+                                          MapUtils.openMapInWaze(
+                                          searchedPosition.latitude,
+                                          searchedPosition.longitude)
+                                          }
+                                          else
+                                          {
+                                          MapUtils.openMapInAppleMaps(
+                                          searchedPosition.latitude,
+                                          searchedPosition.longitude)
+                                          }
+                                          },
                                         disabledColor:
                                             Color.fromRGBO(142, 102, 13, 0.0),
                                         color:
