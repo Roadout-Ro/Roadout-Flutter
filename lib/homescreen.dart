@@ -33,6 +33,7 @@ enum Cards {
 Cards currentCard = Cards.searchBar;
 double progress = 0.0;
 int selectedMinutes = 0;
+bool delayActive = false;
 IconData infoIcon = CupertinoIcons.info_circle;
 Color infoColor = Color.fromRGBO(255, 193, 25, 1.0);
 String infoText = "Select a spot to get info about it.";
@@ -47,7 +48,10 @@ int selectedNumber = -1;
 
 List<String> sectionLetters = [];
 
-bool activeReservation = false;
+Duration duration = Duration();
+Timer? timer;
+
+DateTime activeReservationExpiry = DateTime.now();
 
 String sectionAsset = 'assets/SectionMap1.png';
 
@@ -66,8 +70,6 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
   Set<Marker> _markers = {};
   late BitmapDescriptor mapMarker;
 
-  Duration duration = Duration();
-  Timer? timer;
 
   @override
   void initState() {
@@ -99,7 +101,11 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
       final seconds = duration.inSeconds - getSeconds;
       if (seconds < 0) {
         timer?.cancel();
+        currentCard = Cards.unlockedCard;
         print('finish');
+        setState(() {
+          delayActive =false;
+        });
       } else {
         duration = Duration(seconds: seconds);
       }
@@ -377,8 +383,49 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                       padding: EdgeInsets.all(0.0),
                                       onPressed: () {
                                         selectedSection = 'A';
-                                        currentCard = Cards.sectionCard;
-                                        setState(() {});
+                                        if(activeReservationExpiry.isBefore(DateTime.now()) || activeReservationExpiry == DateTime.now())
+                                        {
+                                          currentCard = Cards.sectionCard;
+                                          setState(() {});
+                                        } else {
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return AlertDialog(
+                                                insetPadding: EdgeInsets.all(40),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(20.0),
+                                                ),
+                                                title: Text('Reservation Error', style: GoogleFonts.karla(
+                                                    fontSize: 20.0, fontWeight: FontWeight.w600)),
+                                                content: Container(
+                                                    child: Column(
+                                                      mainAxisSize: MainAxisSize.min,
+                                                      children: <Widget> [
+                                                        Text("You already have an active reservation", style: GoogleFonts.karla(
+                                                            fontSize: 17.0, fontWeight: FontWeight.w500)),
+                                                        Container(
+                                                            padding: EdgeInsets.only(top: 15.0, left: 5.0, right: 5.0),
+                                                            width: MediaQuery.of(context).size.width-100,
+                                                            height: 60,
+                                                            child: CupertinoButton(
+                                                              padding: EdgeInsets.all(0.0),
+                                                              child: Text('Ok', style: GoogleFonts.karla(fontSize: 18.0, fontWeight: FontWeight.w600),),
+                                                              onPressed: () {
+                                                                Navigator.pop(context);
+                                                              },
+                                                              disabledColor: Color.fromRGBO(214, 109, 0, 1.0),
+                                                              color: Color.fromRGBO(214, 109, 07, 1.0),
+                                                              borderRadius: BorderRadius.all(Radius.circular(13.0)),
+                                                            )
+                                                        ),
+                                                      ],
+                                                    )
+                                                ),
+                                              );
+                                            },
+                                          );
+                                        }
                                       },
                                       child: Text("Pick",
                                           style: GoogleFonts.karla(
@@ -905,7 +952,8 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                     onPressed: () => {
                                       currentCard = Cards.paidCard,
                                       setState(() {
-                                        activeReservation = true;
+                                        activeReservationExpiry = DateTime.now().add(Duration(minutes: selectedMinutes+30));
+                                        print(activeReservationExpiry);
                                       }),
                                       startTimer(),
                                       if (selectedMinutes > 5) {
@@ -1150,7 +1198,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                                                     context);
                                                                 currentCard = Cards.searchBar;
                                                                 setState(() {
-                                                                  activeReservation = false;
+                                                                  activeReservationExpiry = DateTime.now();
                                                                   timer!.cancel();
                                                                 });
                                                                 cancelReservationNotification();
@@ -1238,8 +1286,85 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                             size: 40,
                                           ),
                                           onPressed: () => {
-                                            currentCard = Cards.delayCard,
-                                            setState(() {})
+                                            if(delayActive == false) {
+                                              showDialog(
+                                                context: context,
+                                                builder: (BuildContext context) {
+                                                  return AlertDialog(
+                                                    insetPadding: EdgeInsets.all(40),
+                                                    shape: RoundedRectangleBorder(
+                                                      borderRadius: BorderRadius.circular(20.0),
+                                                    ),
+                                                    title: Text('Delay Reservation', style: GoogleFonts.karla(
+                                                        fontSize: 20.0, fontWeight: FontWeight.w600)),
+                                                    content: Container(
+                                                        child: Column(
+                                                          mainAxisSize: MainAxisSize.min,
+                                                          children: <Widget> [
+                                                            Text("You are able to delay your reservation for up to 20 minutes, but you can only delay once. Use wisely.", style: GoogleFonts.karla(
+                                                                fontSize: 17.0, fontWeight: FontWeight.w500)),
+                                                            Container(
+                                                                padding: EdgeInsets.only(top: 15.0, left: 5.0, right: 5.0),
+                                                                width: MediaQuery.of(context).size.width-100,
+                                                                height: 60,
+                                                                child: CupertinoButton(
+                                                                  padding: EdgeInsets.all(0.0),
+                                                                  child: Text('Ok', style: GoogleFonts.karla(fontSize: 18.0, fontWeight: FontWeight.w600),),
+                                                                  onPressed: () {
+                                                                    Navigator.pop(context);
+                                                                    currentCard = Cards.delayCard;
+                                                                    setState(() {});
+                                                                  },
+                                                                  disabledColor: Color.fromRGBO(255, 193, 25, 1.0),
+                                                                  color: Color.fromRGBO(255, 193, 25, 1.0),
+                                                                  borderRadius: BorderRadius.all(Radius.circular(13.0)),
+                                                                )
+                                                            ),
+                                                          ],
+                                                        )
+                                                    ),
+                                                  );
+                                                },
+                                              )
+                                            } else {
+                                              showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                              return AlertDialog(
+                                              insetPadding: EdgeInsets.all(40),
+                                              shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(20.0),
+                                              ),
+                                              title: Text('Delay Error', style: GoogleFonts.karla(
+                                              fontSize: 20.0, fontWeight: FontWeight.w600)),
+                                              content: Container(
+                                              child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: <Widget> [
+                                              Text("We are sorry, but you can only delay once, if you hurry you may still find your spot free", style: GoogleFonts.karla(
+                                              fontSize: 17.0, fontWeight: FontWeight.w500)),
+                                              Container(
+                                              padding: EdgeInsets.only(top: 15.0, left: 5.0, right: 5.0),
+                                              width: MediaQuery.of(context).size.width-100,
+                                              height: 60,
+                                              child: CupertinoButton(
+                                              padding: EdgeInsets.all(0.0),
+                                              child: Text('Ok', style: GoogleFonts.karla(fontSize: 18.0, fontWeight: FontWeight.w600),),
+                                              onPressed: () {
+                                              Navigator.pop(context);
+                                              },
+                                              disabledColor: Color.fromRGBO(214, 109, 0, 1.0),
+                                              color: Color.fromRGBO(214, 109, 07, 1.0),
+                                              borderRadius: BorderRadius.all(Radius.circular(13.0)),
+                                              )
+                                              ),
+                                              ],
+                                              )
+                                              ),
+                                              );
+                                              },
+                                              )
+                                            }
                                           },
                                           disabledColor:
                                               Color.fromRGBO(149, 46, 0, 1.0),
@@ -1746,8 +1871,11 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                             fontWeight: FontWeight.w600),
                                       ),
                                       onPressed: () => {
+                                        activeReservationExpiry.add(Duration(minutes: duration.inMinutes)),
                                         currentCard = Cards.paidCard,
-                                        setState(() {}),
+                                        setState(() {
+                                          delayActive = true;
+                                        }),
                                         resetDelay(progress.toInt()),
                                         if (duration.inMinutes > 5) {
                                           create5MinNotification(duration.inMinutes-5, duration.inSeconds-duration.inMinutes*60)

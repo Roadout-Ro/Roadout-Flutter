@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> initAwesomeNotifications() async {
     AwesomeNotifications().initialize('resource://drawable/notificationicon', [
@@ -32,6 +33,20 @@ Future<void> initAwesomeNotifications() async {
 
 }
 
+Future<bool> getReservationStatusNot() async {
+  final prefs = await SharedPreferences.getInstance();
+  final key = 'reservationStatusNot';
+  final value = prefs.getBool(key) ?? true;
+  return value;
+}
+
+Future<bool> getRemindersNot() async {
+  final prefs = await SharedPreferences.getInstance();
+  final key = 'remindersNot';
+  final value = prefs.getBool(key) ?? true;
+  return value;
+}
+
 Future<void> requestNotificationPermission() async {
   AwesomeNotifications().isNotificationAllowed().then((allowed) {
     if (!allowed) {
@@ -52,14 +67,17 @@ Future<bool> checkNotificationPermission() async {
 }
 
 Future<void> createReminderNotification(String reason, DateTime reminderDate) async {
-  await AwesomeNotifications().createNotification(
-      content: NotificationContent(
-      id: createUniqueId(),
-      channelKey: 'roadout.reminders_channel',
-      title: 'Reservation Reminder',
-      body: 'You wanted to make a reservation for $reason'),
-      schedule: NotificationCalendar.fromDate(date: reminderDate)
-  );
+  bool remindersNot = await getRemindersNot();
+  if (remindersNot) {
+    await AwesomeNotifications().createNotification(
+        content: NotificationContent(
+            id: createUniqueId(),
+            channelKey: 'roadout.reminders_channel',
+            title: 'Reservation Reminder',
+            body: 'You wanted to make a reservation for $reason'),
+        schedule: NotificationCalendar.fromDate(date: reminderDate)
+    );
+  }
 }
 
 int createUniqueId() {
@@ -68,38 +86,50 @@ int createUniqueId() {
 
 Future<void> create5MinNotification(int durationMin, int durationSec) async {
   await AwesomeNotifications().cancel(55);
-  await AwesomeNotifications().createNotification(
-      content: NotificationContent(
-          id: 55,
-          channelKey: 'roadout.reservation_channel',
-          title: '5 Minutes Left',
-          body: "You have 5 more minutes left from your reservation, you can delay it if you think you won't make it on time"),
-      schedule: NotificationCalendar.fromDate(date: DateTime.now().add(Duration(minutes: durationMin, seconds: durationSec)))
-  );
+  bool reservationNot = await getReservationStatusNot();
+  if (reservationNot) {
+    await AwesomeNotifications().createNotification(
+        content: NotificationContent(
+            id: 55,
+            channelKey: 'roadout.reservation_channel',
+            title: '5 Minutes Left',
+            body: "You have 5 more minutes left from your reservation, you can delay it if you think you won't make it on time"),
+        schedule: NotificationCalendar.fromDate(date: DateTime.now().add(
+            Duration(minutes: durationMin, seconds: durationSec)))
+    );
+  }
 }
 
 Future<void> create1MinNotification(int durationMin, int durationSec) async {
   await AwesomeNotifications().cancel(11);
-  await AwesomeNotifications().createNotification(
-      content: NotificationContent(
-          id: 11,
-          channelKey: 'roadout.reservation_channel',
-          title: '1 Minute Left',
-          body: "You have 1 more minute left from your reservation, you can delay it if you think you won't make it on time"),
-      schedule: NotificationCalendar.fromDate(date: DateTime.now().add(Duration(minutes: durationMin, seconds: durationSec)))
-  );
+  bool reservationNot = await getReservationStatusNot();
+  if (reservationNot) {
+    await AwesomeNotifications().createNotification(
+        content: NotificationContent(
+            id: 11,
+            channelKey: 'roadout.reservation_channel',
+            title: '1 Minute Left',
+            body: "You have 1 more minute left from your reservation, you can delay it if you think you won't make it on time"),
+        schedule: NotificationCalendar.fromDate(date: DateTime.now().add(
+            Duration(minutes: durationMin, seconds: durationSec)))
+    );
+  }
 }
 
 Future<void> createReservationNotification(int durationMin, int durationSec) async {
   await AwesomeNotifications().cancel(00);
-  await AwesomeNotifications().createNotification(
-      content: NotificationContent(
-          id: 00,
-          channelKey: 'roadout.reservation_channel',
-          title: 'Reservation Done',
-          body: 'We hope you enjoyed using Roadout'),
-      schedule: NotificationCalendar.fromDate(date: DateTime.now().add(Duration(minutes: durationMin, seconds: durationSec)))
-  );
+  bool reservationNot = await getReservationStatusNot();
+  if (reservationNot) {
+    await AwesomeNotifications().createNotification(
+        content: NotificationContent(
+            id: 00,
+            channelKey: 'roadout.reservation_channel',
+            title: 'Reservation Done',
+            body: 'We hope you enjoyed using Roadout'),
+        schedule: NotificationCalendar.fromDate(date: DateTime.now().add(
+            Duration(minutes: durationMin, seconds: durationSec)))
+    );
+  }
 }
 
 Future<void> cancelReservationNotification() async {

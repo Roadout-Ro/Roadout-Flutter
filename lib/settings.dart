@@ -45,7 +45,11 @@ Widget showSettings(BuildContext context, StateSetter setState, SharedPreference
                     ],
                   ),
                   onPressed: () {
-                    if (activeReservation == true) {
+                    if (duration.inMinutes == 0 && duration.inSeconds == 0 && activeReservationExpiry.isAfter(DateTime.now())) {
+                      currentCard = Cards.unlockedCard;
+                      setState(() {});
+                      Navigator.pop(context);
+                    } else if (activeReservationExpiry.isAfter(DateTime.now())) {
                       currentCard = Cards.unlockCard;
                       setState(() {});
                       Navigator.pop(context);
