@@ -265,14 +265,14 @@ List<ParkingSection> locationSections1 = [
 ];
 
 List<ParkingSection> locationSections2 = [
+  ParkingSection([4, 5], sectionASpots, 'A'),
+  ParkingSection([6, 10], sectionBSpots, 'B'),
+  ParkingSection([6, 6, 6], sectionCSpots, 'C'),
+];
+
+List<ParkingSection> locationSections3 = [
   ParkingSection([2, 7], sectionASpots, 'A'),
   ParkingSection([7, 9], sectionBSpots, 'B'),
   ParkingSection([8, 10], sectionCSpots, 'C'),
   ParkingSection([7, 7], sectionDSpots, 'D'),
-];
-
-List<ParkingSection> locationSections3 = [
-  ParkingSection([4, 5], sectionASpots, 'A'),
-  ParkingSection([6, 10], sectionBSpots, 'B'),
-  ParkingSection([6, 6, 6], sectionCSpots, 'C'),
 ];

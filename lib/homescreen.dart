@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:io';
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -57,6 +59,7 @@ String sectionAsset = 'assets/SectionMap1.png';
 
 LatLng latlngPos = LatLng(46.774547, 23.603745);
 
+
 class MainScreen extends StatefulWidget {
   @override
   _MainScreen createState() => _MainScreen();
@@ -70,17 +73,24 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
   Set<Marker> _markers = {};
   late BitmapDescriptor mapMarker;
 
+  iconFile() {
+    if (Platform.isAndroid) {
+      return 'assets/Marker@2x.png';
+    }
+    return 'assets/Marker.png';
+  }
+
 
   @override
   void initState() {
     super.initState();
+    setCustomMarker();
     currentParkLocation = parkingLocations[0];
     sectionLetters = [];
     for (ParkingSection sec in currentParkLocation.sections) {
       sectionLetters.add(sec.sectionLetter);
     }
     WidgetsBinding.instance!.addObserver(this);
-    setCustomMarker();
   }
 
   void reset() {
@@ -117,8 +127,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
   }
 
   void setCustomMarker() async {
-    mapMarker = await BitmapDescriptor.fromAssetImage(
-        ImageConfiguration(), 'assets/Marker.png');
+   mapMarker = await BitmapDescriptor.fromAssetImage(ImageConfiguration(), iconFile());
   }
 
   Future<void> _onMapCreated(GoogleMapController controller) async {
@@ -133,7 +142,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
               currentParkLocation = parkLocation;
               if (currentParkLocation.name == 'Marasti') {
                 sectionAsset = 'assets/SectionMap1.png';
-              } else if (currentParkLocation.name == 'Mihai Viteazu') {
+              } else if (currentParkLocation.name == '21 Decembrie') {
                 sectionAsset = 'assets/SectionMap2.png';
               } else {
                 sectionAsset = 'assets/SectionMap3.png';
@@ -402,7 +411,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                                     child: Column(
                                                       mainAxisSize: MainAxisSize.min,
                                                       children: <Widget> [
-                                                        Text("You already have an active reservation", style: GoogleFonts.karla(
+                                                        Text("You have to wait 20-30 minutes after ending a reservation before you can make another one", style: GoogleFonts.karla(
                                                             fontSize: 17.0, fontWeight: FontWeight.w500)),
                                                         Container(
                                                             padding: EdgeInsets.only(top: 15.0, left: 5.0, right: 5.0),
@@ -685,7 +694,12 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                                             Text('7 min'),
                                                             Text('8 min'),
                                                             Text('9 min'),
-                                                            Text('10 min')
+                                                            Text('10 min'),
+                                                            Text('11 min'),
+                                                            Text('12 min'),
+                                                            Text('13 min'),
+                                                            Text('14 min'),
+                                                            Text('15 min')
                                                           ],
                                                         )),
                                                   ),
@@ -1081,44 +1095,35 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                       EdgeInsets.only(left: 10.0, right: 10.0),
                                 ),
                                 Padding(
-                                  padding: EdgeInsets.only(top: 10.0),
+                                  padding: EdgeInsets.only(top: 15.0),
                                 ),
-                                Row(children: <Widget>[
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                            left: (MediaQuery.of(context)
-                                                    .size
-                                                    .width -
-                                                260)) /
-                                        2,
-                                  ),
-                                  Column(children: <Widget>[
-                                    Container(
-                                      width: 80,
-                                      height: 80,
-                                      child: CupertinoButton(
-                                        padding: EdgeInsets.all(0.0),
-                                        child: Icon(
-                                          CupertinoIcons.lock,
-                                          color: Theme.of(context)
-                                              .scaffoldBackgroundColor,
-                                          size: 47,
-                                        ),
-                                        onPressed: () => {
-                                          currentCard = Cards.unlockedCard,
-                                          setState(() {})
-                                        },
-                                        disabledColor:
-                                            Color.fromRGBO(149, 46, 0, 1.0),
-                                        color: Color.fromRGBO(149, 46, 0, 1.0),
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(40.0)),
-                                      ),
+                                Column(
+                                  children: <Widget>[
+                                    Text(
+                                      'Time left',
+                                      style: GoogleFonts.karla(
+                                          fontSize: 20.0,
+                                          fontWeight: FontWeight.w600,
+                                          color:
+                                          Theme.of(context).primaryColor),
                                     ),
-                                    Row(children: <Widget>[
+                                    Text(
+                                      '$minutes:$seconds',
+                                      style: GoogleFonts.karla(
+                                          fontSize: 20.0,
+                                          fontWeight: FontWeight.w600,
+                                          color: Color.fromRGBO(
+                                              149, 46, 0, 1.0)),
+                                    )
+                                  ],
+                                ),
+                                Padding(padding: EdgeInsets.only(top: 15.0)),
+                                Row(
+                                    children: <Widget> [
+                                      Padding(padding: EdgeInsets.only(left: (MediaQuery.of(context).size.width-312)/2)),
                                       Container(
-                                        width: 60,
-                                        height: 60,
+                                        width: 65,
+                                        height: 65,
                                         child: CupertinoButton(
                                           padding: EdgeInsets.all(0.0),
                                           child: Icon(
@@ -1134,148 +1139,191 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                                     (BuildContext context) {
                                                   return AlertDialog(
                                                     insetPadding:
-                                                        EdgeInsets.all(40),
+                                                    EdgeInsets.all(40),
                                                     shape:
-                                                        RoundedRectangleBorder(
+                                                    RoundedRectangleBorder(
                                                       borderRadius:
-                                                          BorderRadius.circular(
-                                                              20.0),
+                                                      BorderRadius.circular(
+                                                          20.0),
                                                     ),
                                                     title: Text('Cancel Reservation',
                                                         style:
-                                                            GoogleFonts.karla(
-                                                                fontSize: 20.0,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w600)),
+                                                        GoogleFonts.karla(
+                                                            fontSize: 20.0,
+                                                            fontWeight:
+                                                            FontWeight
+                                                                .w600)),
                                                     content: Container(
                                                         child: Column(
-                                                      mainAxisSize:
+                                                          mainAxisSize:
                                                           MainAxisSize.min,
-                                                      children: <Widget>[
-                                                        Text('Are you sure you want to cancel? You will only be refunded the remaining time',
-                                                            style: GoogleFonts.karla(
-                                                                fontSize: 17.0,
-                                                                fontWeight:
+                                                          children: <Widget>[
+                                                            Text('Are you sure you want to cancel? You will only be refunded the remaining time',
+                                                                style: GoogleFonts.karla(
+                                                                    fontSize: 17.0,
+                                                                    fontWeight:
                                                                     FontWeight
                                                                         .w500)),
-                                                        Container(
-                                                            padding:
+                                                            Container(
+                                                                padding:
                                                                 EdgeInsets.only(
                                                                     top: 15.0,
                                                                     left: 5.0,
                                                                     right: 5.0),
-                                                            width: MediaQuery.of(
-                                                                        context)
+                                                                width: MediaQuery.of(
+                                                                    context)
                                                                     .size
                                                                     .width -
-                                                                100,
-                                                            height: 60,
-                                                            child:
+                                                                    100,
+                                                                height: 60,
+                                                                child:
                                                                 CupertinoButton(
-                                                              padding:
+                                                                  padding:
                                                                   EdgeInsets
                                                                       .all(0.0),
-                                                              child: Text(
-                                                                'Yes',
-                                                                style: GoogleFonts.karla(
-                                                                    fontSize:
+                                                                  child: Text(
+                                                                    'Yes',
+                                                                    style: GoogleFonts.karla(
+                                                                        fontSize:
                                                                         18.0,
-                                                                    fontWeight:
+                                                                        fontWeight:
                                                                         FontWeight
                                                                             .w600),
-                                                              ),
-                                                              onPressed: () {
-                                                                Navigator.pop(
-                                                                    context);
-                                                                currentCard = Cards.searchBar;
-                                                                setState(() {
-                                                                  activeReservationExpiry = DateTime.now();
-                                                                  timer!.cancel();
-                                                                });
-                                                                cancelReservationNotification();
-                                                              },
-                                                              disabledColor:
+                                                                  ),
+                                                                  onPressed: () {
+                                                                    Navigator.pop(
+                                                                        context);
+                                                                    currentCard = Cards.searchBar;
+                                                                    setState(() {
+                                                                      activeReservationExpiry = DateTime.now().add(Duration(minutes: 20));
+                                                                      timer!.cancel();
+                                                                    });
+                                                                    cancelReservationNotification();
+                                                                  },
+                                                                  disabledColor:
                                                                   Color
                                                                       .fromRGBO(
-                                                                          149,
+                                                                      149,
                                                                       46,
                                                                       0,
                                                                       1.0),
-                                                              color: Color
-                                                                  .fromRGBO(
+                                                                  color: Color
+                                                                      .fromRGBO(
                                                                       149,
-                                                                  46,
-                                                                  0,
-                                                                  1.0),
-                                                              borderRadius: BorderRadius
-                                                                  .all(Radius
+                                                                      46,
+                                                                      0,
+                                                                      1.0),
+                                                                  borderRadius: BorderRadius
+                                                                      .all(Radius
                                                                       .circular(
-                                                                          13.0)),
-                                                            )),
-                                                        Container(
-                                                            padding:
+                                                                      13.0)),
+                                                                )),
+                                                            Container(
+                                                                padding:
                                                                 EdgeInsets.only(
                                                                     top: 15.0,
                                                                     left: 5.0,
                                                                     right: 5.0),
-                                                            width: 250,
-                                                            height: 40,
-                                                            child:
+                                                                width: 250,
+                                                                height: 40,
+                                                                child:
                                                                 CupertinoButton(
-                                                              padding:
+                                                                  padding:
                                                                   EdgeInsets
                                                                       .all(0.0),
-                                                              child: Text(
-                                                                'Cancel',
-                                                                style: GoogleFonts.karla(
-                                                                    fontSize:
+                                                                  child: Text(
+                                                                    'Cancel',
+                                                                    style: GoogleFonts.karla(
+                                                                        fontSize:
                                                                         18.0,
-                                                                    fontWeight:
+                                                                        fontWeight:
                                                                         FontWeight
                                                                             .w600,
-                                                                    color: Color
-                                                                        .fromRGBO(
+                                                                        color: Color
+                                                                            .fromRGBO(
                                                                             149,
-                                                                        46,
-                                                                        0,
-                                                                        1.0)),
-                                                              ),
-                                                              onPressed: () {
-                                                                Navigator.pop(
-                                                                    context);
-                                                              },
-                                                              borderRadius: BorderRadius
-                                                                  .all(Radius
+                                                                            46,
+                                                                            0,
+                                                                            1.0)),
+                                                                  ),
+                                                                  onPressed: () {
+                                                                    Navigator.pop(
+                                                                        context);
+                                                                  },
+                                                                  borderRadius: BorderRadius
+                                                                      .all(Radius
                                                                       .circular(
-                                                                          13.0)),
-                                                            ))
-                                                      ],
-                                                    )),
+                                                                      13.0)),
+                                                                ))
+                                                          ],
+                                                        )),
                                                   );
                                                 })
                                           },
                                           disabledColor:
-                                              Color.fromRGBO(149, 46, 0, 1.0),
+                                          Color.fromRGBO(149, 46, 0, 1.0),
                                           color:
-                                              Color.fromRGBO(149, 46, 0, 1.0),
+                                          Color.fromRGBO(149, 46, 0, 1.0),
                                           borderRadius: BorderRadius.all(
                                               Radius.circular(40.0)),
                                         ),
                                       ),
-                                      Padding(
-                                        padding: EdgeInsets.only(left: 8.0),
-                                      ),
+                                      Padding(padding: EdgeInsets.only(left: 10.0)),
                                       Container(
-                                        width: 70,
-                                        height: 70,
+                                        width: 65,
+                                        height: 65,
                                         child: CupertinoButton(
                                           padding: EdgeInsets.all(0.0),
                                           child: Icon(
-                                            CupertinoIcons.ticket,
+                                            CupertinoIcons.arrow_branch,
                                             color: Theme.of(context)
                                                 .scaffoldBackgroundColor,
-                                            size: 40,
+                                            size: 33,
+                                          ),
+                                          onPressed: () async => {
+                                            searchedPosition = currentParkLocation.coords,
+                                            if (selectedMapsApp ==
+                                                'Google Maps')
+                                              {
+                                                MapUtils.openMapInGoogleMaps(
+                                                    searchedPosition.latitude,
+                                                    searchedPosition
+                                                        .longitude)
+                                              }
+                                            else if (selectedMapsApp ==
+                                                'Waze')
+                                              {
+                                                MapUtils.openMapInWaze(
+                                                    searchedPosition.latitude,
+                                                    searchedPosition
+                                                        .longitude)
+                                              }
+                                            else
+                                              {
+                                                MapUtils.openMapInAppleMaps(
+                                                    searchedPosition.latitude,
+                                                    searchedPosition
+                                                        .longitude)
+                                              }
+                                          },
+                                          disabledColor:
+                                          Color.fromRGBO(220, 170, 57, 1.0),
+                                          color: Color.fromRGBO(220, 170, 57, 1.0),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(40.0)),
+                                        ),
+                                      ),
+                                      Padding(padding: EdgeInsets.only(left: 10.0)),
+                                      Container(
+                                        width: 65,
+                                        height: 65,
+                                        child: CupertinoButton(
+                                          padding: EdgeInsets.all(0.0),
+                                          child: Icon(
+                                            CupertinoIcons.clock,
+                                            color: Theme.of(context)
+                                                .scaffoldBackgroundColor,
+                                            size: 35,
                                           ),
                                           onPressed: () => {
                                             if(delayActive == false) {
@@ -1293,7 +1341,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                                         child: Column(
                                                           mainAxisSize: MainAxisSize.min,
                                                           children: <Widget> [
-                                                            Text("You are able to delay your reservation for up to 20 minutes, but you can only delay once. Use wisely.", style: GoogleFonts.karla(
+                                                            Text("You are able to delay your reservation for up to 15 minutes, but you can only delay once. Press ok to continue.", style: GoogleFonts.karla(
                                                                 fontSize: 17.0, fontWeight: FontWeight.w500)),
                                                             Container(
                                                                 padding: EdgeInsets.only(top: 15.0, left: 5.0, right: 5.0),
@@ -1307,8 +1355,21 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                                                     currentCard = Cards.delayCard;
                                                                     setState(() {});
                                                                   },
-                                                                  disabledColor: Color.fromRGBO(255, 193, 25, 1.0),
-                                                                  color: Color.fromRGBO(255, 193, 25, 1.0),
+                                                                  disabledColor: Color.fromRGBO(103, 72, 5, 1.0),
+                                                                  color: Color.fromRGBO(103, 72, 5, 1.0),
+                                                                  borderRadius: BorderRadius.all(Radius.circular(13.0)),
+                                                                )
+                                                            ),
+                                                            Container(
+                                                                padding: EdgeInsets.only(top: 15.0, left: 5.0, right: 5.0),
+                                                                width: MediaQuery.of(context).size.width-100,
+                                                                height: 60,
+                                                                child: CupertinoButton(
+                                                                  padding: EdgeInsets.all(0.0),
+                                                                  child: Text('Cancel', style: GoogleFonts.karla(fontSize: 18.0, fontWeight: FontWeight.w600, color: Color.fromRGBO(103, 72, 5, 1.0)),),
+                                                                  onPressed: () {
+                                                                    Navigator.pop(context);
+                                                                  },
                                                                   borderRadius: BorderRadius.all(Radius.circular(13.0)),
                                                                 )
                                                             ),
@@ -1320,75 +1381,78 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                               )
                                             } else {
                                               showDialog(
-                                              context: context,
-                                              builder: (BuildContext context) {
-                                              return AlertDialog(
-                                              insetPadding: EdgeInsets.all(40),
-                                              shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(20.0),
-                                              ),
-                                              title: Text('Delay Error', style: GoogleFonts.karla(
-                                              fontSize: 20.0, fontWeight: FontWeight.w600)),
-                                              content: Container(
-                                              child: Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: <Widget> [
-                                              Text("We are sorry, but you can only delay once, if you hurry you may still find your spot free", style: GoogleFonts.karla(
-                                              fontSize: 17.0, fontWeight: FontWeight.w500)),
-                                              Container(
-                                              padding: EdgeInsets.only(top: 15.0, left: 5.0, right: 5.0),
-                                              width: MediaQuery.of(context).size.width-100,
-                                              height: 60,
-                                              child: CupertinoButton(
-                                              padding: EdgeInsets.all(0.0),
-                                              child: Text('Ok', style: GoogleFonts.karla(fontSize: 18.0, fontWeight: FontWeight.w600),),
-                                              onPressed: () {
-                                              Navigator.pop(context);
-                                              },
-                                              disabledColor: Color.fromRGBO(214, 109, 0, 1.0),
-                                              color: Color.fromRGBO(214, 109, 07, 1.0),
-                                              borderRadius: BorderRadius.all(Radius.circular(13.0)),
-                                              )
-                                              ),
-                                              ],
-                                              )
-                                              ),
-                                              );
-                                              },
+                                                context: context,
+                                                builder: (BuildContext context) {
+                                                  return AlertDialog(
+                                                    insetPadding: EdgeInsets.all(40),
+                                                    shape: RoundedRectangleBorder(
+                                                      borderRadius: BorderRadius.circular(20.0),
+                                                    ),
+                                                    title: Text('Delay Error', style: GoogleFonts.karla(
+                                                        fontSize: 20.0, fontWeight: FontWeight.w600)),
+                                                    content: Container(
+                                                        child: Column(
+                                                          mainAxisSize: MainAxisSize.min,
+                                                          children: <Widget> [
+                                                            Text("We are sorry, but you can only delay once, if you hurry you may still find your spot free", style: GoogleFonts.karla(
+                                                                fontSize: 17.0, fontWeight: FontWeight.w500)),
+                                                            Container(
+                                                                padding: EdgeInsets.only(top: 15.0, left: 5.0, right: 5.0),
+                                                                width: MediaQuery.of(context).size.width-100,
+                                                                height: 60,
+                                                                child: CupertinoButton(
+                                                                  padding: EdgeInsets.all(0.0),
+                                                                  child: Text('Ok', style: GoogleFonts.karla(fontSize: 18.0, fontWeight: FontWeight.w600),),
+                                                                  onPressed: () {
+                                                                    Navigator.pop(context);
+                                                                  },
+                                                                  disabledColor: Color.fromRGBO(214, 109, 0, 1.0),
+                                                                  color: Color.fromRGBO(214, 109, 07, 1.0),
+                                                                  borderRadius: BorderRadius.all(Radius.circular(13.0)),
+                                                                )
+                                                            ),
+                                                          ],
+                                                        )
+                                                    ),
+                                                  );
+                                                },
                                               )
                                             }
                                           },
                                           disabledColor:
-                                              Color.fromRGBO(149, 46, 0, 1.0),
+                                          Color.fromRGBO(103, 72, 5, 1.0),
                                           color:
-                                              Color.fromRGBO(149, 46, 0, 1.0),
+                                          Color.fromRGBO(103, 72, 5, 1.0),
                                           borderRadius: BorderRadius.all(
                                               Radius.circular(40.0)),
                                         ),
-                                      )
-                                    ])
-                                  ]),
-                                  Column(
-                                    children: <Widget>[
-                                      Text(
-                                        'Time left',
-                                        style: GoogleFonts.karla(
-                                            fontSize: 20.0,
-                                            fontWeight: FontWeight.w600,
-                                            color:
-                                                Theme.of(context).primaryColor),
                                       ),
-                                      Text(
-                                        '$minutes:$seconds',
-                                        style: GoogleFonts.karla(
-                                            fontSize: 20.0,
-                                            fontWeight: FontWeight.w600,
-                                            color: Color.fromRGBO(
-                                                149, 46, 0, 1.0)),
-                                      )
-                                    ],
-                                  )
-                                ])
+                                      Padding(padding: EdgeInsets.only(left: 10.0)),
+                                      Container(
+                                        width: 65,
+                                        height: 65,
+                                        child: CupertinoButton(
+                                          padding: EdgeInsets.all(0.0),
+                                          child: Icon(
+                                            CupertinoIcons.lock,
+                                            color: Theme.of(context)
+                                                .scaffoldBackgroundColor,
+                                            size: 38,
+                                          ),
+                                          onPressed: () {
+                                            currentCard = Cards.unlockedCard;
+                                            cancelReservationNotification();
+                                            setState(() {});
+                                          },
+                                          disabledColor:
+                                          Color.fromRGBO(214, 109, 0, 1.0),
+                                          color: Color.fromRGBO(214, 109, 0, 1.0),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(40.0)),
+                                        ),
+                                      ),
+                                    ]
+                                )
                               ],
                             ),
                           );
@@ -1617,7 +1681,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                     height: 45,
                                     alignment: Alignment.center,
                                     child: Text(
-                                      "You can delay your reservation by up to 20 minutes if caught in traffic, you can set here an estimate of your delay and you will be extra charged for keeping the spot reserved for more minutes.",
+                                      "You can delay your reservation by up to 15 minutes if caught in traffic, you can set here an estimate of your delay and you will be extra charged for keeping the spot reserved for more minutes.",
                                       style: GoogleFonts.karla(
                                           fontSize: 13,
                                           fontWeight: FontWeight.w500,
@@ -1664,10 +1728,10 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                               child: CupertinoSlider(
                                                 value: progress,
                                                 min: 0.0,
-                                                max: 20.0,
+                                                max: 15.0,
                                                 activeColor: Color.fromRGBO(
                                                     143, 102, 13, 1.0),
-                                                divisions: 20,
+                                                divisions: 15,
                                                 onChanged: (value) {
                                                   setState(() {
                                                     progress =
@@ -1678,7 +1742,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                           Container(
                                             child: Column(
                                               children: <Widget>[
-                                                Text("20",
+                                                Text("15",
                                                     style: GoogleFonts.karla(
                                                         fontSize: 16,
                                                         fontWeight:

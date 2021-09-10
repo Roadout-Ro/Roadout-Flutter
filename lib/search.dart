@@ -52,7 +52,7 @@ Widget showSearchBar(BuildContext context, StateSetter setHomeState) {
                           child: TextField(
                             autofocus: true,
                             enableSuggestions: false,
-                            onChanged: (value) => _runFilter(value, context, setState),
+                            onChanged: (value) => _runFilter(value, context, setState, setHomeState),
                             autocorrect: false,
                             keyboardAppearance: MediaQuery.of(context).platformBrightness,
                             cursorColor: Color.fromRGBO(255, 193, 25, 1.0),
@@ -93,7 +93,7 @@ Widget showSearchBar(BuildContext context, StateSetter setHomeState) {
   });
 }
 
-ListTile _tile(int spots, String location, String km, BuildContext context, StateSetter setState, Color color, int index) =>
+ListTile _tile(int spots, String location, String km, BuildContext context, StateSetter setState, StateSetter setHomeState, Color color, int index) =>
     ListTile(
         title: Text(location,
             style: GoogleFonts.karla(
@@ -140,9 +140,10 @@ ListTile _tile(int spots, String location, String km, BuildContext context, Stat
             )),
         onTap: () {
           currentParkLocation = parkingLocations[index];
+          print(currentParkLocation.name);
           if (currentParkLocation.name == 'Marasti') {
             sectionAsset = 'assets/SectionMap1.png';
-          } else if (currentParkLocation.name == 'Mihai Viteazu') {
+          } else if (currentParkLocation.name == '21 Decembrie') {
             sectionAsset = 'assets/SectionMap2.png';
           } else {
             sectionAsset = 'assets/SectionMap3.png';
@@ -154,12 +155,12 @@ ListTile _tile(int spots, String location, String km, BuildContext context, Stat
           currentLocationName = parkingLocations[index].name;
           currentLocationColor = color;
           currentCard = Cards.resultBar;
-          setState(() {});
+          setHomeState(() {});
           Navigator.pop(context);
         },
     );
 
-void _runFilter(String enteredKeyword, BuildContext context, StateSetter setState) {
+void _runFilter(String enteredKeyword, BuildContext context, StateSetter setState, StateSetter setHomeState) {
   String disKm = '0';
   if (enteredKeyword.isEmpty) {
     results = parkingLocations;
@@ -172,11 +173,11 @@ void _runFilter(String enteredKeyword, BuildContext context, StateSetter setStat
     print(res.name);
     disKm = calculateDistance(res.coords.latitude, res.coords.longitude, latlngPos.latitude, latlngPos.longitude).toStringAsFixed(1);
     if (res.name == 'Marasti') {
-      tiles.add(_tile(res.nrFreeSpots, res.name, "$disKm km", context, setState, (searchColors..shuffle()).first, 0));
+      tiles.add(_tile(res.nrFreeSpots, res.name, "$disKm km", context, setState, setHomeState, (searchColors..shuffle()).first, 0));
     } else if (res.name == 'Mihai Viteazu') {
-      tiles.add(_tile(res.nrFreeSpots, res.name, "$disKm km", context, setState, (searchColors..shuffle()).first, 1));
+      tiles.add(_tile(res.nrFreeSpots, res.name, "$disKm km", context, setState, setHomeState, (searchColors..shuffle()).first, 1));
     } else {
-      tiles.add(_tile(res.nrFreeSpots, res.name, "$disKm km", context, setState, (searchColors..shuffle()).first, 2));
+      tiles.add(_tile(res.nrFreeSpots, res.name, "$disKm km", context, setState, setHomeState, (searchColors..shuffle()).first, 2));
     }
   }
   print(' ');

@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:app_settings/app_settings.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'auth_service.dart';
 import 'notification_service.dart';
 import 'database_service.dart';
@@ -455,12 +456,12 @@ Widget showDirectionsApp(BuildContext context) {
       apps.removeAt(0);
     }
     return Container(
-        height: 300,
         decoration: BoxDecoration(
           color: Theme.of(context).dialogBackgroundColor,
           borderRadius: BorderRadius.all(Radius.circular(23)),
         ),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Row(
               children: <Widget>[
@@ -500,7 +501,8 @@ Widget showDirectionsApp(BuildContext context) {
                 primary: false,
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
-                children: apps)
+                children: apps),
+            Padding(padding: EdgeInsets.only(bottom: 20.0))
           ],
         ));
   });
@@ -561,19 +563,19 @@ ListTile _appTile(String name, String imageName, double opacity,
 }
 
 Widget showAbout(BuildContext context) => Container(
-    height: 250,
     decoration: BoxDecoration(
       color: Theme.of(context).dialogBackgroundColor,
       borderRadius: BorderRadius.all(Radius.circular(23)),
     ),
     child: Column(
+      mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Row(
           children: <Widget>[
             Container(
               width: 200,
-              height: 90,
-              padding: EdgeInsets.only(left: 20.0, top: 30.0),
+              height: 60,
+              padding: EdgeInsets.only(left: 20.0, top: 18.0),
               child: Text(
                 "About",
                 textAlign: TextAlign.left,
@@ -583,16 +585,16 @@ Widget showAbout(BuildContext context) => Container(
             ),
             Spacer(),
             Container(
-              height: 90,
               width: 50,
+              height: 63,
               padding: EdgeInsets.only(right: 8.0),
               child: IconButton(
                 icon: const Icon(CupertinoIcons.xmark, size: 23),
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                disabledColor: Color.fromRGBO(229, 167, 0, 1.0),
-                color: Color.fromRGBO(229, 167, 0, 1.0),
+                disabledColor: Color.fromRGBO(255, 193, 25, 1.0),
+                color: Color.fromRGBO(255, 193, 25, 1.0),
               ),
             )
           ],
@@ -617,7 +619,7 @@ Widget showAbout(BuildContext context) => Container(
                   Container(
                       padding: EdgeInsets.only(right: 42),
                       child: Text(
-                        "v0.1",
+                        "v1.0",
                         style: GoogleFonts.karla(
                             fontSize: 15,
                             fontWeight: FontWeight.w500,
@@ -628,7 +630,82 @@ Widget showAbout(BuildContext context) => Container(
             )
           ],
         ),
-        Spacer(),
+        Padding(padding: EdgeInsets.only(top: 8.0)),
+        Container(
+          width: MediaQuery.of(context).size.width - 22,
+          height: 70,
+          padding: EdgeInsets.only(top: 5),
+          child: CupertinoButton(
+            padding: EdgeInsets.all(0.0),
+            child: Column(
+              children: <Widget> [
+                Padding(padding: EdgeInsets.only(top: 7.0)),
+                Container(
+                    alignment: Alignment.center,
+                    child: Text("https://roadout.ro",
+                        style: GoogleFonts.karla(
+                            fontSize: 17.0,
+                            fontWeight: FontWeight.w600,
+                            color: Color.fromRGBO(255, 193, 25, 1.0)))),
+                Padding(padding: EdgeInsets.only(top: 8.0)),
+                Row(
+                    children: <Widget> [
+                      Padding(padding: EdgeInsets.only(left: 10.0)),
+                      Text("Parking, made easy",
+                          style: GoogleFonts.karla(
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.w600,
+                          color: Theme.of(context).primaryColor)),
+                      Spacer(),
+                      Text("Made in Cluj",
+                          style: GoogleFonts.karla(
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.w600,
+                            color: Color.fromRGBO(255, 193, 25, 1.0))),
+                      Padding(padding: EdgeInsets.only(right: 10.0)),
+                    ]
+                )
+              ]
+            ),
+            disabledColor: Color.fromRGBO(130, 130, 130, 0.18),
+            color: Color.fromRGBO(130, 130, 130, 0.18),
+            borderRadius: BorderRadius.all(Radius.circular(16.0)),
+            onPressed: () async {
+              if (await canLaunch('https://www.roadout.ro')) {
+              await launch('https://www.roadout.ro', forceSafariVC: false);
+              } else {
+              throw 'Could not open the map.';
+              }
+            }
+          ),
+        ),
+        Padding(padding: EdgeInsets.only(top: 8.0)),
+        Container(
+          height: 50,
+          padding: EdgeInsets.only(top: 5),
+          child: CupertinoButton(
+              padding: EdgeInsets.all(0.0),
+              child: Container(
+                  alignment: Alignment.center,
+                  child: Text("Privacy Policy & Terms of Use",
+                      style: GoogleFonts.karla(
+                          fontSize: 17.0,
+                          fontWeight: FontWeight.w600,
+                          color: Color.fromRGBO(255, 193, 25, 1.0)))),
+              borderRadius: BorderRadius.all(Radius.circular(16.0)),
+              onPressed: () {
+                Navigator.pop(context);
+                showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(23),
+                        )), builder: (context) => showLegal(context));
+              }
+          ),
+        ),
+        Padding(padding: EdgeInsets.only(top: 10.0)),
         Container(
             padding: EdgeInsets.only(bottom: 30),
             alignment: Alignment.center,
@@ -639,6 +716,7 @@ Widget showAbout(BuildContext context) => Container(
             ))
       ],
     ));
+
 
 Widget showLegal(BuildContext context) => Container(
     height: 536,
@@ -1871,13 +1949,15 @@ Widget showTutorial(BuildContext context) {
 Widget showEditAccount(BuildContext context, SharedPreferences preferences) {
   return StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
    return Container(
-      height: editHeight,
+      //height: editHeight,
       width: 390,
        decoration: BoxDecoration(
          color: Theme.of(context).dialogBackgroundColor,
          borderRadius: BorderRadius.all(Radius.circular(23)),
        ),
+      padding: MediaQuery.of(context).viewInsets,
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Padding(padding: EdgeInsets.only(top: 10)),
           Row(
@@ -2363,7 +2443,8 @@ Widget decideEditStuff(BuildContext context, StateSetter setState) {
               ),
               padding: EdgeInsets.all(0.0),
             ),
-          )
+          ),
+          Padding(padding: EdgeInsets.only(bottom: 15.0))
         ])
       ],
     );
@@ -2786,7 +2867,8 @@ Widget decideEditStuff(BuildContext context, StateSetter setState) {
               ),
               padding: EdgeInsets.all(0.0),
             ),
-          )
+          ),
+          Padding(padding: EdgeInsets.only(bottom: 15.0))
         ],
       )
     ],
@@ -2796,12 +2878,14 @@ Widget decideEditStuff(BuildContext context, StateSetter setState) {
 Widget showReminders(BuildContext context) {
   return StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
     return Container(
-        height: 284,
+        //height: 284,
         decoration: BoxDecoration(
           color: Theme.of(context).dialogBackgroundColor,
           borderRadius: BorderRadius.all(Radius.circular(23)),
         ),
+        padding: MediaQuery.of(context).viewInsets,
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Padding(padding: EdgeInsets.only(top: 10.0)),
             Row(

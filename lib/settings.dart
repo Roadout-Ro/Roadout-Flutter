@@ -8,6 +8,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
 
+import 'mail_utils.dart';
+
 String selectedMapsApp = '';
 
 Widget showSettings(BuildContext context, StateSetter setState, SharedPreferences preferences) {
@@ -239,13 +241,12 @@ Widget showSettings(BuildContext context, StateSetter setState, SharedPreference
               children: [
                 _tile("Notifications", CupertinoIcons.bell, context, setState, preferences),
                 _tile("Payment Methods", CupertinoIcons.creditcard, context, setState, preferences),
-                _tile("Default Directions App", CupertinoIcons.arrow_branch,
-                    context, setState, preferences),
+                _tile("Default Directions App", CupertinoIcons.arrow_branch, context, setState, preferences),
                 _tile("Reminders", CupertinoIcons.clock, context, setState, preferences),
                 _tile("Invite Friends", CupertinoIcons.envelope_open, context, setState, preferences),
                 _tile("About Roadout", CupertinoIcons.app, context, setState, preferences),
-                _tile("Privacy Policy & Terms of Use",
-                    CupertinoIcons.doc_plaintext, context, setState, preferences),
+                _tile("Report a Bug",
+                    CupertinoIcons.ant, context, setState, preferences),
                 _tile("Sign Out", CupertinoIcons.lock_open, context, setState, preferences),
               ])
         ],
@@ -356,15 +357,9 @@ ListTile _tile(String title, IconData icon, BuildContext context, StateSetter se
             borderRadius: BorderRadius.vertical(
             top: Radius.circular(23),
             )), builder: (context) => showAbout(context));
-        } else if (title == "Privacy Policy & Terms of Use") {
+        } else if (title == "Report a Bug") {
           Navigator.pop(context);
-          showModalBottomSheet(
-              context: context,
-              isScrollControlled: true,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(23),
-                  )), builder: (context) => showLegal(context));
+          sendEmail(context);
         } else if (title == "Invite Friends") {
           Navigator.pop(context);
           showModalBottomSheet(
