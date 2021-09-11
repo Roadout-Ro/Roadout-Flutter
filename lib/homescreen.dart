@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:ui';
+import 'package:app_settings/app_settings.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -14,6 +16,7 @@ import 'package:roadout/settings.dart';
 import 'package:roadout/spots_&_locations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'auth_service.dart';
+import 'connectivity_helper.dart';
 import 'database_service.dart';
 import 'layouts.dart';
 import 'menus.dart';
@@ -69,6 +72,13 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
   late Position currentPosition;
   late LatLng searchedPosition;
   var geolocator = Geolocator();
+  
+  Color payBtnColor = Colors.orange;
+  String payAsset = '';
+  Color payBorderColor = Colors.orange;
+  Color payTextColor = Colors.orange;
+
+  bool showedDelayAlert = false;
 
   Set<Marker> _markers = {};
   late BitmapDescriptor mapMarker;
@@ -80,17 +90,24 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
     return 'assets/Marker.png';
   }
 
+  Map _source = {ConnectivityResult.none: false};
+  final ConnectivityHelper _connectivity = ConnectivityHelper.instance;
 
   @override
   void initState() {
     super.initState();
     setCustomMarker();
+    _decidePaymentPlatform();
     currentParkLocation = parkingLocations[0];
     sectionLetters = [];
     for (ParkingSection sec in currentParkLocation.sections) {
       sectionLetters.add(sec.sectionLetter);
     }
     WidgetsBinding.instance!.addObserver(this);
+    _connectivity.initialise();
+    _connectivity.myStream.listen((source) {
+      setState(() => _source = source);
+    });
   }
 
   void reset() {
@@ -132,6 +149,8 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
 
   Future<void> _onMapCreated(GoogleMapController controller) async {
     _readUserName();
+    _readPrefferedDirectionsApp();
+    showedDelayAlert = await _showedDelayAlert();
 
     setState(() {
       for (ParkingLocation parkLocation in parkingLocations) {
@@ -139,22 +158,27 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
             markerId: MarkerId(parkLocation.name),
             icon: mapMarker,
             onTap: () {
-              currentParkLocation = parkLocation;
-              if (currentParkLocation.name == 'Marasti') {
-                sectionAsset = 'assets/SectionMap1.png';
-              } else if (currentParkLocation.name == '21 Decembrie') {
-                sectionAsset = 'assets/SectionMap2.png';
+              if (_source.keys.toList()[0] == ConnectivityResult.none) {
+                print('no internet');
               } else {
-                sectionAsset = 'assets/SectionMap3.png';
+                print(' internet');
+                currentParkLocation = parkLocation;
+                if (currentParkLocation.name == 'Marasti') {
+                  sectionAsset = 'assets/SectionMap1.png';
+                } else if (currentParkLocation.name == '21 Decembrie') {
+                  sectionAsset = 'assets/SectionMap2.png';
+                } else {
+                  sectionAsset = 'assets/SectionMap3.png';
+                }
+                sectionLetters = [];
+                for (ParkingSection sec in currentParkLocation.sections) {
+                  sectionLetters.add(sec.sectionLetter);
+                }
+                currentLocationName = parkLocation.name;
+                currentLocationColor = (searchColors..shuffle()).first;
+                currentCard = Cards.resultBar;
+                setState(() {});
               }
-              sectionLetters = [];
-              for (ParkingSection sec in currentParkLocation.sections) {
-                sectionLetters.add(sec.sectionLetter);
-              }
-              currentLocationName = parkLocation.name;
-              currentLocationColor = (searchColors..shuffle()).first;
-              currentCard = Cards.resultBar;
-              setState(() {});
             },
             position: parkLocation.coords));
       }
@@ -206,7 +230,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
               markers: _markers,
               mapToolbarEnabled: false,
               initialCameraPosition:
-                  CameraPosition(target: latlngPos, zoom: 14),
+              CameraPosition(target: latlngPos, zoom: 14),
               myLocationButtonEnabled: false,
               myLocationEnabled: true,
               zoomGesturesEnabled: true,
@@ -231,6 +255,84 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                       builder: (BuildContext context,
                           AsyncSnapshot<Widget> snapshot) {
                         SharedPreferences prefs;
+                        if (_source.keys.toList()[0] == ConnectivityResult.none) {
+                          print('no internet');
+                          return Container(
+                            height: 60,
+                            width: MediaQuery.of(context).size.width - 22,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                                color:
+                                Theme.of(context).scaffoldBackgroundColor,
+                                borderRadius:
+                                BorderRadius.all(Radius.circular(26)),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.3),
+                                    spreadRadius: 5,
+                                    blurRadius: 67,
+                                    offset: Offset(
+                                        0, 0), // changes position of shadow
+                                  ),
+                                ]),
+                            child: Row(
+                              children: <Widget>[
+                                Container(
+                                  width: 37.0,
+                                  height: 45.0,
+                                  child: Icon(CupertinoIcons.wifi, color: Color.fromRGBO(
+                                      174, 174, 174, 1.0)),
+                                  padding: EdgeInsets.only(left: 15.0),
+                                ),
+                                Container(
+                                    width:
+                                    MediaQuery.of(context).size.width - 107,
+                                    child: CupertinoButton(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        'Please connect to the internet',
+                                        textAlign: TextAlign.left,
+                                        style: GoogleFonts.karla(
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.w600,
+                                            color: Color.fromRGBO(
+                                                174, 174, 174, 1.0)),
+                                      ),
+                                      onPressed: () {
+                                        print('no internet');
+                                        AppSettings.openWIFISettings();
+                                      },
+                                    )),
+                                Container(
+                                  width: 48.0,
+                                  height: 43.0,
+                                  child: CupertinoButton(
+                                      child: Image.asset('assets/Logo.png'),
+                                      padding: EdgeInsets.all(0.0),
+                                      onPressed: () async => {
+                                        prefs = await SharedPreferences
+                                            .getInstance(),
+                                        showModalBottomSheet(
+                                            context: context,
+                                            isScrollControlled: true,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                BorderRadius.vertical(
+                                                  top: Radius.circular(23),
+                                                )),
+// BorderRadius. vertical// RoundedRectangleBorder
+                                            builder: (context) =>
+                                                showSettings(context,
+                                                    setState, prefs)),
+                                      }),
+                                  padding: EdgeInsets.only(right: 15.0),
+                                )
+                              ],
+                            ),
+                          );
+                        } else {
+                          print(' internet');
+                        }
                         if (currentCard == Cards.searchBar) {
                           return Container(
                             height: 60,
@@ -238,9 +340,9 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
                                 color:
-                                    Theme.of(context).scaffoldBackgroundColor,
+                                Theme.of(context).scaffoldBackgroundColor,
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(26)),
+                                BorderRadius.all(Radius.circular(26)),
                                 boxShadow: [
                                   BoxShadow(
                                     color: Colors.black.withOpacity(0.3),
@@ -260,7 +362,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                 ),
                                 Container(
                                     width:
-                                        MediaQuery.of(context).size.width - 107,
+                                    MediaQuery.of(context).size.width - 107,
                                     child: CupertinoButton(
                                       alignment: Alignment.centerLeft,
                                       child: Text(
@@ -280,9 +382,9 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                             isScrollControlled: true,
                                             shape: RoundedRectangleBorder(
                                                 borderRadius:
-                                                    BorderRadius.vertical(
-                                              top: Radius.circular(23),
-                                            )),
+                                                BorderRadius.vertical(
+                                                  top: Radius.circular(23),
+                                                )),
 // BorderRadius. vertical// RoundedRectangleBorder
                                             builder: (context) => showSearchBar(
                                                 context, setState))
@@ -295,21 +397,21 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                       child: Image.asset('assets/Logo.png'),
                                       padding: EdgeInsets.all(0.0),
                                       onPressed: () async => {
-                                            prefs = await SharedPreferences
-                                                .getInstance(),
-                                            showModalBottomSheet(
-                                                context: context,
-                                                isScrollControlled: true,
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.vertical(
+                                        prefs = await SharedPreferences
+                                            .getInstance(),
+                                        showModalBottomSheet(
+                                            context: context,
+                                            isScrollControlled: true,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                BorderRadius.vertical(
                                                   top: Radius.circular(23),
                                                 )),
 // BorderRadius. vertical// RoundedRectangleBorder
-                                                builder: (context) =>
-                                                    showSettings(context,
-                                                        setState, prefs)),
-                                          }),
+                                            builder: (context) =>
+                                                showSettings(context,
+                                                    setState, prefs)),
+                                      }),
                                   padding: EdgeInsets.only(right: 15.0),
                                 )
                               ],
@@ -322,9 +424,9 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
                                 color:
-                                    Theme.of(context).scaffoldBackgroundColor,
+                                Theme.of(context).scaffoldBackgroundColor,
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(26)),
+                                BorderRadius.all(Radius.circular(26)),
                                 boxShadow: [
                                   BoxShadow(
                                     color: Colors.black.withOpacity(0.3),
@@ -454,9 +556,9 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
                                 color:
-                                    Theme.of(context).scaffoldBackgroundColor,
+                                Theme.of(context).scaffoldBackgroundColor,
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(26)),
+                                BorderRadius.all(Radius.circular(26)),
                                 boxShadow: [
                                   BoxShadow(
                                     color: Colors.black.withOpacity(0.3),
@@ -474,7 +576,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                       child: Row(children: <Widget>[
                                         Padding(
                                             padding:
-                                                EdgeInsets.only(left: 8.0)),
+                                            EdgeInsets.only(left: 8.0)),
                                         Container(
                                           height: 50,
                                           width: 8,
@@ -520,14 +622,14 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                             setState(() {});
                                           },
                                           disabledColor:
-                                              Color.fromRGBO(220, 170, 57, 1.0),
+                                          Color.fromRGBO(220, 170, 57, 1.0),
                                           color:
-                                              Color.fromRGBO(220, 170, 57, 1.0),
+                                          Color.fromRGBO(220, 170, 57, 1.0),
                                         ),
                                       ),
                                       Padding(
                                           padding:
-                                              EdgeInsets.only(bottom: 8.0)),
+                                          EdgeInsets.only(bottom: 8.0)),
                                     ])
                                   ],
                                 ),
@@ -537,7 +639,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                       children: <Widget>[
                                         Padding(
                                             padding:
-                                                EdgeInsets.only(left: 20.0)),
+                                            EdgeInsets.only(left: 20.0)),
                                         Text('Coordonates: ',
                                             style: GoogleFonts.karla(
                                                 fontSize: 15.0,
@@ -546,7 +648,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                                     .primaryColor)),
                                         Text(
                                             currentParkLocation.coords.latitude
-                                                    .toStringAsFixed(3) +
+                                                .toStringAsFixed(3) +
                                                 ', ' +
                                                 currentParkLocation
                                                     .coords.longitude
@@ -657,7 +759,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                                   style: GoogleFonts.karla(
                                                       fontSize: 14.0,
                                                       fontWeight:
-                                                          FontWeight.w600,
+                                                      FontWeight.w600,
                                                       color: Color.fromRGBO(
                                                           220, 170, 57, 1.0)),
                                                 ),
@@ -671,39 +773,39 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                               ),
                                             ),
                                             itemBuilder: (context) => [
-                                                  PopupMenuItem(
-                                                    child: Container(
-                                                        width: 80.0,
-                                                        height: 70.0,
-                                                        child: CupertinoPicker(
-                                                          onSelectedItemChanged:
-                                                              (value) {
-                                                            setState(() {
-                                                              selectedMinutes =
-                                                                  value + 1;
-                                                            });
-                                                          },
-                                                          itemExtent: 32.0,
-                                                          children: const [
-                                                            Text('1 min'),
-                                                            Text('2 min'),
-                                                            Text('3 min'),
-                                                            Text('4 min'),
-                                                            Text('5 min'),
-                                                            Text('6 min'),
-                                                            Text('7 min'),
-                                                            Text('8 min'),
-                                                            Text('9 min'),
-                                                            Text('10 min'),
-                                                            Text('11 min'),
-                                                            Text('12 min'),
-                                                            Text('13 min'),
-                                                            Text('14 min'),
-                                                            Text('15 min')
-                                                          ],
-                                                        )),
-                                                  ),
-                                                ]),
+                                              PopupMenuItem(
+                                                child: Container(
+                                                    width: 80.0,
+                                                    height: 70.0,
+                                                    child: CupertinoPicker(
+                                                      onSelectedItemChanged:
+                                                          (value) {
+                                                        setState(() {
+                                                          selectedMinutes =
+                                                              value + 1;
+                                                        });
+                                                      },
+                                                      itemExtent: 32.0,
+                                                      children: const [
+                                                        Text('1 min'),
+                                                        Text('2 min'),
+                                                        Text('3 min'),
+                                                        Text('4 min'),
+                                                        Text('5 min'),
+                                                        Text('6 min'),
+                                                        Text('7 min'),
+                                                        Text('8 min'),
+                                                        Text('9 min'),
+                                                        Text('10 min'),
+                                                        Text('11 min'),
+                                                        Text('12 min'),
+                                                        Text('13 min'),
+                                                        Text('14 min'),
+                                                        Text('15 min')
+                                                      ],
+                                                    )),
+                                              ),
+                                            ]),
                                       ],
                                     ),
                                     Padding(
@@ -726,9 +828,9 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                           setState(() {})
                                         } : null,
                                         disabledColor:
-                                            Color.fromRGBO(220, 170, 57, 0.5),
+                                        Color.fromRGBO(220, 170, 57, 0.5),
                                         color:
-                                            Color.fromRGBO(220, 170, 57, 1.0),
+                                        Color.fromRGBO(220, 170, 57, 1.0),
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(13.0)),
                                       ),
@@ -745,9 +847,9 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
                                 color:
-                                    Theme.of(context).scaffoldBackgroundColor,
+                                Theme.of(context).scaffoldBackgroundColor,
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(26)),
+                                BorderRadius.all(Radius.circular(26)),
                                 boxShadow: [
                                   BoxShadow(
                                     color: Colors.black.withOpacity(0.3),
@@ -765,7 +867,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                       child: Row(children: <Widget>[
                                         Padding(
                                             padding:
-                                                EdgeInsets.only(left: 8.0)),
+                                            EdgeInsets.only(left: 8.0)),
                                         Container(
                                           height: 50,
                                           width: 8,
@@ -811,14 +913,14 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                             setState(() {});
                                           },
                                           disabledColor:
-                                              Color.fromRGBO(214, 109, 0, 1.0),
+                                          Color.fromRGBO(214, 109, 0, 1.0),
                                           color:
-                                              Color.fromRGBO(214, 109, 0, 1.0),
+                                          Color.fromRGBO(214, 109, 0, 1.0),
                                         ),
                                       ),
                                       Padding(
                                           padding:
-                                              EdgeInsets.only(bottom: 8.0)),
+                                          EdgeInsets.only(bottom: 8.0)),
                                     ])
                                   ],
                                 ),
@@ -834,7 +936,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                                 .primaryColor)),
                                     Text(
                                         currentParkLocation.coords.latitude
-                                                .toStringAsFixed(3) +
+                                            .toStringAsFixed(3) +
                                             ', ' +
                                             currentParkLocation.coords.longitude
                                                 .toStringAsFixed(3),
@@ -881,9 +983,9 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                             }
                                         },
                                         disabledColor:
-                                            Color.fromRGBO(214, 109, 0, 0.43),
+                                        Color.fromRGBO(214, 109, 0, 0.43),
                                         color:
-                                            Color.fromRGBO(214, 109, 0, 0.43),
+                                        Color.fromRGBO(214, 109, 0, 0.43),
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(8.0)),
                                       ),
@@ -924,26 +1026,49 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                   ],
                                 ),
                                 Spacer(),
-                                /*Container(
+                                Container(
                                   width: MediaQuery.of(context).size.width - 58,
                                   height: 45,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.all(Radius.circular(14.0)),
+                                    border: Border.all(color: payBorderColor, width: 1),
+                                  ),
                                   child: CupertinoButton(
                                     padding: EdgeInsets.all(0.0),
-                                    child: Text(
-                                      'Pay 0 RON',
-                                      style: GoogleFonts.karla(
-                                          fontSize: 17.0, fontWeight: FontWeight.w600, color: Color.fromRGBO(227, 167, 27, 1.0)),
+                                    child: Center(
+                                      child: Row(
+                                          children: <Widget> [
+                                            Padding(padding: EdgeInsets.only(left: (MediaQuery.of(context).size.width - 168)/2)),
+                                            Text(
+                                              'Pay with ',
+                                              style: GoogleFonts.karla(
+                                                  fontSize: 17.0, fontWeight: FontWeight.w600, color: payTextColor),
+                                            ),
+                                            Image.asset(payAsset, height: 23.0,)
+                                          ]
+                                      ),
                                     ),
                                     onPressed: () => {
-                                      currentCard = Cards.paySpotCard,
-                                      setState(() {})
+                                      currentCard = Cards.paidCard,
+                                      setState(() {
+                                        activeReservationExpiry = DateTime.now().add(Duration(minutes: selectedMinutes+30));
+                                        print(activeReservationExpiry);
+                                      }),
+                                      startTimer(),
+                                      if (selectedMinutes > 5) {
+                                        create5MinNotification(selectedMinutes-5, 0)
+                                      },
+                                      create1MinNotification(selectedMinutes-1, 0),
+                                      createReservationNotification(selectedMinutes, 0),
+                                      reset()
                                     },
-                                    disabledColor: Color.fromRGBO(220, 170, 57, 0.43),
-                                    color: Color.fromRGBO(220, 170, 57, 0.43),
+                                    disabledColor: payBtnColor,
+                                    color: payBtnColor,
                                     borderRadius: BorderRadius.all(Radius.circular(13.0)),
+
                                   ),
-                                ), */ //APPLE PAY/GOOGLE PAY button
-                                //Padding(padding: EdgeInsets.only(top: 8.0),),
+                                ),
+                                Padding(padding: EdgeInsets.only(top: 8.0),),
                                 Container(
                                   width: MediaQuery.of(context).size.width - 58,
                                   height: 45,
@@ -970,10 +1095,10 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                       reset()
                                     },
                                     disabledColor:
-                                        Color.fromRGBO(214, 109, 0, 1.0),
+                                    Color.fromRGBO(214, 109, 0, 1.0),
                                     color: Color.fromRGBO(214, 109, 0, 1.0),
                                     borderRadius:
-                                        BorderRadius.all(Radius.circular(13.0)),
+                                    BorderRadius.all(Radius.circular(13.0)),
                                   ),
                                 ),
                                 Padding(
@@ -996,17 +1121,17 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                           isScrollControlled: true,
                                           shape: RoundedRectangleBorder(
                                               borderRadius:
-                                                  BorderRadius.vertical(
-                                            top: Radius.circular(23),
-                                          )), // BorderRadius. vertical// RoundedRectangleBorder
+                                              BorderRadius.vertical(
+                                                top: Radius.circular(23),
+                                              )), // BorderRadius. vertical// RoundedRectangleBorder
                                           builder: (context) =>
                                               showPayment(context))
                                     },
                                     disabledColor:
-                                        Color.fromRGBO(255, 158, 25, 1.0),
+                                    Color.fromRGBO(255, 158, 25, 1.0),
                                     color: Color.fromRGBO(255, 158, 25, 1.0),
                                     borderRadius:
-                                        BorderRadius.all(Radius.circular(13.0)),
+                                    BorderRadius.all(Radius.circular(13.0)),
                                   ),
                                 ),
                                 Padding(
@@ -1030,9 +1155,9 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
                                 color:
-                                    Theme.of(context).scaffoldBackgroundColor,
+                                Theme.of(context).scaffoldBackgroundColor,
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(26)),
+                                BorderRadius.all(Radius.circular(26)),
                                 boxShadow: [
                                   BoxShadow(
                                     color: Colors.black.withOpacity(0.3),
@@ -1058,7 +1183,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                             fontSize: 18.0,
                                             fontWeight: FontWeight.w600,
                                             color:
-                                                Theme.of(context).primaryColor),
+                                            Theme.of(context).primaryColor),
                                       ),
                                     ),
                                     Spacer(),
@@ -1075,7 +1200,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                           setState(() {});
                                         },
                                         disabledColor:
-                                            Color.fromRGBO(149, 46, 0, 1.0),
+                                        Color.fromRGBO(149, 46, 0, 1.0),
                                         color: Color.fromRGBO(149, 46, 0, 1.0),
                                       ),
                                     )
@@ -1092,7 +1217,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                     textAlign: TextAlign.center,
                                   ),
                                   padding:
-                                      EdgeInsets.only(left: 10.0, right: 10.0),
+                                  EdgeInsets.only(left: 10.0, right: 10.0),
                                 ),
                                 Padding(
                                   padding: EdgeInsets.only(top: 15.0),
@@ -1325,60 +1450,67 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                                 .scaffoldBackgroundColor,
                                             size: 35,
                                           ),
-                                          onPressed: () => {
-                                            if(delayActive == false) {
-                                              showDialog(
-                                                context: context,
-                                                builder: (BuildContext context) {
-                                                  return AlertDialog(
-                                                    insetPadding: EdgeInsets.all(40),
-                                                    shape: RoundedRectangleBorder(
-                                                      borderRadius: BorderRadius.circular(20.0),
-                                                    ),
-                                                    title: Text('Delay Reservation', style: GoogleFonts.karla(
-                                                        fontSize: 20.0, fontWeight: FontWeight.w600)),
-                                                    content: Container(
-                                                        child: Column(
-                                                          mainAxisSize: MainAxisSize.min,
-                                                          children: <Widget> [
-                                                            Text("You are able to delay your reservation for up to 15 minutes, but you can only delay once. Press ok to continue.", style: GoogleFonts.karla(
-                                                                fontSize: 17.0, fontWeight: FontWeight.w500)),
-                                                            Container(
-                                                                padding: EdgeInsets.only(top: 15.0, left: 5.0, right: 5.0),
-                                                                width: MediaQuery.of(context).size.width-100,
-                                                                height: 60,
-                                                                child: CupertinoButton(
-                                                                  padding: EdgeInsets.all(0.0),
-                                                                  child: Text('Ok', style: GoogleFonts.karla(fontSize: 18.0, fontWeight: FontWeight.w600),),
-                                                                  onPressed: () {
-                                                                    Navigator.pop(context);
-                                                                    currentCard = Cards.delayCard;
-                                                                    setState(() {});
-                                                                  },
-                                                                  disabledColor: Color.fromRGBO(103, 72, 5, 1.0),
-                                                                  color: Color.fromRGBO(103, 72, 5, 1.0),
-                                                                  borderRadius: BorderRadius.all(Radius.circular(13.0)),
-                                                                )
-                                                            ),
-                                                            Container(
-                                                                padding: EdgeInsets.only(top: 15.0, left: 5.0, right: 5.0),
-                                                                width: MediaQuery.of(context).size.width-100,
-                                                                height: 60,
-                                                                child: CupertinoButton(
-                                                                  padding: EdgeInsets.all(0.0),
-                                                                  child: Text('Cancel', style: GoogleFonts.karla(fontSize: 18.0, fontWeight: FontWeight.w600, color: Color.fromRGBO(103, 72, 5, 1.0)),),
-                                                                  onPressed: () {
-                                                                    Navigator.pop(context);
-                                                                  },
-                                                                  borderRadius: BorderRadius.all(Radius.circular(13.0)),
-                                                                )
-                                                            ),
-                                                          ],
-                                                        )
-                                                    ),
-                                                  );
-                                                },
-                                              )
+                                          onPressed: ()  {
+                                            if (delayActive == false) {
+                                              if (showedDelayAlert == false) {
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (BuildContext context) {
+                                                    return AlertDialog(
+                                                      insetPadding: EdgeInsets.all(40),
+                                                      shape: RoundedRectangleBorder(
+                                                        borderRadius: BorderRadius.circular(20.0),
+                                                      ),
+                                                      title: Text('Delay Reservation', style: GoogleFonts.karla(
+                                                          fontSize: 20.0, fontWeight: FontWeight.w600)),
+                                                      content: Container(
+                                                          child: Column(
+                                                            mainAxisSize: MainAxisSize.min,
+                                                            children: <Widget> [
+                                                              Text("You are able to delay your reservation for up to 15 minutes, but you can only delay once. Press ok to continue.", style: GoogleFonts.karla(
+                                                                  fontSize: 17.0, fontWeight: FontWeight.w500)),
+                                                              Container(
+                                                                  padding: EdgeInsets.only(top: 15.0, left: 5.0, right: 5.0),
+                                                                  width: MediaQuery.of(context).size.width-100,
+                                                                  height: 60,
+                                                                  child: CupertinoButton(
+                                                                    padding: EdgeInsets.all(0.0),
+                                                                    child: Text('Ok', style: GoogleFonts.karla(fontSize: 18.0, fontWeight: FontWeight.w600),),
+                                                                    onPressed: () async {
+                                                                      _saveShowedDelayAlert();
+                                                                      showedDelayAlert = await _showedDelayAlert();
+                                                                      Navigator.pop(context);
+                                                                      currentCard = Cards.delayCard;
+                                                                      setState(() {});
+                                                                    },
+                                                                    disabledColor: Color.fromRGBO(103, 72, 5, 1.0),
+                                                                    color: Color.fromRGBO(103, 72, 5, 1.0),
+                                                                    borderRadius: BorderRadius.all(Radius.circular(13.0)),
+                                                                  )
+                                                              ),
+                                                              Container(
+                                                                  padding: EdgeInsets.only(top: 15.0, left: 5.0, right: 5.0),
+                                                                  width: MediaQuery.of(context).size.width-100,
+                                                                  height: 60,
+                                                                  child: CupertinoButton(
+                                                                    padding: EdgeInsets.all(0.0),
+                                                                    child: Text('Cancel', style: GoogleFonts.karla(fontSize: 18.0, fontWeight: FontWeight.w600, color: Color.fromRGBO(103, 72, 5, 1.0)),),
+                                                                    onPressed: () {
+                                                                      Navigator.pop(context);
+                                                                    },
+                                                                    borderRadius: BorderRadius.all(Radius.circular(13.0)),
+                                                                  )
+                                                              ),
+                                                            ],
+                                                          )
+                                                      ),
+                                                    );
+                                                  },
+                                                );
+                                              } else {
+                                                currentCard = Cards.delayCard;
+                                                setState(() {});
+                                              }
                                             } else {
                                               showDialog(
                                                 context: context,
@@ -1416,7 +1548,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                                     ),
                                                   );
                                                 },
-                                              )
+                                              );
                                             }
                                           },
                                           disabledColor:
@@ -1462,9 +1594,9 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                             width: MediaQuery.of(context).size.width - 22,
                             decoration: BoxDecoration(
                                 color:
-                                    Theme.of(context).scaffoldBackgroundColor,
+                                Theme.of(context).scaffoldBackgroundColor,
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(26)),
+                                BorderRadius.all(Radius.circular(26)),
                                 boxShadow: [
                                   BoxShadow(
                                     color: Colors.black.withOpacity(0.3),
@@ -1504,16 +1636,16 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                           setState(() {});
                                         },
                                         disabledColor:
-                                            Color.fromRGBO(143, 102, 13, 1.0),
+                                        Color.fromRGBO(143, 102, 13, 1.0),
                                         color:
-                                            Color.fromRGBO(143, 102, 13, 1.0),
+                                        Color.fromRGBO(143, 102, 13, 1.0),
                                       ),
                                     )
                                   ],
                                 ),
                                 Container(
                                     padding:
-                                        EdgeInsets.only(left: 20, right: 20),
+                                    EdgeInsets.only(left: 20, right: 20),
                                     alignment: Alignment.center,
                                     child: Container(
                                       child: Text(
@@ -1542,16 +1674,16 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                         ),
                                         onPressed: null,
                                         disabledColor:
-                                            Color.fromRGBO(142, 102, 13, 1.0),
+                                        Color.fromRGBO(142, 102, 13, 1.0),
                                         color:
-                                            Color.fromRGBO(143, 102, 13, 1.0),
+                                        Color.fromRGBO(143, 102, 13, 1.0),
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(14.0)),
                                       ),
                                     )),
                                 Container(
                                     padding:
-                                        EdgeInsets.only(top: 5, bottom: 15),
+                                    EdgeInsets.only(top: 5, bottom: 15),
                                     alignment: Alignment.center,
                                     child: Container(
                                       width: 330,
@@ -1569,28 +1701,28 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                         onPressed: () async => {
                                           searchedPosition = currentParkLocation.coords,
                                           if (selectedMapsApp == 'Google Maps')
-                                          {
-                                          MapUtils.openMapInGoogleMaps(
-                                          searchedPosition.latitude,
-                                          searchedPosition.longitude)
-                                          }
+                                            {
+                                              MapUtils.openMapInGoogleMaps(
+                                                  searchedPosition.latitude,
+                                                  searchedPosition.longitude)
+                                            }
                                           else if (selectedMapsApp == 'Waze')
-                                          {
-                                          MapUtils.openMapInWaze(
-                                          searchedPosition.latitude,
-                                          searchedPosition.longitude)
-                                          }
+                                            {
+                                              MapUtils.openMapInWaze(
+                                                  searchedPosition.latitude,
+                                                  searchedPosition.longitude)
+                                            }
                                           else
-                                          {
-                                          MapUtils.openMapInAppleMaps(
-                                          searchedPosition.latitude,
-                                          searchedPosition.longitude)
-                                          }
-                                          },
+                                            {
+                                              MapUtils.openMapInAppleMaps(
+                                                  searchedPosition.latitude,
+                                                  searchedPosition.longitude)
+                                            }
+                                        },
                                         disabledColor:
-                                            Color.fromRGBO(142, 102, 13, 0.0),
+                                        Color.fromRGBO(142, 102, 13, 0.0),
                                         color:
-                                            Color.fromRGBO(143, 102, 13, 0.0),
+                                        Color.fromRGBO(143, 102, 13, 0.0),
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(14.0)),
                                       ),
@@ -1604,9 +1736,9 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                               height: 275,
                               decoration: BoxDecoration(
                                   color:
-                                      Theme.of(context).scaffoldBackgroundColor,
+                                  Theme.of(context).scaffoldBackgroundColor,
                                   borderRadius:
-                                      BorderRadius.all(Radius.circular(26)),
+                                  BorderRadius.all(Radius.circular(26)),
                                   boxShadow: [
                                     BoxShadow(
                                       color: Colors.black.withOpacity(0.3),
@@ -1624,12 +1756,12 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                         child: Row(children: <Widget>[
                                           Padding(
                                               padding:
-                                                  EdgeInsets.only(left: 8.0)),
+                                              EdgeInsets.only(left: 8.0)),
                                           Container(
                                             height: 50,
                                             width: 8,
                                             padding:
-                                                EdgeInsets.only(right: 8.0),
+                                            EdgeInsets.only(right: 8.0),
                                             child: IconButton(
                                               icon: const Icon(
                                                   CupertinoIcons.chevron_back,
@@ -1669,9 +1801,9 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                             setState(() {});
                                           },
                                           disabledColor:
-                                              Color.fromRGBO(143, 102, 13, 1.0),
+                                          Color.fromRGBO(143, 102, 13, 1.0),
                                           color:
-                                              Color.fromRGBO(143, 102, 13, 1.0),
+                                          Color.fromRGBO(143, 102, 13, 1.0),
                                         ),
                                       ),
                                     ],
@@ -1691,7 +1823,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                   ),
                                   Container(
                                       padding:
-                                          EdgeInsets.only(top: 10, left: 25),
+                                      EdgeInsets.only(top: 10, left: 25),
                                       child: Row(
                                         children: <Widget>[
                                           Container(
@@ -1701,7 +1833,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                                     style: GoogleFonts.karla(
                                                         fontSize: 16,
                                                         fontWeight:
-                                                            FontWeight.w500,
+                                                        FontWeight.w500,
                                                         color: Color.fromRGBO(
                                                             143,
                                                             102,
@@ -1711,7 +1843,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                                     style: GoogleFonts.karla(
                                                         fontSize: 16,
                                                         fontWeight:
-                                                            FontWeight.w500,
+                                                        FontWeight.w500,
                                                         color: Color.fromRGBO(
                                                             143,
                                                             102,
@@ -1722,8 +1854,8 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                           ),
                                           Container(
                                               width: MediaQuery.of(context)
-                                                      .size
-                                                      .width -
+                                                  .size
+                                                  .width -
                                                   127,
                                               child: CupertinoSlider(
                                                 value: progress,
@@ -1746,7 +1878,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                                     style: GoogleFonts.karla(
                                                         fontSize: 16,
                                                         fontWeight:
-                                                            FontWeight.w500,
+                                                        FontWeight.w500,
                                                         color: Color.fromRGBO(
                                                             143,
                                                             102,
@@ -1756,7 +1888,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                                     style: GoogleFonts.karla(
                                                         fontSize: 16,
                                                         fontWeight:
-                                                            FontWeight.w500,
+                                                        FontWeight.w500,
                                                         color: Color.fromRGBO(
                                                             143,
                                                             102,
@@ -1773,9 +1905,9 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                         padding: EdgeInsets.only(
                                             top: 5,
                                             left: (MediaQuery.of(context)
-                                                        .size
-                                                        .width -
-                                                    130) /
+                                                .size
+                                                .width -
+                                                130) /
                                                 2),
                                         child: Text("Charge",
                                             style: GoogleFonts.karla(
@@ -1801,8 +1933,8 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                       alignment: Alignment.center,
                                       child: Container(
                                         width:
-                                            MediaQuery.of(context).size.width -
-                                                58,
+                                        MediaQuery.of(context).size.width -
+                                            58,
                                         height: 60,
                                         child: CupertinoButton(
                                           child: Text(
@@ -1818,9 +1950,9 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                             setState(() {})
                                           },
                                           disabledColor:
-                                              Color.fromRGBO(142, 102, 13, 1.0),
+                                          Color.fromRGBO(142, 102, 13, 1.0),
                                           color:
-                                              Color.fromRGBO(142, 102, 13, 1.0),
+                                          Color.fromRGBO(142, 102, 13, 1.0),
                                           borderRadius: BorderRadius.all(
                                               Radius.circular(15.0)),
                                         ),
@@ -1834,9 +1966,9 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                               height: 285,
                               decoration: BoxDecoration(
                                   color:
-                                      Theme.of(context).scaffoldBackgroundColor,
+                                  Theme.of(context).scaffoldBackgroundColor,
                                   borderRadius:
-                                      BorderRadius.all(Radius.circular(26)),
+                                  BorderRadius.all(Radius.circular(26)),
                                   boxShadow: [
                                     BoxShadow(
                                       color: Colors.black.withOpacity(0.3),
@@ -1854,12 +1986,12 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                         child: Row(children: <Widget>[
                                           Padding(
                                               padding:
-                                                  EdgeInsets.only(left: 8.0)),
+                                              EdgeInsets.only(left: 8.0)),
                                           Container(
                                             height: 50,
                                             width: 8,
                                             padding:
-                                                EdgeInsets.only(right: 8.0),
+                                            EdgeInsets.only(right: 8.0),
                                             child: IconButton(
                                               icon: const Icon(
                                                   CupertinoIcons.chevron_back,
@@ -1899,9 +2031,9 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                             setState(() {});
                                           },
                                           disabledColor:
-                                              Color.fromRGBO(214, 109, 0, 1.0),
+                                          Color.fromRGBO(214, 109, 0, 1.0),
                                           color:
-                                              Color.fromRGBO(214, 109, 0, 1.0),
+                                          Color.fromRGBO(214, 109, 0, 1.0),
                                         ),
                                       )
                                     ],
@@ -1911,9 +2043,9 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                       Container(
                                           padding: EdgeInsets.only(
                                               left: (MediaQuery.of(context)
-                                                          .size
-                                                          .width -
-                                                      160) /
+                                                  .size
+                                                  .width -
+                                                  160) /
                                                   2),
                                           child: Text("Charge",
                                               style: GoogleFonts.karla(
@@ -1935,8 +2067,51 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                   ),
                                   Spacer(),
                                   Container(
+                                    width: MediaQuery.of(context).size.width - 58,
+                                    height: 45,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(Radius.circular(14.0)),
+                                      border: Border.all(color: payBorderColor, width: 1),
+                                    ),
+                                    child: CupertinoButton(
+                                      padding: EdgeInsets.all(0.0),
+                                      child: Center(
+                                        child: Row(
+                                            children: <Widget> [
+                                              Padding(padding: EdgeInsets.only(left: (MediaQuery.of(context).size.width - 168)/2)),
+                                              Text(
+                                                'Pay with ',
+                                                style: GoogleFonts.karla(
+                                                    fontSize: 17.0, fontWeight: FontWeight.w600, color: payTextColor),
+                                              ),
+                                              Image.asset(payAsset, height: 23.0,)
+                                            ]
+                                        ),
+                                      ),
+                                      onPressed: () => {
+                                        currentCard = Cards.paidCard,
+                                        setState(() {
+                                          activeReservationExpiry = DateTime.now().add(Duration(minutes: selectedMinutes+30));
+                                          print(activeReservationExpiry);
+                                        }),
+                                        startTimer(),
+                                        if (selectedMinutes > 5) {
+                                          create5MinNotification(selectedMinutes-5, 0)
+                                        },
+                                        create1MinNotification(selectedMinutes-1, 0),
+                                        createReservationNotification(selectedMinutes, 0),
+                                        reset()
+                                      },
+                                      disabledColor: payBtnColor,
+                                      color: payBtnColor,
+                                      borderRadius: BorderRadius.all(Radius.circular(13.0)),
+
+                                    ),
+                                  ),
+                                  Padding(padding: EdgeInsets.only(top: 8.0),),
+                                  Container(
                                     width:
-                                        MediaQuery.of(context).size.width - 58,
+                                    MediaQuery.of(context).size.width - 58,
                                     height: 45,
                                     child: CupertinoButton(
                                       padding: EdgeInsets.all(0.0),
@@ -1960,7 +2135,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                         createReservationNotification(duration.inMinutes, duration.inSeconds-duration.inMinutes*60),
                                       },
                                       disabledColor:
-                                          Color.fromRGBO(214, 109, 0, 1.0),
+                                      Color.fromRGBO(214, 109, 0, 1.0),
                                       color: Color.fromRGBO(214, 109, 0, 1.0),
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(13.0)),
@@ -1971,7 +2146,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                   ),
                                   Container(
                                     width:
-                                        MediaQuery.of(context).size.width - 58,
+                                    MediaQuery.of(context).size.width - 58,
                                     height: 45,
                                     child: CupertinoButton(
                                       padding: EdgeInsets.all(0.0),
@@ -1987,14 +2162,14 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                             isScrollControlled: true,
                                             shape: RoundedRectangleBorder(
                                                 borderRadius:
-                                                    BorderRadius.vertical(
-                                              top: Radius.circular(23),
-                                            )), // BorderRadius. vertical// RoundedRectangleBorder
+                                                BorderRadius.vertical(
+                                                  top: Radius.circular(23),
+                                                )), // BorderRadius. vertical// RoundedRectangleBorder
                                             builder: (context) =>
                                                 showPayment(context))
                                       },
                                       disabledColor:
-                                          Color.fromRGBO(255, 158, 25, 1.0),
+                                      Color.fromRGBO(255, 158, 25, 1.0),
                                       color: Color.fromRGBO(255, 158, 25, 1.0),
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(13.0)),
@@ -2012,9 +2187,9 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                   .sections[selectedSectionNr]),
                               decoration: BoxDecoration(
                                   color:
-                                      Theme.of(context).scaffoldBackgroundColor,
+                                  Theme.of(context).scaffoldBackgroundColor,
                                   borderRadius:
-                                      BorderRadius.all(Radius.circular(26)),
+                                  BorderRadius.all(Radius.circular(26)),
                                   boxShadow: [
                                     BoxShadow(
                                       color: Colors.black.withOpacity(0.3),
@@ -2032,12 +2207,12 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                         child: Row(children: <Widget>[
                                           Padding(
                                               padding:
-                                                  EdgeInsets.only(left: 8.0)),
+                                              EdgeInsets.only(left: 8.0)),
                                           Container(
                                             height: 50,
                                             width: 8,
                                             padding:
-                                                EdgeInsets.only(right: 8.0),
+                                            EdgeInsets.only(right: 8.0),
                                             child: IconButton(
                                               icon: const Icon(
                                                   CupertinoIcons.chevron_back,
@@ -2077,9 +2252,9 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                             setState(() {});
                                           },
                                           disabledColor:
-                                              Color.fromRGBO(255, 193, 25, 1.0),
+                                          Color.fromRGBO(255, 193, 25, 1.0),
                                           color:
-                                              Color.fromRGBO(255, 193, 25, 1.0),
+                                          Color.fromRGBO(255, 193, 25, 1.0),
                                         ),
                                       )
                                     ],
@@ -2094,7 +2269,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                           50,
                                       decoration: BoxDecoration(
                                         color:
-                                            Color.fromRGBO(130, 130, 130, 0.18),
+                                        Color.fromRGBO(130, 130, 130, 0.18),
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(9)),
                                       ),
@@ -2124,7 +2299,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                   Spacer(),
                                   Container(
                                     width:
-                                        MediaQuery.of(context).size.width - 58,
+                                    MediaQuery.of(context).size.width - 58,
                                     height: 45,
                                     child: CupertinoButton(
                                       padding: EdgeInsets.all(0.0),
@@ -2135,14 +2310,14 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                             fontWeight: FontWeight.w600),
                                       ),
                                       onPressed: infoIcon ==
-                                              CupertinoIcons.checkmark
+                                          CupertinoIcons.checkmark
                                           ? () => {
-                                                currentCard = Cards.spotCard,
-                                                setState(() {})
-                                              }
+                                        currentCard = Cards.spotCard,
+                                        setState(() {})
+                                      }
                                           : null,
                                       disabledColor:
-                                          Color.fromRGBO(255, 193, 25, 0.5),
+                                      Color.fromRGBO(255, 193, 25, 0.5),
                                       color: Color.fromRGBO(255, 193, 25, 1.0),
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(13.0)),
@@ -2157,9 +2332,9 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                               width: MediaQuery.of(context).size.width - 22,
                               decoration: BoxDecoration(
                                   color:
-                                      Theme.of(context).scaffoldBackgroundColor,
+                                  Theme.of(context).scaffoldBackgroundColor,
                                   borderRadius:
-                                      BorderRadius.all(Radius.circular(26)),
+                                  BorderRadius.all(Radius.circular(26)),
                                   boxShadow: [
                                     BoxShadow(
                                       color: Colors.black.withOpacity(0.3),
@@ -2178,12 +2353,12 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                         child: Row(children: <Widget>[
                                           Padding(
                                               padding:
-                                                  EdgeInsets.only(left: 8.0)),
+                                              EdgeInsets.only(left: 8.0)),
                                           Container(
                                             height: 50,
                                             width: 8,
                                             padding:
-                                                EdgeInsets.only(right: 8.0),
+                                            EdgeInsets.only(right: 8.0),
                                             child: IconButton(
                                               icon: const Icon(
                                                   CupertinoIcons.chevron_back,
@@ -2223,9 +2398,9 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                             setState(() {});
                                           },
                                           disabledColor:
-                                              Color.fromRGBO(220, 170, 57, 1.0),
+                                          Color.fromRGBO(220, 170, 57, 1.0),
                                           color:
-                                              Color.fromRGBO(220, 170, 57, 1.0),
+                                          Color.fromRGBO(220, 170, 57, 1.0),
                                         ),
                                       )
                                     ],
@@ -2233,7 +2408,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                   Padding(padding: EdgeInsets.only(top: 10.0)),
                                   Container(
                                     width:
-                                        MediaQuery.of(context).size.width - 36,
+                                    MediaQuery.of(context).size.width - 36,
                                     child: Image.asset(sectionAsset),
                                   ),
                                   Padding(padding: EdgeInsets.only(top: 8.0)),
@@ -2251,7 +2426,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                       Spacer(),
                                       PopupMenuButton(
                                           color:
-                                              Color.fromRGBO(220, 170, 57, 1.0),
+                                          Color.fromRGBO(220, 170, 57, 1.0),
                                           shape: RoundedRectangleBorder(
                                               borderRadius: BorderRadius.all(
                                                   Radius.circular(23.0))),
@@ -2280,36 +2455,36 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                             ),
                                           ),
                                           itemBuilder: (context) => [
-                                                PopupMenuItem(
-                                                  child: Container(
-                                                      width: 80.0,
-                                                      height: 70.0,
-                                                      child: CupertinoPicker(
-                                                        onSelectedItemChanged:
-                                                            (value) {
-                                                          setState(() {
-                                                            selectedSectionNr =
-                                                                value;
-                                                            selectedSection =
-                                                                currentParkLocation
-                                                                    .sections[
-                                                                        value]
-                                                                    .sectionLetter;
-                                                          });
-                                                        },
-                                                        itemExtent: 32.0,
-                                                        children: generateSections(
+                                            PopupMenuItem(
+                                              child: Container(
+                                                  width: 80.0,
+                                                  height: 70.0,
+                                                  child: CupertinoPicker(
+                                                    onSelectedItemChanged:
+                                                        (value) {
+                                                      setState(() {
+                                                        selectedSectionNr =
+                                                            value;
+                                                        selectedSection =
                                                             currentParkLocation
-                                                                .sections),
-                                                      )),
-                                                ),
-                                              ]),
+                                                                .sections[
+                                                            value]
+                                                                .sectionLetter;
+                                                      });
+                                                    },
+                                                    itemExtent: 32.0,
+                                                    children: generateSections(
+                                                        currentParkLocation
+                                                            .sections),
+                                                  )),
+                                            ),
+                                          ]),
                                     ],
                                   ),
                                   Padding(padding: EdgeInsets.only(top: 8.0)),
                                   Container(
                                     width:
-                                        MediaQuery.of(context).size.width - 58,
+                                    MediaQuery.of(context).size.width - 58,
                                     height: 45,
                                     child: CupertinoButton(
                                       padding: EdgeInsets.all(0.0),
@@ -2325,12 +2500,12 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                         infoColor =
                                             Color.fromRGBO(255, 193, 25, 1.0),
                                         infoText =
-                                            "Select a spot to get info about it.",
+                                        "Select a spot to get info about it.",
                                         currentCard = Cards.pickCard,
                                         setState(() {})
                                       },
                                       disabledColor:
-                                          Color.fromRGBO(220, 170, 57, 1.0),
+                                      Color.fromRGBO(220, 170, 57, 1.0),
                                       color: Color.fromRGBO(220, 170, 57, 1.0),
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(13.0)),
@@ -2346,9 +2521,9 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
 //height: 242,
                               decoration: BoxDecoration(
                                   color:
-                                      Theme.of(context).scaffoldBackgroundColor,
+                                  Theme.of(context).scaffoldBackgroundColor,
                                   borderRadius:
-                                      BorderRadius.all(Radius.circular(26)),
+                                  BorderRadius.all(Radius.circular(26)),
                                   boxShadow: [
                                     BoxShadow(
                                       color: Colors.black.withOpacity(0.3),
@@ -2405,7 +2580,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                   ),
                                   Container(
                                     width:
-                                        MediaQuery.of(context).size.width - 58,
+                                    MediaQuery.of(context).size.width - 58,
                                     height: 45,
                                     child: CupertinoButton(
                                       padding: EdgeInsets.all(0.0),
@@ -2420,7 +2595,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                         setState(() {})
                                       },
                                       disabledColor:
-                                          Color.fromRGBO(138, 126, 114, 1.0),
+                                      Color.fromRGBO(138, 126, 114, 1.0),
                                       color: Color.fromRGBO(138, 126, 114, 1.0),
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(13.0)),
@@ -2438,7 +2613,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                           decoration: BoxDecoration(
                               color: Theme.of(context).scaffoldBackgroundColor,
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(26)),
+                              BorderRadius.all(Radius.circular(26)),
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.black.withOpacity(0.3),
@@ -2458,7 +2633,7 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                               ),
                               Container(
                                   width:
-                                      MediaQuery.of(context).size.width - 107,
+                                  MediaQuery.of(context).size.width - 107,
                                   child: CupertinoButton(
                                     alignment: Alignment.centerLeft,
                                     child: Text(
@@ -2478,9 +2653,9 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                           isScrollControlled: true,
                                           shape: RoundedRectangleBorder(
                                               borderRadius:
-                                                  BorderRadius.vertical(
-                                            top: Radius.circular(23),
-                                          )),
+                                              BorderRadius.vertical(
+                                                top: Radius.circular(23),
+                                              )),
 // BorderRadius. vertical// RoundedRectangleBorder
                                           builder: (context) =>
                                               showSearchBar(context, setState))
@@ -2493,21 +2668,21 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                     child: Image.asset('assets/Logo.png'),
                                     padding: EdgeInsets.all(0.0),
                                     onPressed: () async => {
-                                          prefs = await SharedPreferences
-                                              .getInstance(),
-                                          showModalBottomSheet(
-                                              context: context,
-                                              isScrollControlled: true,
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.vertical(
+                                      prefs = await SharedPreferences
+                                          .getInstance(),
+                                      showModalBottomSheet(
+                                          context: context,
+                                          isScrollControlled: true,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                              BorderRadius.vertical(
                                                 top: Radius.circular(23),
                                               )),
 // BorderRadius. vertical// RoundedRectangleBorder
-                                              builder: (context) =>
-                                                  showSettings(context,
-                                                      setState, prefs)),
-                                        }),
+                                          builder: (context) =>
+                                              showSettings(context,
+                                                  setState, prefs)),
+                                    }),
                                 padding: EdgeInsets.only(right: 15.0),
                               )
                             ],
@@ -2532,6 +2707,17 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
     print('Read: $value');
   }
 
+  _readPrefferedDirectionsApp() async {
+    final prefs = await SharedPreferences.getInstance();
+    final key = 'directions_app_pref';
+    var value = prefs.getString(key) ?? 'Google Maps';
+    if (Platform.isIOS) {
+      value = prefs.getString(key) ?? 'Apple Maps';
+    }
+    selectedMapsApp = value;
+    print('Read: $value');
+  }
+
   Future<bool> _readNeverLaunched() async {
     final prefs = await SharedPreferences.getInstance();
     final key = 'never_launched';
@@ -2539,6 +2725,36 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
     print(value);
     return value;
   }
+
+  Future<bool> _showedDelayAlert() async {
+    final prefs = await SharedPreferences.getInstance();
+    final key = 'delay_alert';
+    final value = prefs.getBool(key) ?? false;
+    print(value);
+    return value;
+  }
+
+  _saveShowedDelayAlert() async {
+    final prefs = await SharedPreferences.getInstance();
+    final key = 'delay_alert';
+    prefs.setBool(key, true);
+    print('Saved showed');
+  }
+  
+  _decidePaymentPlatform() {
+    if (Platform.isIOS) {
+      payBtnColor = Colors.black;
+      payBorderColor = Colors.white;
+      payTextColor = Colors.white;
+      payAsset = 'assets/ApplePay.png';
+    } else {
+      payBtnColor = Colors.white;
+      payBorderColor = Colors.black;
+      payTextColor = Colors.black;
+      payAsset = 'assets/GPay.png';
+    }
+  }
+  
 }
 
 class MapStyling {
@@ -3017,77 +3233,3 @@ class MapStyling {
 ]
   ''';
 }
-//Padding(padding: EdgeInsets.only(top: 20.0)),
-//                                 Row(
-//                                   children: <Widget>[
-//                                     Padding(
-//                                         padding: EdgeInsets.only(
-//                                             left: (MediaQuery.of(context)
-//                                                         .size
-//                                                         .width -
-//                                                     289) /
-//                                                 2)),
-//                                     Container(
-//                                       width: 134,
-//                                       height: 84,
-//                                       child: CupertinoButton(
-//                                         padding: EdgeInsets.all(0.0),
-//                                         child: Icon(
-//                                           CupertinoIcons.lock,
-//                                           color: Theme.of(context)
-//                                               .scaffoldBackgroundColor,
-//                                           size: 47,
-//                                         ),
-//                                         onPressed: () => {
-//                                           currentCard = Cards.unlockedCard,
-//                                           setState(() {})
-//                                         },
-//                                         disabledColor:
-//                                             Color.fromRGBO(149, 46, 0, 1.0),
-//                                         color: Color.fromRGBO(149, 46, 0, 1.0),
-//                                         borderRadius: BorderRadius.all(
-//                                             Radius.circular(27.0)),
-//                                       ),
-//                                     ),
-//                                     Padding(
-//                                         padding: EdgeInsets.only(right: 30.0)),
-//                                     Column(
-//                                       children: <Widget>[
-//                                         Text(
-//                                           'Time left',
-//                                           style: GoogleFonts.karla(
-//                                               fontSize: 20.0,
-//                                               fontWeight: FontWeight.w600,
-//                                               color: Theme.of(context)
-//                                                   .primaryColor),
-//                                         ),
-//                                         Text(
-//                                           '6:23',
-//                                           style: GoogleFonts.karla(
-//                                               fontSize: 20.0,
-//                                               fontWeight: FontWeight.w600,
-//                                               color: Color.fromRGBO(
-//                                                   149, 46, 0, 1.0)),
-//                                         )
-//                                       ],
-//                                     )
-//                                   ],
-//                                 ),
-//                                 Padding(padding: EdgeInsets.only(top: 5.0)),
-//                                 Container(
-//                                   child: CupertinoButton(
-//                                     child: Text(
-//                                       "Won't get there on time?",
-//                                       style: GoogleFonts.karla(
-//                                           fontSize: 16.0,
-//                                           fontWeight: FontWeight.w600,
-//                                           color:
-//                                               Color.fromRGBO(149, 46, 0, 1.0)),
-//                                       textAlign: TextAlign.center,
-//                                     ),
-//                                     onPressed: () {
-//                                       currentCard = Cards.delayCard;
-//                                       setState(() {});
-//                                     },
-//                                   ),
-//                                 )

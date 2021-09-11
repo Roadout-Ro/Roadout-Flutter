@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:775089070575:android:65527105474e4d4533561a",
         "android_client_info": {
-          "package_name": "com.codebranch.roadout"
+          "package_name": "ro.codebranch.roadout"
         }
       },
       "oauth_client": [
@@ -34,7 +34,7 @@
               "client_id": "775089070575-saqccrr03bshdnjq9ndreji5h011bf20.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.codebranch.roadout"
+                "bundle_id": "ro.codebranch.roadout"
               }
             }
           ]

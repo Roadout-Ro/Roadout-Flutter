@@ -39,6 +39,7 @@ dependencies:
   app_settings: ^4.1.1
   intl: ^0.17.0
   flutter_email_sender: ^5.0.2
+  connectivity_plus: ^1.1.0
 
 
 dev_dependencies:
@@ -93,15 +94,17 @@ flutter:
      - assets/SectionMap1.png
      - assets/SectionMap2.png
      - assets/SectionMap3.png
-     - assets/logo1.png
-     - assets/logo2.png
-     - assets/logo3.png
-     - assets/logo4.png
-     - assets/logo5.png
-     - assets/logo6.png
-     - assets/logo7.png
+     - assets/logos/logo1.png
+     - assets/logos/logo2.png
+     - assets/logos/logo3.png
+     - assets/logos/logo4.png
+     - assets/logos/logo5.png
+     - assets/logos/logo6.png
+     - assets/logos/logo7.png
      - assets/launcher_icon/mainIcon.png
      - assets/launcher_icon/foreground.png
+     - assets/ApplePay.png
+     - assets/GPay.png
 
 
   fonts:
