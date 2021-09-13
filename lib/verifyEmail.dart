@@ -15,10 +15,12 @@ class _VerifyEmailState extends State<VerifyEmail> {
   final auth = FirebaseAuth.instance;
   late User user;
   late Timer timer;
+  late String email;
 
   @override
   void initState(){
     user = auth.currentUser!;
+    email = user.email!;
     user.sendEmailVerification();
     timer = Timer.periodic(Duration(seconds: 3), (timer) {
       checkEmail();
@@ -73,7 +75,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
                         136, 126, 115, 1.0),),
                     Padding(padding: EdgeInsets.only(top: 10.0),),
                     Center(
-                      child: Text("Go check your inbox and verify your email before continuing",
+                      child: Text("Go check your inbox and verify your email before continuing. We sent an email to $email.",
                         style: GoogleFonts.karla(
                             fontSize: 16.0, fontWeight: FontWeight.w600),
                         textAlign: TextAlign.center,

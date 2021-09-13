@@ -14,6 +14,7 @@ import 'auth_service.dart';
 import 'notification_service.dart';
 import 'database_service.dart';
 import 'dart:io';
+import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 
 TextEditingController cvvController = TextEditingController();
 TextEditingController expiryController = TextEditingController();
@@ -28,6 +29,12 @@ TextEditingController deleteEmailController = TextEditingController();
 TextEditingController deletePasswordController = TextEditingController();
 
 TextEditingController notificationLabelController = TextEditingController();
+
+int month1 = 2;
+int month2 = 3;
+
+Color color1 = Color.fromRGBO(149, 46, 0, 1.0);
+Color color2 = Color.fromRGBO(11, 7, 0, 1.0);
 
 bool getReservationStatusNot(SharedPreferences prefs) {
   final key = 'reservationStatusNot';
@@ -99,6 +106,67 @@ List<double> tutorialPaddings = [30.0, 15.0, 10.0];
 
 double editHeight = 320;
 String userDeleted = '';
+
+
+List<Widget> cards = [
+  Dismissible(
+    key: Key('0'),
+      direction: DismissDirection.endToStart,
+      onDismissed: (direction){
+        cards.removeAt(0);
+      },
+      background: Container(
+          color: Colors.red,
+          margin: EdgeInsets.symmetric(horizontal: 15),
+          alignment: Alignment.centerRight,
+          child: Text("DELETE",
+              style: GoogleFonts.karla(
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.w500,
+                  color:Colors.white)
+          )
+      ),
+      child:Center(
+    child: _cardTile(
+        '**** **** **** 9000',
+        LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color.fromRGBO(255, 193, 25, 1.0),
+              Color.fromRGBO(103, 72, 5, 1.0)
+            ]),
+        Color.fromRGBO(103, 72, 5, 1.0)))),
+ Dismissible(
+   key: Key('1'),
+   direction: DismissDirection.endToStart,
+   onDismissed: (direction){
+     cards.removeAt(1);
+   },
+   background: Container(
+       color: Colors.red,
+       margin: EdgeInsets.symmetric(horizontal: 15),
+       alignment: Alignment.centerRight,
+       child: Text("DELETE",
+           style: GoogleFonts.karla(
+               fontSize: 16.0,
+               fontWeight: FontWeight.w500,
+               color:Colors.white)
+       )
+   ),
+   child:Center(
+    child: _cardTile(
+        '**** **** **** 9900',
+        LinearGradient(
+            begin: Alignment.bottomLeft,
+            end: Alignment.topRight,
+            colors: [
+              Color.fromRGBO(255, 158, 25, 1.0),
+              Color.fromRGBO(143, 102, 13, 1.0)
+            ]),
+        Color.fromRGBO(143, 102, 13, 1.0)),
+  ),)
+];
 
 DateTime reminderDate = DateTime.now().add(Duration(minutes: 15 - DateTime.now().minute % 15));
 String formattedDate = DateFormat('MMM dd, hh:mm').format(reminderDate);
@@ -302,8 +370,10 @@ Widget showNotifications(BuildContext context, SharedPreferences preferences) {
   });
 }
 
-Widget showPayment(BuildContext context) => Container(
-    height: 300,
+Widget showPayment(BuildContext context) =>
+ StatefulBuilder(builder: (BuildContext context, StateSetter setState){
+    return Container(
+    width: 390,
     decoration: BoxDecoration(
       color: Theme.of(context).dialogBackgroundColor,
       borderRadius: BorderRadius.all(Radius.circular(23)),
@@ -343,39 +413,17 @@ Widget showPayment(BuildContext context) => Container(
             )
           ],
         ),
-        Container(
-          child: ListView(
+        ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.height/2-80,
+            ),
+            child: ListView(
               primary: false,
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
-              children: [
-                Center(
-                    child: _cardTile(
-                        '**** **** **** 9000',
-                        LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: [
-                              Color.fromRGBO(255, 193, 25, 1.0),
-                              Color.fromRGBO(103, 72, 5, 1.0)
-                            ]),
-                        Color.fromRGBO(103, 72, 5, 1.0))),
-                Center(
-                  child: _cardTile(
-                      '**** **** **** 9900',
-                      LinearGradient(
-                          begin: Alignment.bottomLeft,
-                          end: Alignment.topRight,
-                          colors: [
-                            Color.fromRGBO(255, 158, 25, 1.0),
-                            Color.fromRGBO(143, 102, 13, 1.0)
-                          ]),
-                      Color.fromRGBO(165, 104, 21, 1.0)),
-                )
-              ]),
-          padding: EdgeInsets.only(left: 13.0),
+              children: cards,
+            )
         ),
-        Spacer(),
         Container(
           width: MediaQuery.of(context).size.width - 58,
           height: 45,
@@ -403,8 +451,8 @@ Widget showPayment(BuildContext context) => Container(
           ),
         ),
         Padding(padding: EdgeInsets.only(bottom: 30.0))
-      ],
-    ));
+   ],
+    ));});
 
 ListTile _cardTile(String number, Gradient gradient, Color numberColor) => ListTile(
         title: Transform(
@@ -421,17 +469,6 @@ ListTile _cardTile(String number, Gradient gradient, Color numberColor) => ListT
                           fontWeight: FontWeight.w600,
                           color: numberColor)),
                 ),
-                Spacer(),
-                Container(
-                  width: 50.0,
-                  child: CupertinoButton(
-                      child: Icon(
-                        CupertinoIcons.minus_circle,
-                        color: Color.fromRGBO(126, 75, 25, 1.0),
-                      ),
-                      onPressed: null),
-                  padding: EdgeInsets.only(left: 7.0),
-                )
               ],
             )),
         leading: Container(
@@ -907,8 +944,8 @@ Widget showAddCard(BuildContext context) => Container(
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                       colors: [
-                        Color.fromRGBO(149, 46, 0, 1.0),
-                        Color.fromRGBO(11, 7, 0, 1.0)
+                       color1,
+                        color2
                       ]),
                   borderRadius: BorderRadius.all(Radius.circular(8)),
                 ),
@@ -951,6 +988,15 @@ Widget showAddCard(BuildContext context) => Container(
                           width: 3, color: Color.fromRGBO(255, 158, 25, 0.0)),
                       borderRadius: BorderRadius.circular(15),
                     )),
+                keyboardType: TextInputType.number,
+                inputFormatters: [
+                  CreditCardExpirationDateFormatter(),
+                 MaskedInputFormatter(
+                    "##/##",
+                    allowedCharMatcher: RegExp('[0-9]'),
+                  ),
+                ],
+
               ),
             )),
             Padding(padding: EdgeInsets.only(left: 10.0)),
@@ -958,6 +1004,12 @@ Widget showAddCard(BuildContext context) => Container(
                 child: Container(
               height: 45,
               child: TextFormField(
+                inputFormatters: [
+                  MaskedInputFormatter(
+                    "###",
+                    allowedCharMatcher: RegExp('[0-9]'),
+                  ),
+                ],
                 controller: cvvController,
                 cursorColor: Color.fromRGBO(103, 72, 5, 1.0),
                 autocorrect: false,
@@ -1015,9 +1067,14 @@ Widget showAddCard(BuildContext context) => Container(
             height: 55,
             padding: EdgeInsets.only(left: 20, right: 22, bottom: 10),
             child: TextFormField(
+              inputFormatters: [
+                MaskedInputFormatter(
+                  "#### #### #### ####",
+                  allowedCharMatcher: RegExp('[0-9]'),
+                ),
+              ],
               controller: numberController,
               cursorColor: Color.fromRGBO(255, 193, 25, 1.0),
-              obscureText: true,
               autocorrect: false,
               keyboardAppearance: MediaQuery.of(context).platformBrightness,
               decoration: InputDecoration(
@@ -1050,15 +1107,130 @@ Widget showAddCard(BuildContext context) => Container(
                   fontSize: 17.0, fontWeight: FontWeight.w600),
             ),
             onPressed: () => {
-              Navigator.pop(context),
-              showModalBottomSheet(
+              month1 = int.parse(expiryController.text[0]),
+              month2 = int.parse(expiryController.text[1]),
+                if(month1 >1 || month1 == 1 && month2 >2 || month1 == 0 && month2 == 0){
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        insetPadding: EdgeInsets.all(40),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        title: Text('Card Expiring Date Error', style: GoogleFonts.karla(
+                            fontSize: 20.0, fontWeight: FontWeight.w600)),
+                        content: Container(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget> [
+                                Text('Please enter your correct credit card expiring date!', style: GoogleFonts.karla(
+                                    fontSize: 17.0, fontWeight: FontWeight.w500)),
+                                Container(
+                                    padding: EdgeInsets.only(top: 15.0, left: 5.0, right: 5.0),
+                                    width: MediaQuery.of(context).size.width-100,
+                                    height: 60,
+                                    child: CupertinoButton(
+                                      padding: EdgeInsets.all(0.0),
+                                      child: Text('Ok', style: GoogleFonts.karla(fontSize: 18.0, fontWeight: FontWeight.w600),),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      disabledColor: Color.fromRGBO(220, 170, 57, 1.0),
+                                      color: Color.fromRGBO(220, 170, 57, 1.0),
+                                      borderRadius: BorderRadius.all(Radius.circular(13.0)),
+                                    )
+                                ),
+                              ],
+                            )
+                        ),
+                      );
+                    },
+                  )
+                } else if(cvvController.text == ''  || cvvController.text.isEmpty || expiryController.text == ''  || expiryController.text.isEmpty ||
+                  numberController.text == ''  || numberController.text.isEmpty || nameController.text == ''  || nameController.text.isEmpty
+              ){
+                showDialog(
                   context: context,
-                  isScrollControlled: true,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(23),
-                  )),
-                  builder: (context) => showPayment(context))
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      insetPadding: EdgeInsets.all(40),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                      title: Text('Credit Card Error', style: GoogleFonts.karla(
+                          fontSize: 20.0, fontWeight: FontWeight.w600)),
+                      content: Container(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget> [
+                              Text('Please enter all your credit card information!', style: GoogleFonts.karla(
+                                  fontSize: 17.0, fontWeight: FontWeight.w500)),
+                              Container(
+                                  padding: EdgeInsets.only(top: 15.0, left: 5.0, right: 5.0),
+                                  width: MediaQuery.of(context).size.width-100,
+                                  height: 60,
+                                  child: CupertinoButton(
+                                    padding: EdgeInsets.all(0.0),
+                                    child: Text('Ok', style: GoogleFonts.karla(fontSize: 18.0, fontWeight: FontWeight.w600),),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    disabledColor: Color.fromRGBO(220, 170, 57, 1.0),
+                                    color: Color.fromRGBO(220, 170, 57, 1.0),
+                                    borderRadius: BorderRadius.all(Radius.circular(13.0)),
+                                  )
+                              ),
+                            ],
+                          )
+                      ),
+                    );
+                  },
+                )
+              } else
+                {
+                  cards.add(
+                   Dismissible(
+                     key: Key(cards.length.toString()),
+                       direction: DismissDirection.endToStart,
+                       onDismissed: (direction){
+                         cards.removeAt(cards.length-1);
+                       },
+                       background: Container(
+                           color: Colors.red,
+                           margin: EdgeInsets.symmetric(horizontal: 15),
+                           alignment: Alignment.centerRight,
+                           child: Text("DELETE",
+                               style: GoogleFonts.karla(
+                                   fontSize: 16.0,
+                                   fontWeight: FontWeight.w500,
+                                   color:Colors.white)
+                           )
+                       ),
+                       child:Center(
+                      child: _cardTile(
+                          '**** **** **** ${numberController.text[15]}${numberController.text[16]}${numberController.text[17]}${numberController.text[18]}',
+                          LinearGradient(
+                              begin: Alignment.bottomLeft,
+                              end: Alignment.topRight,
+                              colors: [
+                                color1,
+                               color2
+                              ]),
+                         color2,
+                    ),
+                    ))
+                  ),
+                  Navigator.pop(context),
+                  showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(23),
+                      )),
+                      builder: (context) => showPayment(context))
+                }
             },
             disabledColor: Color.fromRGBO(149, 46, 0, 1.0),
             color: Color.fromRGBO(149, 46, 0, 1.0),
@@ -1069,7 +1241,9 @@ Widget showAddCard(BuildContext context) => Container(
       ],
     ));
 
-Widget showCardStyle(BuildContext context) => Container(
+Widget showCardStyle(BuildContext context) =>
+    StatefulBuilder(builder: (BuildContext context, StateSetter setState){
+    return Container(
     height: 285,
     decoration: BoxDecoration(
       color: Theme.of(context).dialogBackgroundColor,
@@ -1136,6 +1310,10 @@ Widget showCardStyle(BuildContext context) => Container(
                 ),
               ),
               onTap: () {
+                setState((){
+                  color1 =  Color.fromRGBO(255, 193, 25, 1.0);
+                  color2 =   Color.fromRGBO(103, 72, 5, 1.0);
+                });
                 Navigator.pop(context);
                 showModalBottomSheet(
                     context: context,
@@ -1166,6 +1344,10 @@ Widget showCardStyle(BuildContext context) => Container(
                 ),
               ),
               onTap: () {
+                setState((){
+                  color1 =  Color.fromRGBO(255, 158, 25, 1.0);
+                  color2 =  Color.fromRGBO(57, 49, 30, 1.0);
+                });
                 Navigator.pop(context);
                 showModalBottomSheet(
                     context: context,
@@ -1196,6 +1378,10 @@ Widget showCardStyle(BuildContext context) => Container(
                 ),
               ),
               onTap: () {
+                setState((){
+                  color1 =   Color.fromRGBO(214, 109, 0, 1.0);
+                  color2 =   Color.fromRGBO(66, 109, 121, 1.0);
+                });
                 Navigator.pop(context);
                 showModalBottomSheet(
                     context: context,
@@ -1232,6 +1418,10 @@ Widget showCardStyle(BuildContext context) => Container(
                 ),
               ),
               onTap: () {
+                setState((){
+                  color1 =   Color.fromRGBO(149, 46, 0, 1.0);
+                  color2 =   Color.fromRGBO(245, 204, 108, 1.0);
+                });
                 Navigator.pop(context);
                 showModalBottomSheet(
                     context: context,
@@ -1262,6 +1452,10 @@ Widget showCardStyle(BuildContext context) => Container(
                 ),
               ),
               onTap: () {
+                setState((){
+                  color1 =   Color.fromRGBO(149, 46, 0, 1.0);
+                  color2 =   Color.fromRGBO(11, 7, 0, 1.0);
+                });
                 Navigator.pop(context);
                 showModalBottomSheet(
                     context: context,
@@ -1292,6 +1486,10 @@ Widget showCardStyle(BuildContext context) => Container(
                 ),
               ),
               onTap: () {
+                setState((){
+                  color1 =   Color.fromRGBO(143, 102, 13, 1.0);
+                  color2 =    Color.fromRGBO(245, 232, 204, 1.0);
+                });
                 Navigator.pop(context);
                 showModalBottomSheet(
                     context: context,
@@ -1328,6 +1526,10 @@ Widget showCardStyle(BuildContext context) => Container(
                 ),
               ),
               onTap: () {
+                setState((){
+                  color1 =   Color.fromRGBO(255, 193, 25, 1.0);
+                  color2 =    Color.fromRGBO(111, 2, 95, 1.0);
+                });
                 Navigator.pop(context);
                 showModalBottomSheet(
                     context: context,
@@ -1358,6 +1560,10 @@ Widget showCardStyle(BuildContext context) => Container(
                 ),
               ),
               onTap: () {
+                setState((){
+                  color1 = Color.fromRGBO(214, 109, 0, 1.0);
+                  color2 =   Color.fromRGBO(70, 92, 205, 1.0);
+                });
                 Navigator.pop(context);
                 showModalBottomSheet(
                     context: context,
@@ -1382,13 +1588,16 @@ Widget showCardStyle(BuildContext context) => Container(
                       end: Alignment.centerRight,
                       colors: [
                         Color.fromRGBO(143, 102, 13, 1.0),
-                        Color.fromRGBO(158, 82, 24, 1.0),
                         Color.fromRGBO(219, 0, 70, 1.0)
                       ]),
                   borderRadius: BorderRadius.all(Radius.circular(8)),
                 ),
               ),
               onTap: () {
+                setState((){
+                  color1 =  Color.fromRGBO(143, 102, 13, 1.0);
+                  color2 =   Color.fromRGBO(219, 0, 70, 1.0);
+                });
                 Navigator.pop(context);
                 showModalBottomSheet(
                     context: context,
@@ -1403,7 +1612,7 @@ Widget showCardStyle(BuildContext context) => Container(
           ],
         ),
       ],
-    ));
+    ));});
 
 Widget showPrizes(BuildContext context, String themeName) {
   return StatefulBuilder(builder: (BuildContext context, StateSetter setState) {

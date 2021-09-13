@@ -17,6 +17,9 @@ List<Color> searchColors = [Color.fromRGBO(255, 193, 25, 1.0),
                             Color.fromRGBO(220, 170, 57, 1.0),
                             Color.fromRGBO(149, 46, 0, 1.0)];
 
+
+
+
 Widget showSearchBar(BuildContext context, StateSetter setHomeState) {
   return StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
     return Container(
