@@ -116,15 +116,10 @@ List<Widget> cards = [
         cards.removeAt(0);
       },
       background: Container(
-          color: Colors.red,
           margin: EdgeInsets.symmetric(horizontal: 15),
           alignment: Alignment.centerRight,
-          child: Text("DELETE",
-              style: GoogleFonts.karla(
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.w500,
-                  color:Colors.white)
-          )
+          child: Icon(CupertinoIcons.trash, color: Color.fromRGBO(
+              149, 46, 0, 1.0))
       ),
       child:Center(
     child: _cardTile(
@@ -144,15 +139,10 @@ List<Widget> cards = [
      cards.removeAt(1);
    },
    background: Container(
-       color: Colors.red,
        margin: EdgeInsets.symmetric(horizontal: 15),
        alignment: Alignment.centerRight,
-       child: Text("DELETE",
-           style: GoogleFonts.karla(
-               fontSize: 16.0,
-               fontWeight: FontWeight.w500,
-               color:Colors.white)
-       )
+       child: Icon(CupertinoIcons.trash, color: Color.fromRGBO(
+           149, 46, 0, 1.0))
    ),
    child:Center(
     child: _cardTile(
@@ -313,19 +303,6 @@ Widget showNotifications(BuildContext context, SharedPreferences preferences) {
                       prefs.setBool(key, value);
                       print('Saved $value');
                       setState(() {});
-//Navigator.pop(context);
-/*showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          shape: RoundedRectangleBorder(
-                              borderRadius:
-                              BorderRadius.vertical(
-                                top: Radius.circular(23),
-                              )),
-                          // BorderRadius. vertical// RoundedRectangleBorder
-                          builder: (context) =>
-                              showSettings(
-                                  context, setState, prefs));*/
                     },
                     activeColor: Color.fromRGBO(255, 193, 25, 1.0),
                   ),
@@ -1197,15 +1174,10 @@ Widget showAddCard(BuildContext context) => Container(
                          cards.removeAt(cards.length-1);
                        },
                        background: Container(
-                           color: Colors.red,
                            margin: EdgeInsets.symmetric(horizontal: 15),
                            alignment: Alignment.centerRight,
-                           child: Text("DELETE",
-                               style: GoogleFonts.karla(
-                                   fontSize: 16.0,
-                                   fontWeight: FontWeight.w500,
-                                   color:Colors.white)
-                           )
+                           child: Icon(CupertinoIcons.trash, color: Color.fromRGBO(
+                               149, 46, 0, 1.0))
                        ),
                        child:Center(
                       child: _cardTile(

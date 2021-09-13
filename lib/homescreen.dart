@@ -1572,9 +1572,60 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                             size: 38,
                                           ),
                                           onPressed: () {
-                                            currentCard = Cards.unlockedCard;
-                                            cancelReservationNotification();
-                                            setState(() {});
+                                            showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return AlertDialog(
+                                                  insetPadding: EdgeInsets.all(40),
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.circular(20.0),
+                                                  ),
+                                                  title: Text('Unlock', style: GoogleFonts.karla(
+                                                      fontSize: 20.0, fontWeight: FontWeight.w600)),
+                                                  content: Container(
+                                                      child: Column(
+                                                        mainAxisSize: MainAxisSize.min,
+                                                        children: <Widget> [
+                                                          Text("You are about to unlock your spot, once you proceed your reservation is complete and the spot becomes free to park on. Do you want to proceed?", style: GoogleFonts.karla(
+                                                              fontSize: 17.0, fontWeight: FontWeight.w500)),
+                                                          Container(
+                                                              padding: EdgeInsets.only(top: 15.0, left: 5.0, right: 5.0),
+                                                              width: MediaQuery.of(context).size.width-100,
+                                                              height: 60,
+                                                              child: CupertinoButton(
+                                                                padding: EdgeInsets.all(0.0),
+                                                                child: Text('Unlock', style: GoogleFonts.karla(fontSize: 18.0, fontWeight: FontWeight.w600),),
+                                                                onPressed: () {
+                                                                  Navigator.pop(context);
+                                                                  currentCard = Cards.unlockedCard;
+                                                                  cancelReservationNotification();
+                                                                  setState(() {});
+                                                                },
+                                                                disabledColor: Color.fromRGBO(214, 109, 0, 1.0),
+                                                                color: Color.fromRGBO(214, 109, 07, 1.0),
+                                                                borderRadius: BorderRadius.all(Radius.circular(13.0)),
+                                                              )
+                                                          ),
+                                                          Container(
+                                                              padding: EdgeInsets.only(top: 15.0, left: 5.0, right: 5.0),
+                                                              width: MediaQuery.of(context).size.width-100,
+                                                              height: 60,
+                                                              child: CupertinoButton(
+                                                                padding: EdgeInsets.all(0.0),
+                                                                child: Text('Ok', style: GoogleFonts.karla(fontSize: 18.0, fontWeight: FontWeight.w600, color: Color.fromRGBO(214, 109, 0, 1.0),),),
+                                                                onPressed: () {
+                                                                  Navigator.pop(context);
+                                                                },
+                                                                 borderRadius: BorderRadius.all(Radius.circular(13.0)),
+                                                              )
+                                                          ),
+                                                        ],
+                                                      )
+                                                  ),
+                                                );
+                                              },
+                                            );
+
                                           },
                                           disabledColor:
                                           Color.fromRGBO(214, 109, 0, 1.0),
