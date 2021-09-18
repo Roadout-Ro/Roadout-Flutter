@@ -1320,7 +1320,8 @@ class _MainScreen extends State<MainScreen> with WidgetsBindingObserver {
                                                                         context);
                                                                     currentCard = Cards.searchBar;
                                                                     setState(() {
-                                                                      activeReservationExpiry = DateTime.now().add(Duration(minutes: 20));
+
+                                                                      activeReservationExpiry = DateTime.now();//.add(Duration(minutes: 20));
                                                                       timer!.cancel();
                                                                     });
                                                                     cancelReservationNotification();
